@@ -1,0 +1,57 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="MasterPage.master.cs" Inherits="CentroEstetica.MasterPage" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+
+    <link href="Assets/Css/styles.css" rel="stylesheet" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+
+</head>
+<body>
+    <form id="form1" runat="server">
+
+        <!--  NAVBAR -->
+    <nav class="navbar navbar-expand-lg fixed-top shadow-sm">
+            <div class="container">
+                <a class="navbar-brand fw-bold text-uppercase" href="Default.aspx"> <img src="Assets/logo.png" alt="Centro Estética" class="logo">   Centro Estética</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item"><a class="nav-link" href="Default.aspx">Inicio</a></li>
+                        <li class="nav-item"><a class="nav-link" href="Servicios.aspx">Servicios</a></li>
+                        <li class="nav-item"><a class="nav-link" href="Profesionales.aspx">Profesionales</a></li>
+                        <li class="nav-item"><a class="nav-link" href="Contacto.aspx">Contacto</a></li>
+                         <li class="nav-item"><a class="nav-link" href="Login.aspx">Iniciar Seción</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+
+        <main>
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </main>
+        <!--  FOOTER -->
+        <footer class="footer">
+
+            <p class="mb-0">&copy; <%: DateTime.Now.Year %> Centro Estética. Todos los derechos reservados.</p>
+
+
+        </footer>
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+</body>
+</html>

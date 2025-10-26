@@ -1,0 +1,71 @@
+﻿/*Paleta de colores */
+:root {
+    --colorPrincipal: #FCE8E4;
+    --colorPrincipalHover: #D85C7E;
+    --coloroFondoOscuro: #af8d84;
+    --colorFondoOpcional: #f2ecd3;
+    --colorFondoClaro: #F9F9F9;
+    --colorTexto: #1a1a1a;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    color: var(--colorTexto);
+    background-color: var(--colorFondoClaro);
+}
+
+main {
+    width: 100%;
+    margin-top: 100px;
+    margin-bottom: 10px;
+    min-height: calc(100vh - 70px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.navbar {
+    font-family: 'Playfair Display', serif;
+    background: var(--coloroFondoOscuro);
+}
+
+.logo {
+    height: 60px; 
+    width: auto;
+}
+    h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+    color: black
+}
+
+/* Botones */
+.btn-primary {
+    background-color: var(--colorPrincipal);
+    border-color: var(--colorPrincipal);
+}
+
+    .btn-primary:hover {
+        background-color: var(--colorPrincipalHover);
+        border-color: var(--colorPrincipalHover);
+    }
+
+/* Navbar y secciones */
+
+.bg-dark-custom {
+    background-color: var(--colorFondoOscuro);
+}
+
+.text-primary-custom {
+    color: var(--colorPrincipal);
+}
+
+/*footer*/
+footer {
+    background: var(--coloroFondoOscuro);
+    text-align: center;
+    line-height: 60px;
+    width: 100%;
+    position: relative;
+}
