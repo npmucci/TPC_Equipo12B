@@ -43,47 +43,34 @@
             </div>
         </div>
 
-        <!-- Servicios -->
-        <h2 class="text-center display-5 mb-5" id="servicios">Nuestros Servicios</h2>
+        <!-- Especialidades -->
+        <h2 class="text-center display-5 mb-5" id="servicios">Nuestras Especialidades</h2>
+
         <div class="row g-4">
-        
-            <div class="col-md-6 col-lg-4">
-                <div class="card service-card h-100 border-0 shadow-sm">
-                    <img src="Assets/img/facial.jpg" class="card-img-top" alt="Tratamiento Facial">
-                    <div class="card-body">
-                        <h3 class="h5 mb-2">Tratamiento Facial</h3>
-                        <div class="text-primary-custom fw-bold fs-5 mb-2">$8,000</div>
-                        <p class="text-muted mb-3">Limpieza profunda, hidratación y rejuvenecimiento facial.</p>
-                        <a href="PanelCliente.aspx" class="btn btn-primary w-100">Reservar</a>
+            
+            <asp:Repeater ID="rptEspecialidades" runat="server">
+                <ItemTemplate>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card service-card h-100 border-0 shadow-sm">
+                            
+                            <img src="Assets/img/placeholder.jpg" class="card-img-top" alt="<%# Eval("Nombre") %>">
+                            
+                            <div class="card-body">
+                                
+                                <h3 class="h5 mb-2"><%# Eval("Nombre") %></h3>
+                                
+                                <p class="text-muted mb-3"><%# Eval("Descripcion") %></p>
+                                
+                                <a href="Servicios.aspx?id=<%# Eval("IDEspecialidad") %>" class="btn btn-primary w-100">
+                                    Ver Servicios
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-
-    
-            <div class="col-md-6 col-lg-4">
-                <div class="card service-card h-100 border-0 shadow-sm">
-                    <img src="Assets/img/manicura.jpg" class="card-img-top" alt="Manicura y Pedicura">
-                    <div class="card-body">
-                        <h3 class="h5 mb-2">Manicura y Pedicura</h3>
-                        <div class="text-primary-custom fw-bold fs-5 mb-2">$5,500</div>
-                        <p class="text-muted mb-3">Cuidado completo de manos y pies con esmaltado semipermanente.</p>
-                        <a href="PanelCliente.aspx" class="btn btn-primary w-100">Reservar</a>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="col-md-6 col-lg-4">
-                <div class="card service-card h-100 border-0 shadow-sm">
-                    <img src="Assets/img/masaje.jpg" class="card-img-top" alt="Masajes Relajantes">
-                    <div class="card-body">
-                        <h3 class="h5 mb-2">Masajes Relajantes</h3>
-                        <div class="text-primary-custom fw-bold fs-5 mb-2">$7,000</div>
-                        <p class="text-muted mb-3">Masajes terapéuticos para aliviar tensiones y mejorar tu bienestar.</p>
-                        <a href="PanelCliente.aspx" class="btn btn-primary w-100">Reservar</a>
-                    </div>
-                </div>
-            </div>
+                </ItemTemplate>
+            </asp:Repeater>
+            
+        </div>
         </div>
     </div>
 

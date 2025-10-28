@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Dominio;
+using Negocio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,7 +13,26 @@ namespace CentroEstetica
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+          
+            if (!IsPostBack)
+            {
+                try
+                {
+                   
+                    EspecialidadNegocio negocio = new EspecialidadNegocio();
 
+                    List<Especialidad> listaEspecialidades = negocio.Listar();
+ 
+                    rptEspecialidades.DataSource = listaEspecialidades;
+
+                    rptEspecialidades.DataBind();
+                }
+                catch (Exception ex)
+                {
+                    
+                    throw ex;
+                }
+            }
         }
     }
 }
