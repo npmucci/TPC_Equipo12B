@@ -29,7 +29,7 @@
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item"><a class="nav-link" href="Default.aspx">Inicio</a></li>
-                        <li class="nav-item"><a class="nav-link" href="Servicios.aspx">Servicios</a></li>
+                       <li class="nav-item"><a class="nav-link" href="Default.aspx#servicios">Especialidades</a></li>
                         <li class="nav-item"><a class="nav-link" href="Profesionales.aspx">Profesionales</a></li>
                         <li class="nav-item"><a class="nav-link" href="Contacto.aspx">Contacto</a></li>
                          <li class="nav-item"><a class="nav-link" href="Login.aspx">Iniciar Seción</a></li>

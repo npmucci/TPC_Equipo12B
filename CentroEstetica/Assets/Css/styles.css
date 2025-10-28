@@ -26,16 +26,18 @@ main {
     flex-direction: column;
     align-items: center;
 }
+
 .navbar {
     font-family: 'Playfair Display', serif;
     background: var(--coloroFondoOscuro);
 }
 
 .logo {
-    height: 60px; 
+    height: 60px;
     width: auto;
 }
-    h1, h2, h3, h4, h5, h6 {
+
+h1, h2, h3, h4, h5, h6 {
     font-family: 'Playfair Display', serif;
     color: black
 }
@@ -60,6 +62,72 @@ main {
 .text-primary-custom {
     color: var(--colorPrincipal);
 }
+
+/*cards*/
+.custom-card {
+    border-radius: 16px;
+    overflow: hidden;
+    background-color: #fff7f5 !important;
+    border: 1px solid #f1dfdc;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.custom-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+ }
+.custom-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+ }
+.custom-card:hover img {
+    transform: scale(1.05);
+ }
+
+.custom-card .card-body {
+    padding: 1.5rem;
+
+}
+.custom-card h3,
+.custom-card h4,
+.custom-card h5 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    color: var(--colorTexto);
+    margin-bottom: 0.75rem;
+}
+
+.custom-card p {
+    color: #6c757d;
+    font-size: 0.95rem;
+ }
+
+.custom-card .btn {
+    background-color: var(--colorPrincipal);
+    border: none;
+    font-weight: 600;
+    color: #000;
+    border-radius: 8px;
+    transition: all 0.3s ease;        
+    }
+
+.custom-card .btn:hover {
+    background-color: var(--colorPrincipalHover);
+    color: #fff;
+     transform: translateY(-2px);
+  }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .custom-card img {
+        height: 180px;
+    }
+}
+
 
 /*footer*/
 footer {

@@ -7,7 +7,6 @@
         <div class="container">
             <h1 class="display-2 fw-bold mb-4">Tu Belleza, Nuestra Pasión</h1>
             <p class="lead mb-4">Descubre una experiencia única de bienestar y cuidado personal con nuestros tratamientos especializados</p>
-            <a href="PanelCliente.aspx" class="btn btn-primary btn-lg">Reservar Turno</a>
         </div>
     </section>
 
@@ -15,27 +14,24 @@
     <div class="container py-5">
         <div class="row g-4 mb-5">
             <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm text-center">
+                <div class="card custom-card h-100 border-0 shadow-sm text-center">
                     <div class="card-body">
-                        <div class="feature-icon">📅</div>
                         <h3 class="h4 mb-3">Reserva Online</h3>
                         <p class="text-muted">Agenda tu turno de forma rápida y sencilla desde cualquier dispositivo.</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm text-center">
+                <div class="card custom-card h-100 border-0 shadow-sm text-center">
                     <div class="card-body">
-                        <div class="feature-icon">👥</div>
                         <h3 class="h4 mb-3">Profesionales Expertos</h3>
                         <p class="text-muted">Equipo altamente capacitado con años de experiencia en el sector.</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm text-center">
+                <div class="card custom-card h-100 border-0 shadow-sm text-center">
                     <div class="card-body">
-                        <div class="feature-icon">✨</div>
                         <h3 class="h4 mb-3">Tratamientos Premium</h3>
                         <p class="text-muted">Utilizamos productos de primera calidad y técnicas innovadoras.</p>
                     </div>
@@ -51,9 +47,9 @@
             <asp:Repeater ID="rptEspecialidades" runat="server">
                 <ItemTemplate>
                     <div class="col-md-6 col-lg-4">
-                        <div class="card service-card h-100 border-0 shadow-sm">
+                        <div class="card service-card custom-card h-100 border-0 shadow-sm">
                             
-                            <img src="Assets/img/placeholder.jpg" class="card-img-top" alt="<%# Eval("Nombre") %>">
+                            <img src="Assets/lashista.jpeg" class="card-img-top" alt="<%# Eval("Nombre") %>">
                             
                             <div class="card-body">
                                 
@@ -61,7 +57,7 @@
                                 
                                 <p class="text-muted mb-3"><%# Eval("Descripcion") %></p>
                                 
-                                <a href="Servicios.aspx?id=<%# Eval("IDEspecialidad") %>" class="btn btn-primary w-100">
+                                <a href="Servicios.aspx?id=<%# Eval("IDEspecialidad") %>" class="btn w-100">
                                     Ver Servicios
                                 </a>
                             </div>
@@ -72,7 +68,6 @@
             
         </div>
         </div>
-    </div>
-
+   
  
 </asp:Content>
