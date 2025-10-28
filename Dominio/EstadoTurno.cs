@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace Dominio
 {
-    public class EstadoTurno
+    public enum EstadoTurno
     {
-        public int ID { get; set; }
-        public string Descripcion { get; set; }
+        Confirmado = 1,
+        CanceladoCliente = 2,
+        CanceladoProfesional = 3,
+        Finalizado = 4
     }
 }

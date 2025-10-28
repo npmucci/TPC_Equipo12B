@@ -8,10 +8,11 @@ namespace Dominio
 {
     public class HorarioAtencion
     {
-        public int ID { get; set; }
-        public TimeSpan HoraInicio { get; set; }
-        public TimeSpan HoraFin { get; set; }
-        public DayOfWeek Dia { get; set; }
+        public int IDHorarioAtencion { get; set; }
+        public string DiaSemana { get; set; } 
+        public TimeSpan HorarioInicio { get; set; }
+        public TimeSpan HorarioFin { get; set; }
         public bool Activo { get; set; }
+        public Profesional Profesional { get; set; }
     }
 }

@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dominio
+namespace Dominio.Enum
 {
-    public enum Rol
+    public enum TipoPago
     {
-        Admin = 1,
-        Profesional = 2,
-        Cliente = 3
+        Senia = 1,
+        Total = 2
     }
 }

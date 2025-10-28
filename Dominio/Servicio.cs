@@ -8,11 +8,12 @@ namespace Dominio
 {
     public class Servicio
     {
-        public int ID { get; set; }
+        public int IDServicio { get; set; }
+        public string Nombre { get; set; }
         public string Descripcion { get; set; }
-        public int Duracion { get; set; }
         public decimal Precio { get; set; }
-        public int IdEspecialidad { get; set; }
+        public int DuracionMinutos { get; set; }
         public bool Activo { get; set; }
+        public Especialidad Especialidad { get; set; }
     }
 }

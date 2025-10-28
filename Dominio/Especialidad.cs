@@ -8,9 +8,14 @@ namespace Dominio
 {
     public class Especialidad
     {
-        public int ID { get; set; }
+        public int IDEspecialidad { get; set; }
+        public string Nombre { get; set; }
         public string Descripcion { get; set; }
-        public bool Activo { get; set; }
+        public List<Servicio> Servicios { get; set; }
 
+        public Especialidad()
+        {
+            Servicios = new List<Servicio>();
+        }
     }
 }

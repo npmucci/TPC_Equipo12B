@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dominio.Enum;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,13 @@ namespace Dominio
     {
         public string Domicilio { get; set; }
         public string Telefono { get; set; }
-        public List<Turno> Turnos { get; set; } 
+        public List<Turno> Turnos { get; set; }
+
+        public Cliente()
+        {
+            Turnos = new List<Turno>();
+            Rol = Rol.Cliente; // Se setea el rol por defecto
+            
+        }
     }
 }
