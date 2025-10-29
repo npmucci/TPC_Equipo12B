@@ -27,6 +27,17 @@ namespace Negocio
             return listaFiltrada;
         }
 
+        public List<Servicio> listarPorEspecialidad(int idEspecialidad)
+        {
+            
+            List<Servicio> listaCompleta = datos.ListarPorEspecialidad(idEspecialidad);
+
+           
+            List<Servicio> listaFiltrada = listaCompleta.FindAll(s => s.Activo == true);
+
+            return listaFiltrada;
+        }
+
         // Para Admin ⬇️
         public List<Servicio> ListarTodos()
         {

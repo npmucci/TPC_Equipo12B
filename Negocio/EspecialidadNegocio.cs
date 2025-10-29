@@ -23,5 +23,10 @@ namespace Negocio
             
             return datos.Listar();
         }
+
+        public Especialidad ObtenerPorId(int id)
+        {
+            return datos.ObtenerPorId(id);
+        }
     }
 }
