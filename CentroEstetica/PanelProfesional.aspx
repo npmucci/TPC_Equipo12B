@@ -9,7 +9,7 @@
                 <p class="text-muted mb-0">Bienvenida, María González</p>
             </div>
             <div class="d-flex gap-2">
-                <button class="btn btn-outline-secondary">⚙️ Configurar Horarios</button>
+                <button class="btn btn-outline-secondary"> Configurar Horarios</button>
                 <button class="btn btn-primary">+ Bloquear Horario</button>
             </div>
         </div>

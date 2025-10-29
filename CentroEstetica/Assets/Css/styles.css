@@ -115,19 +115,20 @@ h1, h2, h3, h4, h5, h6 {
 
     .btn-custom:hover {
         background-color: var(--colorPrincipalHover);
-        color: #fff !important; /* asegura que el texto se mantenga visible */
-        transform: scale(1.07); /* agranda un poco el botón */
+        color: #fff !important; 
+        transform: scale(1.07); 
         box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
     }
 
 
+
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 576px) {
+
     .custom-card img {
-        height: 180px;
+        height: 180px; /* Ajusta altura en móvil */
     }
 }
-
 
 /*footer*/
 footer {

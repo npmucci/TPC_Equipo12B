@@ -33,6 +33,7 @@
                         <li class="nav-item"><a class="nav-link" href="PanelProfesional.aspx">Profesional</a></li>
                         <li class="nav-item"><a class="nav-link" href="PanelAdmin.aspx">Administrador</a></li>
                          <li class="nav-item"><a class="nav-link" href="PanelCliente.aspx">Cliente</a></li>
+                        <li class="nav-item"><a class="nav-link" href="PanelTurnos.aspx">Turnos</a></li>
                         <li class="nav-item"><a class="nav-link" href="Contacto.aspx">Contacto</a></li>
                          <li class="nav-item"><a class="nav-link" href="Login.aspx">Iniciar Seción</a></li>
                     </ul>
