@@ -4,9 +4,10 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
        
     <section class="banner-section">
-        <div class="container">
+        <div class="container text-center">
             <h1 class="display-2 fw-bold mb-4">Tu Belleza, Nuestra Pasión</h1>
             <p class="lead mb-4">Descubre una experiencia única de bienestar y cuidado personal con nuestros tratamientos especializados</p>
+            <a href="login.aspx"  class="btn-custom"> Reservar Turno</a>
         </div>
     </section>
 
@@ -49,7 +50,7 @@
                     <div class="col-md-6 col-lg-4">
                         <div class="card service-card custom-card h-100 border-0 shadow-sm">
                             
-                            <img src="Assets/lashista.jpeg" class="card-img-top" alt="<%# Eval("Nombre") %>">
+                            <img src='<%# Eval("Imagen") %>' class="card-img-top" alt='<%# Eval("Nombre") %>'>
                             
                             <div class="card-body">
                                 
@@ -57,7 +58,7 @@
                                 
                                 <p class="text-muted mb-3"><%# Eval("Descripcion") %></p>
                                 
-                                <a href="Servicios.aspx?id=<%# Eval("IDEspecialidad") %>" class="btn w-100">
+                                <a href="Servicios.aspx?id=<%# Eval("IDEspecialidad") %>" class="btn-custom btn-lg w-100">
                                     Ver Servicios
                                 </a>
                             </div>

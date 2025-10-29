@@ -12,6 +12,8 @@ namespace Dominio
         public string Nombre { get; set; }
         public string Descripcion { get; set; }
         public List<Servicio> Servicios { get; set; }
+        public string Imagen { get; set; }
+
 
         public Especialidad()
         {

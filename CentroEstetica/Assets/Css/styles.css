@@ -42,16 +42,7 @@ h1, h2, h3, h4, h5, h6 {
     color: black
 }
 
-/* Botones */
-.btn-primary {
-    background-color: var(--colorPrincipal);
-    border-color: var(--colorPrincipal);
-}
 
-    .btn-primary:hover {
-        background-color: var(--colorPrincipalHover);
-        border-color: var(--colorPrincipalHover);
-    }
 
 /* Navbar y secciones */
 
@@ -62,6 +53,9 @@ h1, h2, h3, h4, h5, h6 {
 .text-primary-custom {
     color: var(--colorPrincipal);
 }
+
+
+
 
 /*cards*/
 .custom-card {
@@ -106,20 +100,26 @@ h1, h2, h3, h4, h5, h6 {
     font-size: 0.95rem;
  }
 
-.custom-card .btn {
+.btn-custom {
     background-color: var(--colorPrincipal);
     border: none;
     font-weight: 600;
     color: #000;
     border-radius: 8px;
-    transition: all 0.3s ease;        
+    padding: 12px 20px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-decoration: none;
+}
+
+    .btn-custom:hover {
+        background-color: var(--colorPrincipalHover);
+        color: #fff !important; /* asegura que el texto se mantenga visible */
+        transform: scale(1.07); /* agranda un poco el botón */
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
     }
 
-.custom-card .btn:hover {
-    background-color: var(--colorPrincipalHover);
-    color: #fff;
-     transform: translateY(-2px);
-  }
 
 /* Responsive */
 @media (max-width: 768px) {

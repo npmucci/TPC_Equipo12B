@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Configuration;
 using System.Text;
 using System.Threading.Tasks;
 using Dominio;
@@ -19,7 +20,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    string consulta = "SELECT IDEspecialidad, Nombre, Descripcion FROM Especialidad";
+                    string consulta = "SELECT IDEspecialidad, Nombre, Descripcion, Foto FROM Especialidad";
                     datos.SetearConsulta(consulta);
                     datos.EjecutarLectura();
 
@@ -33,6 +34,7 @@ namespace AccesoDatos
                         {
                             aux.Descripcion = (string)datos.Lector["Descripcion"];
                         }
+                        aux.Imagen = (string)datos.Lector["Foto"];
                         lista.Add(aux);
                     }
                 }

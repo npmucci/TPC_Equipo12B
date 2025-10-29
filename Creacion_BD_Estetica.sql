@@ -45,6 +45,7 @@ CREATE TABLE Cliente (
 
 CREATE TABLE Profesional (
     IDUsuario INT PRIMARY KEY,
+	Foto VARCHAR (50),
     FOREIGN KEY (IDUsuario) REFERENCES Usuario(ID) ON DELETE CASCADE
 );
 
@@ -57,7 +58,8 @@ CREATE TABLE Administrador (
 CREATE TABLE Especialidad (
     IDEspecialidad INT IDENTITY(1,1) PRIMARY KEY,
     Nombre VARCHAR(100) NOT NULL UNIQUE,
-    Descripcion TEXT
+    Descripcion TEXT,
+	Foto VARCHAR (150),
 );
 
 -- 5. Catálogo de Servicios 
@@ -143,11 +145,11 @@ INSERT INTO TipoPago (Nombre) VALUES
 ('Seña'), ('Total');
 -- IDs: 1-Seña, 2-Total
 
-INSERT INTO Especialidad (Nombre, Descripcion) VALUES
-('Manicura', 'Servicios de belleza para manos y pies.'),
-('Esteticista', 'Tratamientos faciales, corporales y depilación.'),
-('Masajista', 'Masajes terapéuticos y de relajación.'),
-('LASHISTA', 'Servicios de pestañas y cejas.');
+INSERT INTO Especialidad (Nombre, Descripcion, Foto) VALUES
+('Manicura', 'Servicios de belleza para manos y pies.','https://lafemmebeauty.es/wp-content/uploads/2024/06/Consejos-para-Mantener-Tu-Pedicura-Semipermanente-Perfecta-1.jpeg'),
+('Esteticista', 'Tratamientos faciales, corporales y depilación.', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3Mvo09I7M19WqW-2RbnOT-aw5bo-WOd9PtA&s'),
+('Masajista', 'Masajes terapéuticos y de relajación.', 'https://www.anamanao.com/imagecache/width/uploads/tratamientos/tratamientos-corporales/aromassage-relax.jpg?size=680´'),
+('LASHISTA', 'Servicios de pestañas y cejas.', 'https://inlashacademy.com/wp-content/uploads/2022/04/lashista-1-1360x902.jpg');
 -- IDs: 1-Manicura, 2-Esteticista, 3-Masajista, 4-LASHISTA
 
 -- 2. Servicios (Vinculados a Especialidad)
@@ -301,3 +303,5 @@ INSERT INTO Turno (Fecha, HoraInicio, IDUsuarioProfesional, IDUsuarioCliente, ID
 
 -- Reactivamos todas las constraints
 EXEC sp_MSforeachtable 'ALTER TABLE ? WITH CHECK CHECK CONSTRAINT ALL'
+
+--creo campo imagen para especialidad y para profesional--

@@ -73,6 +73,9 @@
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Login.aspx" />
+    <Content Include="PanelAdmin.aspx" />
+    <Content Include="PanelCliente.aspx" />
+    <Content Include="PanelProfesional.aspx" />
     <Content Include="Servicios.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -100,6 +103,27 @@
     </Compile>
     <Compile Include="MasterPage.Master.designer.cs">
       <DependentUpon>MasterPage.Master</DependentUpon>
+    </Compile>
+    <Compile Include="PanelAdmin.aspx.cs">
+      <DependentUpon>PanelAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PanelAdmin.aspx.designer.cs">
+      <DependentUpon>PanelAdmin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PanelCliente.aspx.cs">
+      <DependentUpon>PanelCliente.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PanelCliente.aspx.designer.cs">
+      <DependentUpon>PanelCliente.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PanelProfesional.aspx.cs">
+      <DependentUpon>PanelProfesional.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PanelProfesional.aspx.designer.cs">
+      <DependentUpon>PanelProfesional.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Servicios.aspx.cs">
