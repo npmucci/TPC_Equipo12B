@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Negocio;
 
 namespace CentroEstetica
 {
@@ -11,7 +12,18 @@ namespace CentroEstetica
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+           
+            if (!Seguridad.EsAdmin(Session["usuario"]))
+            {
+                
+                Response.Redirect("Default.aspx", false);
+            }
 
+           
+            if (!IsPostBack)
+            {
+               
+            }
         }
     }
 }

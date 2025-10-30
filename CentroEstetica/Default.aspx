@@ -104,7 +104,7 @@
             
             <asp:Repeater ID="rptEspecialidades" runat="server">
                 <ItemTemplate>
-                    <%--<div class="col-md-3 col-lg-3">
+                    <div class="col-md-3 col-lg-3">
                         <div class="card service-card custom-card h-100 border-0 shadow-sm">
                             
                             <img src='<%# Eval("Imagen") %>' class="card-img-top" alt='<%# Eval("Nombre") %>'>
@@ -120,7 +120,7 @@
                                 </a>
                             </div>
                         </div>
-                    </div>--%>
+                    </div>
                 </ItemTemplate>
             </asp:Repeater>
             
