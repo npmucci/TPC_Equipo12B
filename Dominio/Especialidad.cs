@@ -14,6 +14,8 @@ namespace Dominio
         public List<Servicio> Servicios { get; set; }
         public string Imagen { get; set; }
 
+        public bool Activo { get; set; }
+
 
         public Especialidad()
         {

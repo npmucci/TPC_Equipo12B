@@ -20,8 +20,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    string consulta = "SELECT IDEspecialidad, Nombre, Descripcion, Foto FROM Especialidad";
-                    datos.SetearConsulta(consulta);
+                    datos.SetearProcedimiento("ListarEspecialidades");
                     datos.EjecutarLectura();
 
                     while (datos.Lector.Read())
@@ -35,6 +34,9 @@ namespace AccesoDatos
                             aux.Descripcion = (string)datos.Lector["Descripcion"];
                         }
                         aux.Imagen = (string)datos.Lector["Foto"];
+
+                        aux.Activo = (bool)datos.Lector["Activo"];
+
                         lista.Add(aux);
                     }
                 }

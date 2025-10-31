@@ -21,11 +21,16 @@ namespace CentroEstetica
                    
                     EspecialidadNegocio negocio = new EspecialidadNegocio();
 
-                    List<Especialidad> listaEspecialidades = negocio.Listar();
- 
+                    List<Especialidad> listaEspecialidades = negocio.ListarActivos();
                     rptEspecialidades.DataSource = listaEspecialidades;
 
                     rptEspecialidades.DataBind();
+
+                    ProfesionalNegocio profesionalNegocio = new ProfesionalNegocio();
+                    List<Profesional> listaProfesionales = profesionalNegocio.ListarActivos();
+                    rptProfesionales.DataSource = listaProfesionales;
+
+                    rptProfesionales.DataBind();
                 }
                 catch (Exception ex)
                 {

@@ -23,6 +23,11 @@ namespace Negocio
             
             return datos.Listar();
         }
+        public List<Especialidad> ListarActivos()
+        {
+
+            return Listar().FindAll(esp => esp.Activo);
+        }
 
         public Especialidad ObtenerPorId(int id)
         {

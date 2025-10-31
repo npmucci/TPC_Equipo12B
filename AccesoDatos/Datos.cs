@@ -35,6 +35,12 @@ namespace AccesoDatos
         {
             comando = new SqlCommand(query, conexion);
         }
+        // Setea los procimientos almacenados
+        public void SetearProcedimiento(string nombreSP)
+        {
+            comando = new SqlCommand(nombreSP, conexion);
+            comando.CommandType = System.Data.CommandType.StoredProcedure;
+        }
 
         // Agregar parametros
         public void SetearParametro(string nombre, object valor)
