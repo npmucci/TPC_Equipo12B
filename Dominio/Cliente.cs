@@ -9,15 +9,13 @@ namespace Dominio
 {
     public class Cliente : Usuario
     {
-        public string Domicilio { get; set; }
-        public string Telefono { get; set; }
+        // Propiedades específicas de Cliente
         public List<Turno> Turnos { get; set; }
 
         public Cliente()
         {
             Turnos = new List<Turno>();
-            Rol = Rol.Cliente; // Se setea el rol por defecto
-            
+            Rol = Rol.Cliente;
         }
     }
 }

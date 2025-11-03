@@ -1,4 +1,5 @@
 ﻿using Dominio;
+using Dominio.Enum; 
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,45 +15,52 @@ namespace CentroEstetica
         {
             if (!IsPostBack)
             {
-
-                if (Session["usuario"] == null) //USUARIO INVITADO
+                
+                if (Session["admin"] == null &&
+                    Session["profesional"] == null &&
+                    Session["cliente"] == null)
                 {
-
+                    // Es un invitado
                     hlIniciarSesion.Visible = true;
                     hlPerfil.Visible = false;
                     btnCerrarSesion.Visible = false;
                 }
                 else
                 {
-                    //USUARIO LOGUEADO
-
+                    
                     hlIniciarSesion.Visible = false;
                     hlPerfil.Visible = true;
                     btnCerrarSesion.Visible = true;
 
-                    Usuario logueado = (Usuario)Session["usuario"];
 
-                    switch (logueado.Rol)
+
+                    if (Session["admin"] != null)
                     {
-                        case Rol.Admin:
-                            hlPerfil.NavigateUrl = "~/PanelAdmin.aspx";
-                            break;
-                        case Rol.Profesional:
-                            hlPerfil.NavigateUrl = "~/PanelProfesional.aspx";
-                            break;
-                        case Rol.Cliente:
-                        default:
-                            hlPerfil.NavigateUrl = "~/PanelCliente.aspx";
-                            break;
+                        hlPerfil.NavigateUrl = "~/PanelAdmin.aspx";
+
+
+                    }
+                    else if (Session["profesional"] != null)
+                    {
+                        hlPerfil.NavigateUrl = "~/PanelProfesional.aspx";
+                    }
+
+                    else if (Session["cliente"] != null)
+                    {
+                        hlPerfil.NavigateUrl = "~/PanelCliente.aspx";
+
                     }
                 }
             }
         }
 
-
         protected void btnCerrarSesion_Click(object sender, EventArgs e)
         {
-            Session.Clear(); // Limpiamos la sesión
+           
+            Session.Remove("admin");
+            Session.Remove("profesional");
+            Session.Remove("cliente");
+
             Response.Redirect("~/Default.aspx"); // Lo mandamos al inicio
         }
     }

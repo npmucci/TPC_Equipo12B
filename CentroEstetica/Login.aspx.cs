@@ -13,24 +13,26 @@ namespace CentroEstetica
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
-            if (!IsPostBack && Session["usuario"] != null)
+         
+            if (!IsPostBack)
             {
-                Usuario logueado = (Usuario)Session["usuario"];
-                if (logueado.Rol == Rol.Admin)
+                if (Session["admin"] != null)
+                {
                     Response.Redirect("PanelAdmin.aspx");
-                else if (logueado.Rol == Rol.Profesional)
+                }
+                else if (Session["profesional"] != null)
+                {
                     Response.Redirect("PanelProfesional.aspx");
-                else
+                }
+                else if (Session["cliente"] != null)
+                {
                     Response.Redirect("PanelCliente.aspx");
+                }
             }
-
         }
-
 
         protected void btnIngresar_Click(object sender, EventArgs e)
         {
-
             if (string.IsNullOrEmpty(txtUsuario.Text) || string.IsNullOrEmpty(txtPassword.Text))
             {
                 lblError.Text = "Por favor, complete ambos campos.";
@@ -42,45 +44,54 @@ namespace CentroEstetica
             {
                 UsuarioNegocio negocio = new UsuarioNegocio();
 
-
                 string email = txtUsuario.Text;
                 string pass = txtPassword.Text;
 
-                Usuario usuarioLogueado = negocio.Login(email, pass);
+                List<Rol> rolesLogueados = negocio.Login(email, pass);
 
-                if (usuarioLogueado != null)
+                if (rolesLogueados != null && rolesLogueados.Count > 0)
                 {
-                    // Login exitoso
-                    Session["usuario"] = usuarioLogueado;
-
-                    // Redirigimos al panel correspondiente
-                    switch (usuarioLogueado.Rol)
+                    foreach (var rol in rolesLogueados)
                     {
-                        case Rol.Admin:
-                            Response.Redirect("PanelAdmin.aspx", false);
-                            break;
-                        case Rol.Profesional:
-                            Response.Redirect("PanelProfesional.aspx", false);
-                            break;
-                        case Rol.Cliente:
-                        default:
-                            Response.Redirect("PanelCliente.aspx", false);
-                            break;
+                        Usuario usuario = negocio.CargarPerfil(email, rol);
+                        if (rol == Rol.Admin)
+                            Session["admin"] = usuario;
+
+                        if (rol == Rol.Cliente)
+                            Session["cliente"] = usuario;
+
+                        if (rol == Rol.Profesional)
+                            Session["profesional"] = usuario;
+                    }
+
+                    if (rolesLogueados.Contains(Rol.Admin))
+                    {
+                        Response.Redirect("PanelAdmin.aspx", false);
+                    }
+                    else if (rolesLogueados.Contains(Rol.Profesional))
+                    {
+                        Response.Redirect("PanelProfesional.aspx", false);
+                    }
+                    else if (rolesLogueados.Contains(Rol.Cliente))
+                    {
+                        Response.Redirect("PanelCliente.aspx", false);
+                    }
+                    else
+                    {
+                        lblError.Text = "Usuario autenticado pero sin roles.";
+                        lblError.Visible = true;
                     }
                 }
                 else
                 {
-
                     lblError.Text = "Usuario o contraseña incorrectos.";
                     lblError.Visible = true;
                 }
             }
             catch (Exception ex)
             {
-
                 lblError.Text = "Ocurrió un error inesperado.";
                 lblError.Visible = true;
-
             }
         }
     }

@@ -13,7 +13,7 @@ namespace CentroEstetica
         protected void Page_Load(object sender, EventArgs e)
         {
             
-            if (!Seguridad.EsProfesional(Session["usuario"]))
+            if (!Seguridad.EsProfesional(Session["profesional"]))
             {
                 
                 Response.Redirect("Default.aspx", false);
