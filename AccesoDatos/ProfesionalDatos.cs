@@ -28,8 +28,9 @@ namespace AccesoDatos
                         aux.Dni = (string)datos.Lector["Dni"];
                         aux.Mail = (string)datos.Lector["Mail"];
                         aux.Rol = (Rol)datos.Lector["IDRol"];
-                        aux.Foto = (string)datos.Lector["Foto"];
+                        aux.Foto = datos.Lector["Foto"] != DBNull.Value ? (string)datos.Lector["Foto"] : null;
                         aux.Activo = (bool)datos.Lector["Activo"];
+                        
                         
                         lista.Add(aux);
                     }
