@@ -1,10 +1,11 @@
 ﻿using AccesoDatos;
 using Dominio;
-using Dominio.Enum; 
 using System;
 using System.Collections.Generic;
-using BCrypt.Net; 
-
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using BCrypt.Net;
 
 namespace Negocio
 {
@@ -17,47 +18,28 @@ namespace Negocio
             datos = new UsuarioDatos();
         }
 
-        
-        public List<Rol> Login(string email, string passwordPlano)
+
+        public Usuario Login(string email, string passwordPlano)
         {
             try
             {
-                
                 var credenciales = datos.ObtenerCredenciales(email);
 
-                
-                if (credenciales.Hash == null || credenciales.Roles.Count == 0)
+                if (credenciales.Hash == null)   // Si el hash es null, el email no existe o está inactivo
                 {
-                    return null; 
+                    return null;
                 }
 
-                
                 bool esValido = BCrypt.Net.BCrypt.Verify(passwordPlano, credenciales.Hash);
 
-                if (!esValido)
+
+                if (!esValido)  // si no es válido, devolvemos null
                 {
-                    return null; 
+                    return null;
                 }
 
-                
-                return credenciales.Roles;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
 
-        
-        public Usuario CargarPerfil(string email, Rol rolElegido)
-        {
-            try
-            {
-                
-                Usuario usuario = datos.CargarPerfil(email, rolElegido);
-
-                
-
+                Usuario usuario = datos.ObtenerUsuarioPorEmail(email); // Login exitoso, se guarda usuario para usar en sesión
                 return usuario;
             }
             catch (Exception ex)
@@ -66,15 +48,17 @@ namespace Negocio
             }
         }
 
-        
+
         public int RegistrarCliente(Cliente nuevo, string passwordPlano)
         {
             try
             {
-                
-                string hash = BCrypt.Net.BCrypt.HashPassword(passwordPlano);
 
-               
+                // if (datos.ExisteEmail(nuevo.Mail))
+                //    throw new Exception("El email ya está en uso.");
+
+                string hash = BCrypt.Net.BCrypt.HashPassword(passwordPlano); //  Hasheamos la contraseña
+
                 return datos.RegistrarCliente(nuevo, hash);
             }
             catch (Exception ex)

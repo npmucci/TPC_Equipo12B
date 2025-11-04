@@ -16,18 +16,19 @@ namespace AccesoDatos
             {
                 try
                 {
+
                     datos.SetearProcedimiento("ListarProfesionales");
                     datos.EjecutarLectura();
                     while (datos.Lector.Read())
                     {
                         Dominio.Profesional aux = new Profesional();
                         aux.ID = (int)datos.Lector["IDUsuario"];
-                        aux.Nombre = datos.Lector["Nombre"] is DBNull ? null : (string)datos.Lector["Nombre"];
-                        aux.Apellido = datos.Lector["Apellido"] is DBNull ? null : (string)datos.Lector["Apellido"];
-                        aux.Dni = datos.Lector["Dni"] is DBNull ? null : (string)datos.Lector["Dni"];
-                        aux.Mail = datos.Lector["Mail"] is DBNull ? null : (string)datos.Lector["Mail"];
+                        aux.Nombre = (string)datos.Lector["Nombre"];
+                        aux.Apellido = (string)datos.Lector["Apellido"];
+                        aux.Dni = (string)datos.Lector["Dni"];
+                        aux.Mail = (string)datos.Lector["Mail"];
                         aux.Rol = (Rol)datos.Lector["IDRol"];
-                        aux.Foto = datos.Lector["Foto"] is DBNull ? null : (string)datos.Lector["Foto"];
+                        aux.Foto = (string)datos.Lector["Foto"];
                         aux.Activo = (bool)datos.Lector["Activo"];
                         
                         lista.Add(aux);

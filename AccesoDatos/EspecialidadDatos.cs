@@ -33,7 +33,7 @@ namespace AccesoDatos
                         {
                             aux.Descripcion = (string)datos.Lector["Descripcion"];
                         }
-                        aux.Imagen = datos.Lector["Foto"] is DBNull ? null : (string)datos.Lector["Foto"];  
+                        aux.Imagen = (string)datos.Lector["Foto"];
 
                         aux.Activo = (bool)datos.Lector["Activo"];
 
@@ -73,7 +73,7 @@ namespace AccesoDatos
                         {
                             aux.Descripcion = (string)datos.Lector["Descripcion"];
                         }
-                        aux.Imagen = (string)datos.Lector["Foto"];  
+                        aux.Imagen = (string)datos.Lector["Foto"];
                     }
                 }
                 catch (Exception ex)
