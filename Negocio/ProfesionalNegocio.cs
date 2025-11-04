@@ -1,28 +1,31 @@
-﻿using System;
+﻿using AccesoDatos;
+using Dominio;
+using Dominio.Enum; 
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AccesoDatos;
-using Dominio;
 
 namespace Negocio
 {
     public class ProfesionalNegocio
     {
-        private ProfesionalDatos datos;
+        private UsuarioDatos datos;
+
         public ProfesionalNegocio()
         {
-            datos = new AccesoDatos.ProfesionalDatos();
+            datos = new UsuarioDatos();
         }
-        public List<Profesional> Listar(int idRol)
+        public List<Usuario> ListarProfesionales()
         {
-            return datos.Listar(idRol);
+            
+            return datos.ListarPorRol((int)Rol.Profesional);
         }
+
         
-        public List<Profesional> ListarActivos(Rol rol)
+        public List<Usuario> ListarProfesionalesActivos()
         {
-            return Listar((int)rol).FindAll(prof => prof.Activo);
+           
+            return ListarProfesionales().FindAll(prof => prof.Activo);
         }
     }
 }

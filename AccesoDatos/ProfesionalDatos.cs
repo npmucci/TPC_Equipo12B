@@ -1,9 +1,11 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Dominio;
+
+  ** METODO MOVIDO A USUARIODATOS **
 
 namespace AccesoDatos
 {
@@ -45,3 +47,4 @@ namespace AccesoDatos
         }
     }
 }
+*/

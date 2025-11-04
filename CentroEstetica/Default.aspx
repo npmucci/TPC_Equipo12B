@@ -83,7 +83,7 @@
                     <div class="col-md-3 col-lg-3">
                         <div class="card service-card custom-card h-100 border-0 shadow-sm">
 
-                            <img src='<%# Eval("Imagen") %>' class="card-img-top" alt='<%# Eval("Nombre") %>'>
+                            <img src='<%# Eval("Foto") %>' class="card-img-top" alt='<%# Eval("Nombre") %>'>
 
                             <div class="card-body">
 

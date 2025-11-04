@@ -13,6 +13,6 @@ namespace Dominio
         public TimeSpan HorarioInicio { get; set; }
         public TimeSpan HorarioFin { get; set; }
         public bool Activo { get; set; }
-        public Profesional Profesional { get; set; }
+        public Usuario Profesional { get; set; }
     }
 }

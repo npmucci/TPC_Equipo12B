@@ -44,68 +44,61 @@ namespace AccesoDatos
             {
                 try
                 {
-
-                    string consulta = @"
-                    SELECT 
-                        U.ID, U.Nombre, U.Apellido, U.Dni, U.Mail, U.IDRol, U.Activo, C.Domicilio, C.Telefono FROM Usuario U
-                    LEFT JOIN 
-                        Cliente C ON U.ID = C.IDUsuario
-                    LEFT JOIN 
-                        Profesional P ON U.ID = P.IDUsuario
-                    WHERE 
-                        U.Mail = @mail AND U.Activo = 1";
-
+                    
+                    string consulta = "SELECT * FROM Usuario WHERE Mail = @mail AND Activo = 1";
                     datos.SetearConsulta(consulta);
                     datos.SetearParametro("@mail", email);
                     datos.EjecutarLectura();
 
                     if (datos.Lector.Read())
                     {
-                        Usuario aux;            // Clase Usuario declarada como clase abstracta...
-                        Rol rol = (Rol)datos.Lector["IDRol"];
+                        Usuario aux;
+                        Rol rol = (Rol)datos.Lector["IDRol"]; 
 
-
+                        
                         switch (rol)
                         {
                             case Rol.Admin:
                                 aux = new Administrador();
-
                                 break;
-
                             case Rol.Profesional:
                                 aux = new Profesional();
-
+                                // 
                                 break;
-
+                            case Rol.Recepcionista:
+                                aux = new Recepcionista();
+                                break;
+                            case Rol.ProfesionalUnico:
+                                aux = new ProfesionalUnico();
+                                // 
+                                break;
                             case Rol.Cliente:
                             default:
-                                // Instanciamos Y casteamos para rellenar campos específicos para cliente...
-                                Cliente cliente = new Cliente();
-                                cliente.Domicilio = datos.Lector["Domicilio"] is DBNull ? null : (string)datos.Lector["Domicilio"];
-                                cliente.Telefono = datos.Lector["Telefono"] is DBNull ? null : (string)datos.Lector["Telefono"];
-                                aux = cliente;
+                                aux = new Cliente();
+                                // 
                                 break;
                         }
 
-
-                        aux.ID = (int)datos.Lector["ID"];
+                    
+                        aux.ID = (int)datos.Lector["IDUsuario"];
                         aux.Nombre = (string)datos.Lector["Nombre"];
                         aux.Apellido = (string)datos.Lector["Apellido"];
                         aux.Dni = (string)datos.Lector["Dni"];
                         aux.Mail = (string)datos.Lector["Mail"];
                         aux.Activo = (bool)datos.Lector["Activo"];
-                        aux.Rol = rol;
+                        aux.Telefono = (string)datos.Lector["Telefono"];
+                        aux.Domicilio = datos.Lector["Domicilio"] is DBNull ? null : (string)datos.Lector["Domicilio"];
+                        aux.Foto = datos.Lector["Foto"] is DBNull ? null : (string)datos.Lector["Foto"];
+                        aux.Rol = rol; 
 
                         return aux;
                     }
                     return null;
                 }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
+                catch (Exception ex) { throw ex; }
             }
         }
+
 
 
         public int RegistrarCliente(Cliente nuevo, string hash)
@@ -114,40 +107,74 @@ namespace AccesoDatos
             {
                 try
                 {
-
-                    string consultaUsuario = "INSERT INTO Usuario (Nombre, Apellido, Dni, Mail, ContraseniaHash, IDRol, Activo) " +
-                                             "VALUES (@Nombre, @Apellido, @Dni, @Mail, @Hash, @IDRol, 1); " +
-                                             "SELECT CAST(SCOPE_IDENTITY() AS INT);";
+                    
+                    string consultaUsuario = @"
+                        INSERT INTO Usuario (Nombre, Apellido, Dni, Telefono, Domicilio, Mail, ContraseniaHash, Foto, Activo, IDRol) 
+                        VALUES (@Nombre, @Apellido, @Dni, @Telefono, @Domicilio, @Mail, @Hash, @Foto, 1, @IDRol);
+                        SELECT CAST(SCOPE_IDENTITY() AS INT);";
 
                     datos.SetearConsulta(consultaUsuario);
                     datos.SetearParametro("@Nombre", nuevo.Nombre);
                     datos.SetearParametro("@Apellido", nuevo.Apellido);
                     datos.SetearParametro("@Dni", nuevo.Dni);
+                    datos.SetearParametro("@Telefono", nuevo.Telefono);
+                    datos.SetearParametro("@Domicilio", (object)nuevo.Domicilio ?? DBNull.Value);
                     datos.SetearParametro("@Mail", nuevo.Mail);
                     datos.SetearParametro("@Hash", hash);
-                    datos.SetearParametro("@IDRol", (int)Rol.Cliente); // Se registra como Cliente
+                    datos.SetearParametro("@Foto", (object)nuevo.Foto ?? DBNull.Value);
+                    datos.SetearParametro("@IDRol", (int)Rol.Cliente); 
 
-                    int idNuevoUsuario = datos.EjecutarAccionEscalar();
+                    
 
-                    // Inserta en la tabla Cliente usando el ID obtenido
-                    string consultaCliente = "INSERT INTO Cliente (IDUsuario, Domicilio, Telefono) " +
-                                             "VALUES (@IDUsuario, @Domicilio, @Telefono)";
-
-
-                    datos.SetearConsulta(consultaCliente);
-                    datos.SetearParametro("@IDUsuario", idNuevoUsuario);
-                    datos.SetearParametro("@Domicilio", (object)nuevo.Domicilio ?? DBNull.Value);
-                    datos.SetearParametro("@Telefono", (object)nuevo.Telefono ?? DBNull.Value);
-
-                    datos.EjecutarAccion(); // Esta vez no devuelve nada
-
-                    return idNuevoUsuario;
+                    return datos.EjecutarAccionEscalar();
                 }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
+                catch (Exception ex) { throw ex; }
             }
+        }
+
+        public List<Usuario> ListarPorRol(int idRol)
+        {
+            List<Usuario> lista = new List<Usuario>();
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearProcedimiento("ListarUsuariosPorRol");
+                    datos.SetearParametro("@IDRol", idRol);
+                    datos.EjecutarLectura();
+
+                    while (datos.Lector.Read())
+                    {
+                        Usuario aux;
+                        Rol rol = (Rol)datos.Lector["IDRol"];
+
+                        
+                        switch (rol)
+                        {
+                            case Rol.Admin: aux = new Administrador(); break;
+                            case Rol.Profesional: aux = new Profesional(); break;
+                            case Rol.Recepcionista: aux = new Recepcionista(); break;
+                            case Rol.ProfesionalUnico: aux = new ProfesionalUnico(); break;
+                            case Rol.Cliente:
+                            default: aux = new Cliente(); break;
+                        }
+
+                       
+                        aux.ID = (int)datos.Lector["IDUsuario"];
+                        aux.Nombre = (string)datos.Lector["Nombre"];
+                        aux.Apellido = (string)datos.Lector["Apellido"];
+                        aux.Dni = (string)datos.Lector["Dni"];
+                        aux.Mail = (string)datos.Lector["Mail"];
+                        aux.Foto = datos.Lector["Foto"] != DBNull.Value ? (string)datos.Lector["Foto"] : null;
+                        aux.Activo = (bool)datos.Lector["Activo"];
+                        aux.Rol = rol;
+
+                        lista.Add(aux);
+                    }
+                }
+                catch (Exception ex) { throw ex; }
+            }
+            return lista;
         }
     }
 }

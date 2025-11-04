@@ -7,14 +7,12 @@ using System.Threading.Tasks;
 
 namespace Dominio
 {
-    
-        public class Pago
-        {
-            public int IDPago { get; set; }
-            public DateTime FechaPago { get; set; }
-            public decimal Monto { get; set; }
-            public TipoPago Tipo { get; set; } 
-        }
-
-    
+    public class Pago
+    {
+        public int IDPago { get; set; }
+        public DateTime FechaPago { get; set; }
+        public decimal Monto { get; set; }
+        public TipoPago Tipo { get; set; }
+        public FormaPago FormaDePago { get; set; }
+    }
 }

@@ -13,12 +13,12 @@ namespace CentroEstetica
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-          
+
             if (!IsPostBack)
             {
                 try
                 {
-                   
+
                     EspecialidadNegocio negocio = new EspecialidadNegocio();
 
                     List<Especialidad> listaEspecialidades = negocio.ListarActivos();
@@ -27,15 +27,17 @@ namespace CentroEstetica
                     rptEspecialidades.DataBind();
 
                     ProfesionalNegocio profesionalNegocio = new ProfesionalNegocio();
-                    List<Profesional> listaProfesionales = profesionalNegocio.ListarActivos(Rol.Profesional);
+
+                    
+                    List<Usuario> listaProfesionales = profesionalNegocio.ListarProfesionalesActivos();
+                    
 
                     rptProfesionales.DataSource = listaProfesionales;
-
                     rptProfesionales.DataBind();
                 }
                 catch (Exception ex)
                 {
-                    
+
                     throw ex;
                 }
             }

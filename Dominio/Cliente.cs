@@ -9,8 +9,6 @@ namespace Dominio
 {
     public class Cliente : Usuario
     {
-        public string Domicilio { get; set; }
-        public string Telefono { get; set; }
         public List<Turno> Turnos { get; set; }
 
         public Cliente()
