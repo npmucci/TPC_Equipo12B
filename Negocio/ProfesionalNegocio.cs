@@ -15,14 +15,14 @@ namespace Negocio
         {
             datos = new AccesoDatos.ProfesionalDatos();
         }
-        public List<Profesional> Listar()
+        public List<Profesional> Listar(int idRol)
         {
-            return datos.Listar();
+            return datos.Listar(idRol);
         }
         
-        public List<Profesional> ListarActivos()
+        public List<Profesional> ListarActivos(Rol rol)
         {
-            return Listar().FindAll(prof => prof.Activo);
+            return Listar((int)rol).FindAll(prof => prof.Activo);
         }
     }
 }

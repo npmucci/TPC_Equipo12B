@@ -9,7 +9,7 @@ namespace AccesoDatos
 {
     public class ProfesionalDatos
     {
-        public List<Profesional> Listar()
+        public List<Profesional> Listar(int idRol)
         {
             List<Dominio.Profesional> lista = new List<Profesional>();
             using (Datos datos = new Datos())
@@ -17,7 +17,8 @@ namespace AccesoDatos
                 try
                 {
 
-                    datos.SetearProcedimiento("ListarProfesionales");
+                    datos.SetearProcedimiento("ListarUsuariosPorRol");
+                    datos.SetearParametro("@IDRol", idRol);
                     datos.EjecutarLectura();
                     while (datos.Lector.Read())
                     {

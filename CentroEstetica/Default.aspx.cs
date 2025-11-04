@@ -27,7 +27,8 @@ namespace CentroEstetica
                     rptEspecialidades.DataBind();
 
                     ProfesionalNegocio profesionalNegocio = new ProfesionalNegocio();
-                    List<Profesional> listaProfesionales = profesionalNegocio.ListarActivos();
+                    List<Profesional> listaProfesionales = profesionalNegocio.ListarActivos(Rol.Profesional);
+
                     rptProfesionales.DataSource = listaProfesionales;
 
                     rptProfesionales.DataBind();

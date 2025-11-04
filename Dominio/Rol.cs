@@ -10,6 +10,8 @@ namespace Dominio
     {
         Admin = 1,
         Profesional = 2,
-        Cliente = 3
+        Cliente = 3,
+        Recepcionista = 4,
+        ProfesionalUnico = 5
     }
 }

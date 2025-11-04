@@ -28,6 +28,7 @@ CREATE TABLE EstadoTurno (
 -- 2. Tabla base de Usuarios 
 CREATE TABLE Usuario (
 	IDUsuario INT IDENTITY(1,1) PRIMARY KEY,
+	IDRol INT NOT NULL,
     Nombre VARCHAR(100) NOT NULL,
     Apellido VARCHAR(100) NOT NULL,
     Dni VARCHAR(20) UNIQUE NOT NULL,
@@ -36,17 +37,9 @@ CREATE TABLE Usuario (
     Mail VARCHAR(255) UNIQUE NOT NULL,
     ContraseniaHash VARCHAR(255) NOT NULL, 
 	Foto NVARCHAR(255),
-    Activo BIT NOT NULL DEFAULT 1
+    Activo BIT NOT NULL DEFAULT 1,
+	FOREIGN KEY (IDRol) REFERENCES Rol(IDRol)
     
-);
-
--- nueva tabla que permite que un mismo usuario pueda tener mas de un rol
-CREATE TABLE UsuarioRol (
-    IDUsuario INT NOT NULL,
-    IDRol INT NOT NULL,
-    PRIMARY KEY (IDUsuario, IDRol),
-    FOREIGN KEY (IDUsuario) REFERENCES Usuario(IDUsuario) ON DELETE CASCADE,
-    FOREIGN KEY (IDRol) REFERENCES Rol(IDRol) ON DELETE CASCADE
 );
 
 
@@ -128,14 +121,15 @@ EXEC sp_MSforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL'
 -- 1. Catálogos Base (Estados, Roles, Tipos de Pago)
 INSERT INTO EstadoTurno (Descripcion) VALUES
 ('Confirmado'),
+('Pendiente'),
 ('CanceladoCliente'),
 ('CanceladoProfesional'),
 ('Finalizado');
--- IDs: 1-Confirmado, 2-CanceladoCliente, 3-CanceladoProfesional, 4-Finalizado
+-- IDs: 1-Confirmado, 2- Pendiente de pado, 3-CanceladoCliente, 4-CanceladoProfesional, 5-Finalizado
 
 INSERT INTO Rol (NombreRol) VALUES 
-('Admin'), ('Profesional'), ('Cliente'), ('Recepcionista')
--- IDs: 1-Admin, 2-Profesional, 3-Cliente, 4-Recepcionista
+('Admin'), ('Profesional'), ('Cliente'), ('Recepcionista'), ('ProfesionalUnico')
+-- IDs: 1-Admin, 2-Profesional, 3-Cliente, 4-Recepcionista, 5- Profesioal-Administrador
 
 INSERT INTO TipoPago (Nombre) VALUES 
 ('Seña'), ('Total');
@@ -194,54 +188,50 @@ INSERT INTO Servicio (IDEspecialidad, Nombre, Precio, DuracionMinutos, Activo) V
 DECLARE @PassHash VARCHAR(255) = 'HASH_PLACEHOLDER_123456';
 
 -- Admins (IDRol 1)
-INSERT INTO Usuario (Nombre, Apellido, Dni, Telefono, Mail, ContraseniaHash) VALUES
-('Lucas', 'Berlingeri', '30111222','22233377889', 'lucas.berlingeri@admin.com', @PassHash),
-('Natalia', 'Mucci', '31222333', '22336677991', 'natalia.mucci@admin.com', @PassHash);
+INSERT INTO Usuario (Nombre, Apellido, Dni, Telefono, Mail, ContraseniaHash, IDRol) VALUES
+('Lucas', 'Berlingeri', '30111222','22233377889', 'lucas.berlingeri@admin.com', @PassHash, 1),
+('Natalia', 'Mucci', '31222333', '22336677991', 'natalia.mucci@admin.com', @PassHash, 4);
 -- IDs: 1, 2, 
 
+
 -- Profesionales (IDRol 2)
-INSERT INTO Usuario (Nombre, Apellido, Dni,Telefono, Mail, ContraseniaHash, foto) VALUES
-('Ana', 'Bianchi', '35111111','1136547895', 'ana.bianchi@prof.com', @PassHash,'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg'),
-('Sofia', 'Mancini', '35333333', '1124574120', 'sofia.mancini@prof.com', @PassHash, 'https://img.freepik.com/foto-gratis/retrato-mujer-joven-expresiva_1258-48167.jpg'),
-('Laura', 'Schneider', '36444444','1122336699' ,'laura.schneider@prof.com', @PassHash, 'https://image.jimcdn.com/app/cms/image/transf/none/path/s70f5679ceb3714b2/image/i2cceb8a4aa75b9cf/version/1666629063/image.jpg'),
-('Elena', 'Macedo', '36666666', '1144770022','elena.macedo@prof.com', @PassHash, 'https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg'),
-('Diego', 'Ferrara', '34111222','1234567890', 'diego.ferrara@prof.com', @PassHash, 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg'),
-('Franco', 'Leone', '34222333','1155880033', 'franco.leone@prof.com', @PassHash, 'https://media.istockphoto.com/id/1200677760/es/foto/retrato-de-apuesto-joven-sonriente-con-los-brazos-cruzados.jpg?s=612x612&w=0&k=20&c=RhKR8pxX3y_YVe5CjrRnTcNFEGDryD2FVOcUT_w3m4w='),
-('Martina', 'Wagner', '36555555','1199887766', 'martina.wagner@prof.com', @PassHash,'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8gi0ZLlmIhYygwOcEO3zEkR2fm8sjSNzA64N5kvyKrkULkrH6EX2uo0_BzXqJOtUb0P0&usqp=CAU'),
-('Clara', 'Castro', '37222444','1155990033', 'clara.castro@prof.com', @PassHash, 'https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg');
+INSERT INTO Usuario (Nombre, Apellido, Dni,Telefono, Mail, ContraseniaHash, Foto, IDRol) VALUES
+('Ana', 'Bianchi', '35111111','1136547895', 'ana.bianchi@prof.com', @PassHash,'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg', 2),
+('Sofia', 'Mancini', '35333333', '1124574120', 'sofia.mancini@prof.com', @PassHash, 'https://img.freepik.com/foto-gratis/retrato-mujer-joven-expresiva_1258-48167.jpg', 2),
+('Laura', 'Schneider', '36444444','1122336699' ,'laura.schneider@prof.com', @PassHash, 'https://image.jimcdn.com/app/cms/image/transf/none/path/s70f5679ceb3714b2/image/i2cceb8a4aa75b9cf/version/1666629063/image.jpg', 2),
+('Elena', 'Macedo', '36666666', '1144770022','elena.macedo@prof.com', @PassHash, 'https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg', 2),
+('Diego', 'Ferrara', '34111222','1234567890', 'diego.ferrara@prof.com', @PassHash, 'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg', 2),
+('Franco', 'Leone', '34222333','1155880033', 'franco.leone@prof.com', @PassHash, 'https://media.istockphoto.com/id/1200677760/es/foto/retrato-de-apuesto-joven-sonriente-con-los-brazos-cruzados.jpg?s=612x612&w=0&k=20&c=RhKR8pxX3y_YVe5CjrRnTcNFEGDryD2FVOcUT_w3m4w=', 2),
+('Martina', 'Wagner', '36555555','1199887766', 'martina.wagner@prof.com', @PassHash,'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8gi0ZLlmIhYygwOcEO3zEkR2fm8sjSNzA64N5kvyKrkULkrH6EX2uo0_BzXqJOtUb0P0&usqp=CAU', 2),
+
+-- Usuario unipersonal (Profesional Único - IDRol 5)
+('Clara', 'Castro', '37222444','1155990033', 'clara.castro@prof.com', @PassHash, 'https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg', 5);
+
 -- IDs: 3 a 10
 
 -- Clientes (IDRol 3)
-INSERT INTO Usuario (Nombre, Apellido, Dni, Telefono, Domicilio, Mail, ContraseniaHash) VALUES
-('Maria', 'Gonzalez', '40111111','1150001111','Av. Rivadavia 1234',  'maria.gonzalez@cliente.com', @PassHash),
-('Juan', 'Rodriguez', '40222222','1150018888','Cerrito 900',  'juan.rodriguez@cliente.com', @PassHash),
-('Florencia', 'Gomez', '40333333', '1150003333','Av. Corrientes 5678', 'flor.gomez@cliente.com', @PassHash),
-('Pedro', 'Fernandez', '40444444','1150005555', 'Bolivar 158', 'pedro.fernandez@cliente.com', @PassHash),
-('Camila', 'Lopez', '40555555','1150007777','Florida 550',  'camila.lopez@cliente.com', @PassHash),
-('Martin', 'Diaz', '40666666','1150009999','Peru 345',  'martin.diaz@cliente.com', @PassHash),
-('Lucia', 'Martinez', '40777777','1150013333','Uruguay 300',  'lucia.martinez@cliente.com', @PassHash),
-('Agustin', 'Perez', '40888888','1150015555','Esmeralda 600',  'agustin.perez@cliente.com', @PassHash),
-('Julieta', 'Sanchez', '40999999','1150017777','Carlos Pellegrini 800',  'julieta.sanchez@cliente.com', @PassHash),
-('Valeria', 'Acosta', '41222222','1150019999','Libertad 1000', 'valeria.acosta@cliente.com', @PassHash);
+
+INSERT INTO Usuario (Nombre, Apellido, Dni, Telefono, Domicilio, Mail, ContraseniaHash, IDRol) VALUES
+('Maria', 'Gonzalez', '40111111','1150001111','Av. Rivadavia 1234',  'maria.gonzalez@cliente.com', @PassHash, 3),
+('Juan', 'Rodriguez', '40222222','1150018888','Cerrito 900',  'juan.rodriguez@cliente.com', @PassHash, 3),
+('Florencia', 'Gomez', '40333333', '1150003333','Av. Corrientes 5678', 'flor.gomez@cliente.com', @PassHash, 3),
+('Pedro', 'Fernandez', '40444444','1150005555', 'Bolivar 158', 'pedro.fernandez@cliente.com', @PassHash, 3),
+('Camila', 'Lopez', '40555555','1150007777','Florida 550',  'camila.lopez@cliente.com', @PassHash, 3),
+('Martin', 'Diaz', '40666666','1150009999','Peru 345',  'martin.diaz@cliente.com', @PassHash, 3),
+('Lucia', 'Martinez', '40777777','1150013333','Uruguay 300',  'lucia.martinez@cliente.com', @PassHash, 3),
+('Agustin', 'Perez', '40888888','1150015555','Esmeralda 600',  'agustin.perez@cliente.com', @PassHash, 3),
+('Julieta', 'Sanchez', '40999999','1150017777','Carlos Pellegrini 800',  'julieta.sanchez@cliente.com', @PassHash, 3),
+('Valeria', 'Acosta', '41222222','1150019999','Libertad 1000', 'valeria.acosta@cliente.com', @PassHash, 3);
 
 --IDs: 11 a 20
-
-
--- Asignación de roles (UsuarioRol)
-INSERT INTO UsuarioRol (IDUsuario, IDRol) VALUES
-(1, 1), -- Lucas - Administrador 
-(2, 4), -- Natalia - Recepcionista
-(3, 2), (4, 2), (5, 2), (6, 2), (7, 2), (8, 2), (9, 2), (10,2),
-(11,3),(12,3),(13,3), (14,3),(15,3), (16,3), (17,3), (18,3), (19,3), (20,3);
-
 
 
 
 -- 5. ProfesionalEspecialidad
 INSERT INTO ProfesionalEspecialidad (IDUsuario, IDEspecialidad) VALUES
 (4, 1), (5, 1), -- Manicuras
-(7, 2), (8, 2), -- Esteticistas
-(10, 3), (3, 3),       -- Masajistas
+(7, 2), (10, 2), -- Esteticistas
+(8, 3), (3, 3),       -- Masajistas
 (9, 4), (6, 4);       -- Lashistas
 
 -- 6. Horarios de Atención
@@ -286,31 +276,51 @@ go
 
 
 --Procedimientos Almacenados
-CREATE PROCEDURE ListarEspecialidades
+
+CREATE or ALTER PROCEDURE ListarEspecialidades
 AS
 BEGIN
     SELECT IDEspecialidad, Nombre, Descripcion, Foto, Activo
     FROM Especialidad
     ORDER BY Nombre;
 END
-GO
+go
 
 
-
-CREATE OR ALTER PROCEDURE ListarProfesionales
+CREATE OR ALTER PROCEDURE ListarUsuariosPorRol
+    @IDRol INT  -- siempre se pasa desde el código
 AS
 BEGIN
+    SET NOCOUNT ON;
+
     SELECT 
         U.IDUsuario,
         U.Nombre,
         U.Apellido,
         U.Dni,
+        U.Telefono,
         U.Mail,
-        UR.IDRol,
-		U.Foto,
-        U.Activo
+        U.Foto,
+        U.Activo,
+        U.IDRol
     FROM Usuario U
-    INNER JOIN UsuarioRol UR ON U.IDUsuario = UR.IDUsuario
-    WHERE UR.IDRol = 2;
+    WHERE
+        (
+            -- Si pido profesionales, incluyo también a ProfesionalUnico
+            (@IDRol = 2 AND U.IDRol IN (2,5))
+        )
+        OR
+        (
+            -- Si pido ProfesionalUnico explícitamente
+            (@IDRol = 5 AND U.IDRol = 5)
+        )
+        OR
+        (
+            -- Si pido cualquier otro rol
+            (@IDRol NOT IN (2,5) AND U.IDRol = @IDRol)
+        )
+    ORDER BY U.Apellido, U.Nombre;
 END
+GO
+
 
