@@ -1,124 +1,124 @@
-CREATE DATABASE ESTETICA_BD;
+﻿CREATE DATABASE ESTETICA_BD;
 GO
 USE ESTETICA_BD;
 GO
 
--- 1. Cat�logos 
+-- 1. Catálogos 
 CREATE TABLE Rol (
-    IDRol INT IDENTITY(1,1) PRIMARY KEY,
-    NombreRol NVARCHAR(50) NOT NULL
+    IDRol INT IDENTITY(1,1) PRIMARY KEY,
+    NombreRol NVARCHAR(50) NOT NULL
 );
 
 CREATE TABLE TipoPago (
-    IDTipoPago INT IDENTITY(1,1) PRIMARY KEY,
-    Nombre VARCHAR(50) NOT NULL UNIQUE
+    IDTipoPago INT IDENTITY(1,1) PRIMARY KEY,
+    Nombre VARCHAR(50) NOT NULL UNIQUE
 );
 
 CREATE TABLE FormaPago (
-    IDFormaPago INT IDENTITY(1,1) PRIMARY KEY,
-    Nombre VARCHAR(50) NOT NULL UNIQUE
+    IDFormaPago INT IDENTITY(1,1) PRIMARY KEY,
+    Nombre VARCHAR(50) NOT NULL UNIQUE
 );
 
 
 CREATE TABLE EstadoTurno (
-    IDEstado INT IDENTITY(1,1) PRIMARY KEY,
-    Descripcion VARCHAR(100) NOT NULL UNIQUE
+    IDEstado INT IDENTITY(1,1) PRIMARY KEY,
+    Descripcion VARCHAR(100) NOT NULL UNIQUE
 );
 
--- 2. Tabla base de Usuarios 
+-- 2. Tabla base de Usuarios 
 CREATE TABLE Usuario (
 	IDUsuario INT IDENTITY(1,1) PRIMARY KEY,
 	IDRol INT NOT NULL,
-    Nombre VARCHAR(100) NOT NULL,
-    Apellido VARCHAR(100) NOT NULL,
-    Dni VARCHAR(20) UNIQUE NOT NULL,
+    Nombre VARCHAR(100) NOT NULL,
+    Apellido VARCHAR(100) NOT NULL,
+    Dni VARCHAR(20) UNIQUE NOT NULL,
 	Telefono NVARCHAR(20) UNIQUE NOT NULL,
-	Domicilio  VARCHAR(255) NULL,
-    Mail VARCHAR(255) UNIQUE NOT NULL,
-    ContraseniaHash VARCHAR(255) NOT NULL, 
+	Domicilio  VARCHAR(255) NULL,
+    Mail VARCHAR(255) UNIQUE NOT NULL,
+    ContraseniaHash VARCHAR(255) NOT NULL, 
 	Foto NVARCHAR(255),
-    Activo BIT NOT NULL DEFAULT 1,
+    Activo BIT NOT NULL DEFAULT 1,
 	FOREIGN KEY (IDRol) REFERENCES Rol(IDRol)
-    
+    
 );
 
 
--- 4. Cat�logo de Especialidad
+-- 4. Catálogo de Especialidad
 CREATE TABLE Especialidad (
-    IDEspecialidad INT IDENTITY(1,1) PRIMARY KEY,
-    Nombre VARCHAR(100) NOT NULL UNIQUE,
-    Descripcion VARCHAR(MAX),
+    IDEspecialidad INT IDENTITY(1,1) PRIMARY KEY,
+    Nombre VARCHAR(100) NOT NULL UNIQUE,
+    Descripcion VARCHAR(MAX),
 	Foto VARCHAR (150),
 	Activo BIT NOT NULL DEFAULT 1
 );
 
--- 5. Cat�logo de Servicios 
+-- 5. Catálogo de Servicios 
 CREATE TABLE Servicio (
-    IDServicio INT IDENTITY(1,1) PRIMARY KEY,
-    IDEspecialidad INT NOT NULL, 
-    Nombre VARCHAR(150) NOT NULL,
-    Descripcion VARCHAR(MAX),
-    Precio DECIMAL(10, 2) NOT NULL,
-    DuracionMinutos INT NOT NULL, 
-    Activo BIT NOT NULL DEFAULT 1,
-    
-    FOREIGN KEY (IDEspecialidad) REFERENCES Especialidad(IDEspecialidad)
+    IDServicio INT IDENTITY(1,1) PRIMARY KEY,
+    IDEspecialidad INT NOT NULL, 
+    Nombre VARCHAR(150) NOT NULL,
+    Descripcion VARCHAR(MAX),
+    Precio DECIMAL(10, 2) NOT NULL,
+    DuracionMinutos INT NOT NULL, 
+    Activo BIT NOT NULL DEFAULT 1,
+    
+    FOREIGN KEY (IDEspecialidad) REFERENCES Especialidad(IDEspecialidad)
 );
 
--- 6. Uni�n Usuario (Profesional) - Especialidad
+-- 6. Unión Usuario (Profesional) - Especialidad
 CREATE TABLE ProfesionalEspecialidad (
-    IDUsuario INT NOT NULL,
-    IDEspecialidad INT NOT NULL,
-    PRIMARY KEY (IDUsuario, IDEspecialidad),
-    FOREIGN KEY (IDUsuario) REFERENCES Usuario(IDUsuario) ON DELETE CASCADE,
-    FOREIGN KEY (IDEspecialidad) REFERENCES Especialidad(IDEspecialidad) ON DELETE CASCADE
+    IDUsuario INT NOT NULL,
+    IDEspecialidad INT NOT NULL,
+    PRIMARY KEY (IDUsuario, IDEspecialidad),
+    FOREIGN KEY (IDUsuario) REFERENCES Usuario(IDUsuario) ON DELETE CASCADE,
+    FOREIGN KEY (IDEspecialidad) REFERENCES Especialidad(IDEspecialidad) ON DELETE CASCADE
 );
 
--- 7. Horarios de Disponibilidad 
+-- 7. Horarios de Disponibilidad 
 CREATE TABLE HorarioAtencion (
-    IDHorarioAtencion INT IDENTITY(1,1) PRIMARY KEY,
-    IDUsuario INT NOT NULL,
-    DiaSemana VARCHAR(15) NOT NULL, 
-    HorarioInicio TIME NOT NULL,
-    HorarioFin TIME NOT NULL,
-    Activo BIT NOT NULL DEFAULT 1,
-    FOREIGN KEY (IDUsuario) REFERENCES Usuario(IDUsuario) ON DELETE CASCADE
+    IDHorarioAtencion INT IDENTITY(1,1) PRIMARY KEY,
+    IDUsuario INT NOT NULL,
+    DiaSemana VARCHAR(15) NOT NULL, 
+    HorarioInicio TIME NOT NULL,
+    HorarioFin TIME NOT NULL,
+    Activo BIT NOT NULL DEFAULT 1,
+    FOREIGN KEY (IDUsuario) REFERENCES Usuario(IDUsuario) ON DELETE CASCADE
 );
 
--- 8. Pagos 
+-- 8. Pagos 
 CREATE TABLE Pago (
-    IDPago INT IDENTITY(1,1) PRIMARY KEY,
-    FechaPago DATETIME NOT NULL,
-    Monto DECIMAL(10, 2) NOT NULL,
-    IDTipoPago INT NOT NULL, 
-    IDFormaPago INT NOT NULL,
-    FOREIGN KEY (IDTipoPago) REFERENCES TipoPago(IDTipoPago),
-    FOREIGN KEY (IDFormaPago) REFERENCES FormaPago(IDFormaPago)
+    IDPago INT IDENTITY(1,1) PRIMARY KEY,
+    FechaPago DATETIME NOT NULL,
+    Monto DECIMAL(10, 2) NOT NULL,
+    IDTipoPago INT NOT NULL, 
+    IDFormaPago INT NOT NULL,
+    FOREIGN KEY (IDTipoPago) REFERENCES TipoPago(IDTipoPago),
+    FOREIGN KEY (IDFormaPago) REFERENCES FormaPago(IDFormaPago)
 );
 
 CREATE TABLE Turno (
-    IDTurno INT IDENTITY(1,1) PRIMARY KEY,
-    Fecha DATE NOT NULL,
-    HoraInicio TIME NOT NULL,
-    IDUsuarioProfesional INT NOT NULL,
-    IDUsuarioCliente INT NOT NULL,
-    IDServicio INT NOT NULL,
-    IDPago INT NOT NULL, 
-    IDEstado INT NOT NULL,
-    FOREIGN KEY (IDUsuarioProfesional) REFERENCES Usuario(IDUsuario),
-    FOREIGN KEY (IDUsuarioCliente) REFERENCES Usuario(IDUsuario),
-    FOREIGN KEY (IDServicio) REFERENCES Servicio(IDServicio),
-    FOREIGN KEY (IDPago) REFERENCES Pago(IDPago),
-    FOREIGN KEY (IDEstado) REFERENCES EstadoTurno(IDEstado)
+    IDTurno INT IDENTITY(1,1) PRIMARY KEY,
+    Fecha DATE NOT NULL,
+    HoraInicio TIME NOT NULL,
+    IDUsuarioProfesional INT NOT NULL,
+    IDUsuarioCliente INT NOT NULL,
+    IDServicio INT NOT NULL,
+    IDPago INT NOT NULL, 
+    IDEstado INT NOT NULL,
+    FOREIGN KEY (IDUsuarioProfesional) REFERENCES Usuario(IDUsuario),
+    FOREIGN KEY (IDUsuarioCliente) REFERENCES Usuario(IDUsuario),
+    FOREIGN KEY (IDServicio) REFERENCES Servicio(IDServicio),
+    FOREIGN KEY (IDPago) REFERENCES Pago(IDPago),
+    FOREIGN KEY (IDEstado) REFERENCES EstadoTurno(IDEstado)
 );
 
 
-/* --- INSERCI�N DE DATOS --- */
+/* --- INSERCIÓN DE DATOS --- */
 
 -- Deshabilitamos temporalmente las FK
 EXEC sp_MSforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL'
 
--- 1. Cat�logos Base (Estados, Roles, Tipos de Pago)
+-- 1. Catálogos Base (Estados, Roles, Tipos de Pago)
 INSERT INTO EstadoTurno (Descripcion) VALUES
 ('Confirmado'),
 ('Pendiente'),
@@ -127,23 +127,23 @@ INSERT INTO EstadoTurno (Descripcion) VALUES
 ('Finalizado');
 -- IDs: 1-Confirmado, 2- Pendiente de pado, 3-CanceladoCliente, 4-CanceladoProfesional, 5-Finalizado
 
-INSERT INTO Rol (NombreRol) VALUES 
+INSERT INTO Rol (NombreRol) VALUES 
 ('Admin'), ('Profesional'), ('Cliente'), ('Recepcionista'), ('ProfesionalUnico')
 -- IDs: 1-Admin, 2-Profesional, 3-Cliente, 4-Recepcionista, 5- Profesioal-Administrador
 
-INSERT INTO TipoPago (Nombre) VALUES 
-('Se�a'), ('Total');
--- IDs: 1-Se�a, 2-Total
+INSERT INTO TipoPago (Nombre) VALUES 
+('Seña'), ('Total');
+-- IDs: 1-Seña, 2-Total
 
-INSERT INTO FormaPago (Nombre) VALUES 
-('Efectivo'), ('Electronico');
--- IDs: 1-Paga en Efectivo, 2-Paga de forma electrnica (transferencia-mp-etc).
+INSERT INTO FormaPago (Nombre) VALUES 
+('Efectivo'), ('Electrónico');
+-- IDs: 1-Paga en Efectivo, 2-Paga de forma electrónica (transferencia-mp-etc).
 
 INSERT INTO Especialidad (Nombre, Descripcion, Foto) VALUES
 ('Manicura', 'Servicios de belleza para manos y pies.','https://lafemmebeauty.es/wp-content/uploads/2024/06/Consejos-para-Mantener-Tu-Pedicura-Semipermanente-Perfecta-1.jpeg'),
-('Esteticista', 'Tratamientos faciales, corporales y depilaci�n.', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3Mvo09I7M19WqW-2RbnOT-aw5bo-WOd9PtA&s'),
-('Masajista', 'Masajes terap�uticos y de relajaci�n.', 'https://www.anamanao.com/imagecache/width/uploads/tratamientos/tratamientos-corporales/aromassage-relax.jpg?size=680'),
-('Lashista', 'Servicios de pesta�as y cejas.', 'https://inlashacademy.com/wp-content/uploads/2022/04/lashista-1-1360x902.jpg');
+('Esteticista', 'Tratamientos faciales, corporales y depilación.', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3Mvo09I7M19WqW-2RbnOT-aw5bo-WOd9PtA&s'),
+('Masajista', 'Masajes terapéuticos y de relajación.', 'https://www.anamanao.com/imagecache/width/uploads/tratamientos/tratamientos-corporales/aromassage-relax.jpg?size=680'),
+('Lashista', 'Servicios de pestañas y cejas.', 'https://inlashacademy.com/wp-content/uploads/2022/04/lashista-1-1360x902.jpg');
 -- IDs: 1-Manicura, 2-Esteticista, 3-Masajista, 4-Lashista
 
 -- 2. Servicios (Vinculados a Especialidad)
@@ -156,7 +156,7 @@ INSERT INTO Servicio (IDEspecialidad, Nombre, Precio, DuracionMinutos, Activo) V
 (1, 'Capping', 22000, 75, 1),
 (1, 'Esmaltado comun', 12000, 30, 1),
 (1, 'Soft Gel', 28000, 90, 1),
-(1, 'Dise�o de u�as (simple)', 3000, 15, 1);
+(1, 'Diseño de uñas (simple)', 3000, 15, 1);
 -- Servicios de Esteticista (Especialidad 2)
 INSERT INTO Servicio (IDEspecialidad, Nombre, Precio, DuracionMinutos, Activo) VALUES
 (2, 'Dermaplaning', 35000, 60, 1),
@@ -164,34 +164,34 @@ INSERT INTO Servicio (IDEspecialidad, Nombre, Precio, DuracionMinutos, Activo) V
 (2, 'Hi-FU (Facial)', 80000, 90, 1),
 (2, 'Tratamiento facial con activos', 30000, 50, 1),
 (2, 'Bronceado (Sol Pleno)', 22000, 30, 1),
-(2, 'Depilaci�n laser cuerpo entero', 70000, 120, 1),
-(2, 'Depilaci�n laser pecho', 25000, 30, 1),
-(2, 'Depilaci�n laser espalda', 25000, 30, 1),
+(2, 'Depilación laser cuerpo entero', 70000, 120, 1),
+(2, 'Depilación laser pecho', 25000, 30, 1),
+(2, 'Depilación laser espalda', 25000, 30, 1),
 (2, 'Depilacion rostro', 18000, 20, 1),
-(2, 'Depilaci�n laser una zona (cavado)', 20000, 30, 1);
+(2, 'Depilación laser una zona (cavado)', 20000, 30, 1);
 -- Servicios de Masajista (Especialidad 3)
 INSERT INTO Servicio (IDEspecialidad, Nombre, Precio, DuracionMinutos, Activo) VALUES
 (3, 'Masaje Descontracturante', 40000, 60, 1),
 (3, 'Masaje reducctor', 42000, 60, 1),
 (3, 'Masaje relajante', 40000, 60, 1),
-(3, 'Drenaje Linfatico (Manual)', 48000, 50, 1),
+(3, 'Drenaje Linfático (Manual)', 48000, 50, 1),
 (3, 'Reflexologia', 38000, 45, 1);
 -- Servicios de LASHISTA (Especialidad 4)
 INSERT INTO Servicio (IDEspecialidad, Nombre, Precio, DuracionMinutos, Activo) VALUES
 (4, 'Perfilado de cejas', 18000, 30, 1),
 (4, 'Laminado de cejas', 28000, 50, 1),
-(4, 'Lifting de pesta�as', 30000, 60, 1);
+(4, 'Lifting de pestañas', 30000, 60, 1);
 
 
 
--- 3. Usuarios 
-DECLARE @PassHash VARCHAR(255) = 'HASH_PLACEHOLDER_123456';
+-- 3. Usuarios 
+DECLARE @PassHash VARCHAR(255) = '$2a$10$9A014.JhG379V054ZG4uiOlnBQ25eKTHskhx0lvEh313Qo/wzabSK';
 
 -- Admins (IDRol 1)
 INSERT INTO Usuario (Nombre, Apellido, Dni, Telefono, Mail, ContraseniaHash, IDRol) VALUES
 ('Lucas', 'Berlingeri', '30111222','22233377889', 'lucas.berlingeri@admin.com', @PassHash, 1),
 ('Natalia', 'Mucci', '31222333', '22336677991', 'natalia.mucci@admin.com', @PassHash, 4);
--- IDs: 1, 2, 
+-- IDs: 1, 2, 
 
 
 -- Profesionales (IDRol 2)
@@ -204,7 +204,7 @@ INSERT INTO Usuario (Nombre, Apellido, Dni,Telefono, Mail, ContraseniaHash, Foto
 ('Franco', 'Leone', '34222333','1155880033', 'franco.leone@prof.com', @PassHash, 'https://media.istockphoto.com/id/1200677760/es/foto/retrato-de-apuesto-joven-sonriente-con-los-brazos-cruzados.jpg?s=612x612&w=0&k=20&c=RhKR8pxX3y_YVe5CjrRnTcNFEGDryD2FVOcUT_w3m4w=', 2),
 ('Martina', 'Wagner', '36555555','1199887766', 'martina.wagner@prof.com', @PassHash,'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8gi0ZLlmIhYygwOcEO3zEkR2fm8sjSNzA64N5kvyKrkULkrH6EX2uo0_BzXqJOtUb0P0&usqp=CAU', 2),
 
--- Usuario unipersonal (Profesional �nico - IDRol 5)
+-- Usuario unipersonal (Profesional Único - IDRol 5)
 ('Clara', 'Castro', '37222444','1155990033', 'clara.castro@prof.com', @PassHash, 'https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg', 5);
 
 -- IDs: 3 a 10
@@ -212,15 +212,15 @@ INSERT INTO Usuario (Nombre, Apellido, Dni,Telefono, Mail, ContraseniaHash, Foto
 -- Clientes (IDRol 3)
 
 INSERT INTO Usuario (Nombre, Apellido, Dni, Telefono, Domicilio, Mail, ContraseniaHash, IDRol) VALUES
-('Maria', 'Gonzalez', '40111111','1150001111','Av. Rivadavia 1234',  'maria.gonzalez@cliente.com', @PassHash, 3),
-('Juan', 'Rodriguez', '40222222','1150018888','Cerrito 900',  'juan.rodriguez@cliente.com', @PassHash, 3),
+('Maria', 'Gonzalez', '40111111','1150001111','Av. Rivadavia 1234',  'maria.gonzalez@cliente.com', @PassHash, 3),
+('Juan', 'Rodriguez', '40222222','1150018888','Cerrito 900',  'juan.rodriguez@cliente.com', @PassHash, 3),
 ('Florencia', 'Gomez', '40333333', '1150003333','Av. Corrientes 5678', 'flor.gomez@cliente.com', @PassHash, 3),
 ('Pedro', 'Fernandez', '40444444','1150005555', 'Bolivar 158', 'pedro.fernandez@cliente.com', @PassHash, 3),
-('Camila', 'Lopez', '40555555','1150007777','Florida 550',  'camila.lopez@cliente.com', @PassHash, 3),
-('Martin', 'Diaz', '40666666','1150009999','Peru 345',  'martin.diaz@cliente.com', @PassHash, 3),
-('Lucia', 'Martinez', '40777777','1150013333','Uruguay 300',  'lucia.martinez@cliente.com', @PassHash, 3),
-('Agustin', 'Perez', '40888888','1150015555','Esmeralda 600',  'agustin.perez@cliente.com', @PassHash, 3),
-('Julieta', 'Sanchez', '40999999','1150017777','Carlos Pellegrini 800',  'julieta.sanchez@cliente.com', @PassHash, 3),
+('Camila', 'Lopez', '40555555','1150007777','Florida 550',  'camila.lopez@cliente.com', @PassHash, 3),
+('Martin', 'Diaz', '40666666','1150009999','Peru 345',  'martin.diaz@cliente.com', @PassHash, 3),
+('Lucia', 'Martinez', '40777777','1150013333','Uruguay 300',  'lucia.martinez@cliente.com', @PassHash, 3),
+('Agustin', 'Perez', '40888888','1150015555','Esmeralda 600',  'agustin.perez@cliente.com', @PassHash, 3),
+('Julieta', 'Sanchez', '40999999','1150017777','Carlos Pellegrini 800',  'julieta.sanchez@cliente.com', @PassHash, 3),
 ('Valeria', 'Acosta', '41222222','1150019999','Libertad 1000', 'valeria.acosta@cliente.com', @PassHash, 3);
 
 --IDs: 11 a 20
@@ -231,10 +231,10 @@ INSERT INTO Usuario (Nombre, Apellido, Dni, Telefono, Domicilio, Mail, Contrasen
 INSERT INTO ProfesionalEspecialidad (IDUsuario, IDEspecialidad) VALUES
 (4, 1), (5, 1), -- Manicuras
 (7, 2), (10, 2), -- Esteticistas
-(8, 3), (3, 3),       -- Masajistas
-(9, 4), (6, 4);       -- Lashistas
+(8, 3), (3, 3),       -- Masajistas
+(9, 4), (6, 4);       -- Lashistas
 
--- 6. Horarios de Atenci�n
+-- 6. Horarios de Atención
 INSERT INTO HorarioAtencion (IDUsuario, DiaSemana, HorarioInicio, HorarioFin, Activo) VALUES
 (4, 'Lunes', '09:00:00', '18:00:00', 1),(4, 'Martes', '09:00:00', '18:00:00', 1),
 (4, 'Miercoles', '09:00:00', '14:00:00', 1),(7, 'Miercoles', '10:00:00', '20:00:00', 1),
@@ -242,19 +242,19 @@ INSERT INTO HorarioAtencion (IDUsuario, DiaSemana, HorarioInicio, HorarioFin, Ac
 (10, 'Lunes', '14:00:00', '21:00:00', 1),(10, 'Miercoles', '14:00:00', '21:00:00', 1),
 (8, 'Jueves', '08:00:00', '16:00:00', 1),(8, 'Viernes', '08:00:00', '16:00:00', 1);
 
--- 7. Pagos 
--- IDs: 1-Se�a, 2-Total
+-- 7. Pagos 
+-- IDs: 1-Seña, 2-Total
 INSERT INTO Pago (FechaPago, Monto, IDTipoPago, IDFormaPago) VALUES
 (DATEADD(day, -1, GETDATE()), 30000, 2,1), -- Pago 1 (Total)
-(DATEADD(day, -1, GETDATE()), 8000, 1,1),   -- Pago 2 (Se�a)
+(DATEADD(day, -1, GETDATE()), 8000, 1,1),   -- Pago 2 (Seña)
 (DATEADD(day, -2, GETDATE()), 28000, 2,2), -- Pago 3 (Total)
 (DATEADD(day, -3, GETDATE()), 15000, 2,1), -- Pago 4 (Total)
 (DATEADD(day, -5, GETDATE()), 45000, 2,2), -- Pago 5 (Total)
-(DATEADD(day, -1, GETDATE()), 10000, 1,2),  -- Pago 6 (Se�a)
-(DATEADD(day, -1, GETDATE()), 15000, 1,1),  -- Pago 7 (Se�a)
-(DATEADD(day, -1, GETDATE()), 15000, 1,1),  -- Pago 8 (Se�a)
-(CONVERT(date, GETDATE()), 10000, 1,2),  -- Pago 9 (Se�a)
-(DATEADD(day, -2, GETDATE()), 30000, 1,1);  -- Pago 10 (Se�a)
+(DATEADD(day, -1, GETDATE()), 10000, 1,2),  -- Pago 6 (Seña)
+(DATEADD(day, -1, GETDATE()), 15000, 1,1),  -- Pago 7 (Seña)
+(DATEADD(day, -1, GETDATE()), 15000, 1,1),  -- Pago 8 (Seña)
+(CONVERT(date, GETDATE()), 10000, 1,2),  -- Pago 9 (Seña)
+(DATEADD(day, -2, GETDATE()), 30000, 1,1);  -- Pago 10 (Seña)
 -- IDs: 1 a 10
 
 -- 8. Turnos
@@ -271,57 +271,236 @@ INSERT INTO Turno (Fecha, HoraInicio, IDUsuarioProfesional, IDUsuarioCliente, ID
 (DATEADD(day, 10, GETDATE()), '10:00:00', 7, 16, 13, 10, 1);
 
 -- Reactivamos todas las constraints
-EXEC sp_MSforeachtable 'ALTER TABLE ? WITH CHECK CHECK CONSTRAINT ALL'; 
+EXEC sp_MSforeachtable 'ALTER TABLE ? WITH CHECK CHECK CONSTRAINT ALL'; 
 go
 
 
---Procedimientos Almacenados
+--PROCEDIMIENTOS ALMACENADOS
+
+
+-- SP USUARIOS
+
+CREATE OR ALTER PROCEDURE ListarUsuariosPorRol
+    @IDRol INT  -- siempre se pasa desde el codigo
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        U.IDUsuario,
+        U.Nombre,
+        U.Apellido,
+        U.Dni,
+        U.Telefono,
+        U.Domicilio,
+        U.Mail,
+        U.Foto,
+        U.Activo,
+        U.IDRol
+    FROM Usuario U
+    WHERE
+        (
+            -- Si pido profesionales, incluyo tambien a ProfesionalUnico
+            (@IDRol = 2 AND U.IDRol IN (2,5))
+        )
+        OR
+        (
+            -- Si pido ProfesionalUnico explicitamente
+            (@IDRol = 5 AND U.IDRol = 5)
+        )
+        OR
+        (
+            -- Si pido cualquier otro rol
+            (@IDRol NOT IN (2,5) AND U.IDRol = @IDRol)
+        )
+    ORDER BY U.Apellido, U.Nombre;
+END
+GO
+
+CREATE OR ALTER PROCEDURE sp_RegistrarUsuario
+    
+    @Nombre VARCHAR(100),
+    @Apellido VARCHAR(100),
+    @Dni VARCHAR(20),
+    @Telefono NVARCHAR(20),
+    @Domicilio VARCHAR(255),
+    @Mail VARCHAR(255),
+    @Hash VARCHAR(255), 
+    @Foto NVARCHAR(255),
+    @IDRol INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    INSERT INTO Usuario (
+        Nombre, 
+        Apellido, 
+        Dni, 
+        Telefono, 
+        Domicilio, 
+        Mail, 
+        ContraseniaHash,  
+        Foto, 
+        Activo,           
+        IDRol
+    )
+    VALUES (
+        @Nombre, 
+        @Apellido, 
+        @Dni, 
+        @Telefono, 
+        @Domicilio, 
+        @Mail, 
+        @Hash,            
+        @Foto, 
+        1,               
+        @IDRol
+    );
+    SELECT CAST(SCOPE_IDENTITY() AS INT);
+END
+GO
+
+-- SP ESPECIALIDADES
 
 CREATE or ALTER PROCEDURE ListarEspecialidades
 AS
 BEGIN
-    SELECT IDEspecialidad, Nombre, Descripcion, Foto, Activo
-    FROM Especialidad
-    ORDER BY Nombre;
-END
-go
-
-
-CREATE OR ALTER PROCEDURE ListarUsuariosPorRol
-    @IDRol INT  -- siempre se pasa desde el c�digo
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    SELECT 
-        U.IDUsuario,
-        U.Nombre,
-        U.Apellido,
-        U.Dni,
-        U.Telefono,
-		U.Domicilio,
-        U.Mail,
-        U.Foto,
-        U.Activo,
-        U.IDRol
-    FROM Usuario U
-    WHERE
-        (
-            -- Si pido profesionales, incluyo tambi�n a ProfesionalUnico
-            (@IDRol = 2 AND U.IDRol IN (2,5))
-        )
-        OR
-        (
-            -- Si pido ProfesionalUnico expl�citamente
-            (@IDRol = 5 AND U.IDRol = 5)
-        )
-        OR
-        (
-            -- Si pido cualquier otro rol
-            (@IDRol NOT IN (2,5) AND U.IDRol = @IDRol)
-        )
-    ORDER BY U.Apellido, U.Nombre;
+    SELECT IDEspecialidad, Nombre, Descripcion, Foto, Activo
+    FROM Especialidad
+    ORDER BY Nombre;
 END
 GO
 
+CREATE OR ALTER PROCEDURE sp_AgregarEspecialidad
+    @Nombre VARCHAR(100),
+    @Descripcion VARCHAR(MAX),
+    @Foto VARCHAR(150)
+AS
+BEGIN
+    INSERT INTO Especialidad (Nombre, Descripcion, Foto, Activo)
+    VALUES (@Nombre, @Descripcion, @Foto, 1)
+END
+GO
 
+CREATE OR ALTER PROCEDURE sp_ModificarEspecialidad
+    @ID INT,
+    @Nombre VARCHAR(100),
+    @Descripcion VARCHAR(MAX),
+    @Foto VARCHAR(150),
+    @Activo BIT
+AS
+BEGIN
+    UPDATE Especialidad
+    SET 
+        Nombre = @Nombre,
+        Descripcion = @Descripcion,
+        Foto = @Foto,
+        Activo = @Activo
+    WHERE 
+        IDEspecialidad = @ID
+END
+GO
+
+CREATE OR ALTER PROCEDURE sp_EliminarLogicoEspecialidad
+    @ID INT
+AS
+BEGIN
+    UPDATE Especialidad
+    SET 
+        Activo = 0
+    WHERE 
+        IDEspecialidad = @ID
+END
+GO
+
+-- SP SERVICIOS
+
+CREATE OR ALTER PROCEDURE sp_AgregarServicio
+    @IDEspecialidad INT,
+    @Nombre VARCHAR(150),
+    @Descripcion VARCHAR(MAX),
+    @Precio DECIMAL(10, 2),
+    @DuracionMinutos INT
+AS
+BEGIN
+    INSERT INTO Servicio (IDEspecialidad, Nombre, Descripcion, Precio, DuracionMinutos, Activo)
+    VALUES (@IDEspecialidad, @Nombre, @Descripcion, @Precio, @DuracionMinutos, 1)
+END
+GO
+
+CREATE OR ALTER PROCEDURE sp_ModificarServicio
+    @IDServicio INT,
+    @IDEspecialidad INT,
+    @Nombre VARCHAR(150),
+    @Descripcion VARCHAR(MAX),
+    @Precio DECIMAL(10, 2),
+    @DuracionMinutos INT,
+    @Activo BIT
+AS
+BEGIN
+    UPDATE Servicio
+    SET 
+        IDEspecialidad = @IDEspecialidad,
+        Nombre = @Nombre,
+        Descripcion = @Descripcion,
+        Precio = @Precio,
+        DuracionMinutos = @DuracionMinutos,
+        Activo = @Activo
+    WHERE 
+        IDServicio = @IDServicio
+END
+GO
+
+CREATE OR ALTER PROCEDURE sp_EliminarLogicoServicio
+    @IDServicio INT
+AS
+BEGIN
+    UPDATE Servicio
+    SET 
+        Activo = 0
+    WHERE 
+        IDServicio = @IDServicio
+END
+GO
+
+-- SP HORARIO ATENCION
+
+CREATE PROCEDURE sp_AgregarHorario
+    @IDUsuario INT,
+    @DiaSemana VARCHAR(15),
+    @HorarioInicio TIME,
+    @HorarioFin TIME
+AS
+BEGIN
+    INSERT INTO HorarioAtencion (IDUsuario, DiaSemana, HorarioInicio, HorarioFin, Activo)
+    VALUES (@IDUsuario, @DiaSemana, @HorarioInicio, @HorarioFin, 1)
+END
+GO
+
+CREATE PROCEDURE sp_ModificarHorario
+    @IDHorarioAtencion INT,
+    @DiaSemana VARCHAR(15),
+    @HorarioInicio TIME,
+  mH @HorarioFin TIME,
+    @Activo BIT
+AS
+BEGIN
+    UPDATE HorarioAtencion 
+    SET 
+        DiaSemana = @DiaSemana, 
+        HorarioInicio = @HorarioInicio, 
+        HorarioFin = @HorarioFin, 
+        Activo = @Activo 
+    WHERE 
+        IDHorarioAtencion = @IDHorarioAtencion
+END
+GO
+
+CREATE PROCEDURE sp_EliminarHorario
+    @IDHorarioAtencion INT
+AS
+BEGIN
+    -- Borrado físico, NO LOGICO
+    DELETE FROM HorarioAtencion 
+    WHERE IDHorarioAtencion = @IDHorarioAtencion
+END
+GO
