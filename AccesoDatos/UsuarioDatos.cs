@@ -101,19 +101,13 @@ namespace AccesoDatos
 
 
 
-        public int RegistrarCliente(Cliente nuevo, string hash)
+        public int RegistrarUsuario(Usuario nuevo, string hash)
         {
             using (Datos datos = new Datos())
             {
                 try
                 {
-                    
-                    string consultaUsuario = @"
-                        INSERT INTO Usuario (Nombre, Apellido, Dni, Telefono, Domicilio, Mail, ContraseniaHash, Foto, Activo, IDRol) 
-                        VALUES (@Nombre, @Apellido, @Dni, @Telefono, @Domicilio, @Mail, @Hash, @Foto, 1, @IDRol);
-                        SELECT CAST(SCOPE_IDENTITY() AS INT);";
-
-                    datos.SetearConsulta(consultaUsuario);
+                    datos.SetearProcedimiento("sp_RegistrarUsuario");
                     datos.SetearParametro("@Nombre", nuevo.Nombre);
                     datos.SetearParametro("@Apellido", nuevo.Apellido);
                     datos.SetearParametro("@Dni", nuevo.Dni);
@@ -122,8 +116,9 @@ namespace AccesoDatos
                     datos.SetearParametro("@Mail", nuevo.Mail);
                     datos.SetearParametro("@Hash", hash);
                     datos.SetearParametro("@Foto", (object)nuevo.Foto ?? DBNull.Value);
-                    datos.SetearParametro("@IDRol", (int)Rol.Cliente); 
 
+                   
+                    datos.SetearParametro("@IDRol", (int)nuevo.Rol);
                     
 
                     return datos.EjecutarAccionEscalar();

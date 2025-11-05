@@ -85,5 +85,67 @@ namespace AccesoDatos
         }
 
 
+        public void Agregar(Especialidad nueva)
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+
+                    datos.SetearProcedimiento("sp_AgregarEspecialidad");
+
+
+                    datos.SetearParametro("@Nombre", nueva.Nombre);
+                    datos.SetearParametro("@Descripcion", (object)nueva.Descripcion ?? DBNull.Value);
+                    datos.SetearParametro("@Foto", (object)nueva.Foto ?? DBNull.Value);
+
+                    datos.EjecutarAccion();
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
+        public void Modificar(Especialidad mod)
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearProcedimiento("sp_ModificarEspecialidad");
+                    datos.SetearParametro("@ID", mod.IDEspecialidad);
+                    datos.SetearParametro("@Nombre", mod.Nombre);
+                    datos.SetearParametro("@Descripcion", (object)mod.Descripcion ?? DBNull.Value);
+                    datos.SetearParametro("@Foto", (object)mod.Foto ?? DBNull.Value);
+                    datos.SetearParametro("@Activo", mod.Activo);
+
+                    datos.EjecutarAccion();
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
+        public void EliminarLogico(int id)
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearProcedimiento("sp_EliminarLogicoEspecialidad");
+                    datos.SetearParametro("@ID", id);
+                    datos.EjecutarAccion();
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
     }
 }
