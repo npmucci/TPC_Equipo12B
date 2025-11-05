@@ -299,6 +299,7 @@ BEGIN
         U.Apellido,
         U.Dni,
         U.Telefono,
+		U.Domicilio,
         U.Mail,
         U.Foto,
         U.Activo,

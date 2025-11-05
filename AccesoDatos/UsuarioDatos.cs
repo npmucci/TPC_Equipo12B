@@ -165,6 +165,8 @@ namespace AccesoDatos
                         aux.Apellido = (string)datos.Lector["Apellido"];
                         aux.Dni = (string)datos.Lector["Dni"];
                         aux.Mail = (string)datos.Lector["Mail"];
+                        aux.Telefono = (string)datos.Lector["Telefono"];
+                        aux.Domicilio = datos.Lector["Domicilio"] == DBNull.Value? string.Empty: datos.Lector["Domicilio"].ToString();
                         aux.Foto = datos.Lector["Foto"] != DBNull.Value ? (string)datos.Lector["Foto"] : null;
                         aux.Activo = (bool)datos.Lector["Activo"];
                         aux.Rol = rol;

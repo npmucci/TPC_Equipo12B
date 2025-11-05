@@ -30,7 +30,9 @@ namespace Negocio
                     return null;
                 }
 
-                bool esValido = BCrypt.Net.BCrypt.Verify(passwordPlano, credenciales.Hash);
+                bool esValido = credenciales.Hash == passwordPlano; // solo para probar con las contraseñas de la bbdd que no estan encriptadas
+
+                //bool esValido = BCrypt.Net.BCrypt.Verify(passwordPlano, credenciales.Hash);
 
 
                 if (!esValido)  // si no es válido, devolvemos null

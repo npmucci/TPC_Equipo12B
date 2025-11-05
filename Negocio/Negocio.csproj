@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClienteNegocio.cs" />
     <Compile Include="EspecialidadNegocio.cs" />
     <Compile Include="ProfesionalNegocio.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
