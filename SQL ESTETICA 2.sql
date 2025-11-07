@@ -480,7 +480,7 @@ CREATE PROCEDURE sp_ModificarHorario
     @IDHorarioAtencion INT,
     @DiaSemana VARCHAR(15),
     @HorarioInicio TIME,
-  mH @HorarioFin TIME,
+   @HorarioFin TIME,
     @Activo BIT
 AS
 BEGIN
@@ -504,3 +504,32 @@ BEGIN
     WHERE IDHorarioAtencion = @IDHorarioAtencion
 END
 GO
+
+--SP PARA TURNOS
+CREATE OR ALTER PROCEDURE sp_ListarTurnosCliente
+    @IDCliente INT 
+AS
+BEGIN
+    SELECT 
+        
+		T.IDTurno,
+        T.Fecha,
+        T.HoraInicio,
+        T.IDEstado AS Estado,
+        P.Nombre,
+        P.Apellido,
+		S.Nombre AS Servicio
+    FROM Turno T
+    INNER JOIN Usuario C   -- C = Cliente para filtrar por el cliente logueado
+        ON T.IDUsuarioCliente = C.IDUsuario
+    INNER JOIN Usuario P   -- P = Profesional para traer los datos del profesional
+        ON T.IDUsuarioProfesional = P.IDUsuario
+    INNER JOIN Servicio S
+        ON T.IDServicio = S.IDServicio
+    INNER JOIN EstadoTurno E
+        ON T.IDEstado = E.IDEstado
+    WHERE C.IDUsuario = @IDCliente  
+    ORDER BY T.Fecha, T.HoraInicio;
+END
+GO
+

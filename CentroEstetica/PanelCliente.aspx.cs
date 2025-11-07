@@ -13,6 +13,7 @@ namespace CentroEstetica
     {
         
         ClienteNegocio negocio = new ClienteNegocio();
+        TurnoNegocio turnosNegocio = new TurnoNegocio();
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -26,6 +27,9 @@ namespace CentroEstetica
 
                 Cliente cliente = (Cliente)Session["usuario"];
                 CargarDatosCliente(cliente);
+                
+                rptTurnos.DataSource = turnosNegocio.ListarTurnosCliente((int) cliente.ID);
+                rptTurnos.DataBind();
             }
         }
 
