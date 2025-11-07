@@ -25,6 +25,12 @@
             </div>
 
             <div class="mb-3">
+                <label for="txtDni" class="form-label"><strong>Dni:</strong></label>
+                <asp:TextBox ID="txtDni" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
+                <asp:RequiredFieldValidator  ID="RequiredFieldValidator1" runat="server"  ControlToValidate="txtDni" ErrorMessage="El Dni es obligatorio." CssClass="text-danger"  Display="Dynamic" />
+            </div>
+
+            <div class="mb-3">
                 <label for="txtMail" class="form-label"><strong>Email:</strong></label>
                 <asp:TextBox ID="txtMail" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
                 <asp:RequiredFieldValidator ID="rfvMail" runat="server" ControlToValidate="txtMail" ErrorMessage="El email es obligatorio." CssClass="text-danger"  Display="Dynamic" />
@@ -47,6 +53,11 @@
             <asp:Button ID="btnEditar" runat="server" Text="Modificar" CssClass="btn btn-danger btn-sm mt-2" OnClick="btnEditar_Click" />
             <asp:Button ID="btnGuardar" runat="server" Text="Guardar" CssClass="btn btn-success btn-sm mt-2" OnClick="btnGuardar_Click" Visible="false" />
             <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" CssClass="btn btn-secondary btn-sm mt-2" OnClick="btnCancelar_Click" Visible="false" CausesValidation="false" /> <!-- para que no se ejecuten las valiadciones y me permita cancelar una modificacion-->
+            <button type="button" class="btn btn-outline-danger btn-sm" 
+                data-bs-toggle="modal" 
+                data-bs-target="#modalCambiarPass">
+                Cambiar Contraseña
+            </button>
         </div>
     </div>
 
@@ -83,6 +94,107 @@
         </div>
     </div>
 
+    <div class="modal fade" id="modalCambiarPass" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <asp:UpdatePanel ID="updModalPass" runat="server" UpdateMode="Conditional">
+            <ContentTemplate>
+        
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Cambiar Contraseña</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+            
+                    <div class="mb-3" ID="divPassActual" runat="server">
+                        <label for="<%= txtPassActual.ClientID %>" class="form-label">Contraseña Actual</label>
+                        <asp:TextBox ID="txtPassActual" runat="server" CssClass="form-control" TextMode="Password" autocomplete="off"></asp:TextBox>
+                        <!-- VALIDADOR (NECESARIO) -->
+                        <asp:RequiredFieldValidator ID="rfvPassActual" runat="server" ControlToValidate="txtPassActual" 
+                            ErrorMessage="La contraseña actual es obligatoria." CssClass="text-danger" 
+                            Display="Dynamic" ValidationGroup="PassGroup" />
+                    </div>
+
+                    <div class="mb-3" ID="divPassNueva" runat="server">
+                        <label for="<%= txtPassNueva.ClientID %>" class="form-label">Nueva Contraseña</label>
+                        <asp:TextBox ID="txtPassNueva" runat="server" CssClass="form-control" TextMode="Password" autocomplete="new-password"></asp:TextBox>
+                        <!-- VALIDADOR (NECESARIO) -->
+                        <asp:RequiredFieldValidator ID="rfvPassNueva" runat="server" ControlToValidate="txtPassNueva" 
+                            ErrorMessage="La nueva contraseña es obligatoria." CssClass="text-danger" 
+                            Display="Dynamic" ValidationGroup="PassGroup" />
+                    </div>
+
+                    <div class="mb-3" ID="divPassConfirmar" runat="server">
+                        <label for="<%= txtPassConfirmar.ClientID %>" class="form-label">Confirmar Contraseña</label>
+                        <asp:TextBox ID="txtPassConfirmar" runat="server" CssClass="form-control" TextMode="Password" autocomplete="new-password"></asp:TextBox>
+                        <!-- VALIDADORES (NECESARIOS) -->
+                        <asp:RequiredFieldValidator ID="rfvPassConfirmar" runat="server" ControlToValidate="txtPassConfirmar" 
+                            ErrorMessage="La confirmación es obligatoria." CssClass="text-danger" 
+                            Display="Dynamic" ValidationGroup="PassGroup" />
+                        <asp:CompareValidator ID="cvPassConfirmar" runat="server" ControlToValidate="txtPassConfirmar" ControlToCompare="txtPassNueva"
+                            ErrorMessage="Las contraseñas no coinciden." CssClass="text-danger" 
+                            Display="Dynamic" ValidationGroup="PassGroup" />
+                    </div>
+
+                    <asp:Label ID="lblModalError" runat="server" CssClass="text-danger" style="display: none;"></asp:Label>
+                    <asp:Label ID="lblModalExito" runat="server" CssClass="text-success" style="display: none;"></asp:Label>
+
+                </div>
+                
+                <div class="modal-footer" ID="modalFooter" runat="server" ClientIDMode="Static">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" 
+                        ID="btnModalCancelar" runat="server">Cancelar
+                    </button>
+                    <asp:Button ID="btnGuardarContrasenia" runat="server" Text="Guardar Cambios" 
+                        CssClass="btn btn-primary" 
+                        OnClick="btnGuardarContrasenia_Click" 
+                        ValidationGroup="PassGroup" />
+                </div>
+
+            </ContentTemplate>
+
+            
+            <Triggers>
+                <asp:AsyncPostBackTrigger ControlID="btnGuardarContrasenia" EventName="Click" />
+            </Triggers>
+            
+        </asp:UpdatePanel>
+            
+
+           </div>
+        </div>
+    </div>
+
+        <script type="text/javascript">
+
+            $(document).ready(function () {
+
+                var modal = $('#modalCambiarPass');
+
+                
+                modal.on('show.bs.modal', function () {
+
+                    $("input[id$='txtPassActual']").val('');
+                    $("input[id$='txtPassNueva']").val('');
+                    $("input[id$='txtPassConfirmar']").val('');
+
+                    
+                    $("span[id$='lblModalError']").hide().text('');
+                    $("span[id$='lblModalExito']").hide().text('');
+
+             
+                    $("div[id$='divPassActual']").show();
+                    $("div[id$='divPassNueva']").show();
+                    $("div[id$='divPassConfirmar']").show();
+
+                   
+                    $("div[id$='modalFooter']").css('display', 'flex');
+                });
+            });
+
+        </script>
 
 
 </asp:Content>

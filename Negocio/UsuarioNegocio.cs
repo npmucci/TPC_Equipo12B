@@ -50,6 +50,22 @@ namespace Negocio
             }
         }
 
+        public void ActualizarPassword(int idUsuario, string passwordPlano)
+        {
+            try
+            {
+                
+                string nuevoHash = BCrypt.Net.BCrypt.HashPassword(passwordPlano);
+
+                
+                datos.ActualizarPassword(idUsuario, nuevoHash);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
 
         public int RegistrarUsuario(Usuario nuevo, string passwordPlano)
         {

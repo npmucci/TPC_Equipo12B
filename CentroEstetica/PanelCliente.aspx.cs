@@ -11,29 +11,24 @@ namespace CentroEstetica
 {
     public partial class PanelCliente : System.Web.UI.Page
     {
-        ClienteNegocio negocio = new ClienteNegocio();
         
+        ClienteNegocio negocio = new ClienteNegocio();
+
         protected void Page_Load(object sender, EventArgs e)
         {
-          
-
             if (!IsPostBack)
             {
-
                 if (!Seguridad.EsCliente(Session["usuario"]))
                 {
-
                     Response.Redirect("Default.aspx", false);
+                    return; 
                 }
-                
 
-                Usuario usuarioSesion = (Usuario)Session["usuario"];
-
-                Usuario cliente = negocio.ObtenerClientePorId(usuarioSesion.ID);
+                Cliente cliente = (Cliente)Session["usuario"];
                 CargarDatosCliente(cliente);
-
             }
         }
+
         private void CargarDatosCliente(Usuario cliente)
         {
             txtNombre.Text = cliente.Nombre;
@@ -41,15 +36,22 @@ namespace CentroEstetica
             txtMail.Text = cliente.Mail;
             txtTelefono.Text = cliente.Telefono;
             txtDomicilio.Text = cliente.Domicilio;
+            txtDni.Text = cliente.Dni;
+
+           
+
         }
+
         protected void btnEditar_Click(object sender, EventArgs e)
         {
             // Habilitar edición
+
             txtNombre.ReadOnly = false;
             txtApellido.ReadOnly = false;
-            txtMail.ReadOnly = false;
+            // txtMail.ReadOnly = false; 
             txtTelefono.ReadOnly = false;
             txtDomicilio.ReadOnly = false;
+            txtDni.ReadOnly = false;
 
             btnGuardar.Visible = true;
             btnCancelar.Visible = true;
@@ -60,42 +62,47 @@ namespace CentroEstetica
         {
             try
             {
-                Usuario usuarioSesion = (Usuario)Session["usuario"];
+               
+                Cliente clienteActual = (Cliente)Session["usuario"];
 
-                Usuario cliente = new Cliente();
+               
+                clienteActual.Nombre = txtNombre.Text;
+                clienteActual.Apellido = txtApellido.Text;
+                //clienteActual.Mail = txtMail.Text;
+                clienteActual.Telefono = txtTelefono.Text;
+                clienteActual.Domicilio = txtDomicilio.Text;
+                clienteActual.Dni = txtDni.Text;
 
-                cliente.Nombre = txtNombre.Text;
-                cliente.Apellido = txtApellido.Text;
-                cliente.Mail = txtMail.Text;
-                cliente.Telefono = txtTelefono.Text;
-                cliente.Domicilio = txtDomicilio.Text;
+                negocio.Modificar(clienteActual);
 
-                //clienteNegocio.Actualizar(cliente);
+                
+                Session["usuario"] = clienteActual;
 
-                // Bloquear nuevamente
-                txtNombre.ReadOnly = true;
-                txtApellido.ReadOnly = true;
-                txtMail.ReadOnly = true;
-                txtTelefono.ReadOnly = true;
-                txtDomicilio.ReadOnly = true;
+                
+                ResetearControles();
 
-                btnGuardar.Visible = false;
-                btnCancelar.Visible = false;
-                btnEditar.Visible = true;
+                // Mostrar un mensaje de exito....
             }
             catch (Exception ex)
             {
-                
+                // Mostrar un mensaje de error....
             }
         }
 
         protected void btnCancelar_Click(object sender, EventArgs e)
         {
-            Usuario usuarioSesion = (Usuario)Session["usuario"];
+           
+            Cliente clienteOriginal = (Cliente)Session["usuario"];
 
-            Usuario cliente = negocio.ObtenerClientePorId(usuarioSesion.ID);
-            CargarDatosCliente(cliente);
+            
+            CargarDatosCliente(clienteOriginal);
 
+            
+            ResetearControles();
+        }
+
+        private void ResetearControles()
+        {
             txtNombre.ReadOnly = true;
             txtApellido.ReadOnly = true;
             txtMail.ReadOnly = true;
@@ -106,7 +113,56 @@ namespace CentroEstetica
             btnCancelar.Visible = false;
             btnEditar.Visible = true;
         }
+
+        protected void btnGuardarContrasenia_Click(object sender, EventArgs e)
+        {
+         
+            lblModalError.Text = "";
+            lblModalError.Style["display"] = "none";
+            lblModalExito.Text = "";
+            lblModalExito.Style["display"] = "none";
+
+            Page.Validate("PassGroup");
+            if (!Page.IsValid)
+                return;
+
+            try
+            {
+                Usuario usuario = (Usuario)Session["usuario"];
+                string passActualIngresada = txtPassActual.Text;
+                UsuarioNegocio negocio = new UsuarioNegocio();
+
+                Usuario usuarioVerificado = negocio.Login(usuario.Mail, passActualIngresada);
+
+                if (usuarioVerificado == null)
+                {
+                   
+                    lblModalError.Text = "La contraseña actual es incorrecta.";
+                    lblModalError.Style["display"] = "block";
+                    return;
+                }
+
+               
+                string passNueva = txtPassNueva.Text;
+                negocio.ActualizarPassword(usuario.ID, passNueva);
+
+                
+                lblModalExito.Text = "¡Contraseña actualizada con éxito!";
+                lblModalExito.Style["display"] = "block";
+
+                
+                divPassActual.Style["display"] = "none";
+                divPassNueva.Style["display"] = "none";
+                divPassConfirmar.Style["display"] = "none";
+
+                
+                modalFooter.Style["display"] = "none";
+            }
+            catch (Exception ex)
+            {
+                lblModalError.Text = "Ocurrió un error inesperado: " + ex.Message;
+                lblModalError.Style["display"] = "block";
+            }
+        }
     }
-
-
 }
