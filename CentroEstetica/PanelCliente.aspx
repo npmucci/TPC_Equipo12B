@@ -72,10 +72,10 @@
                         <div class="card shadow-sm">
                             <div class="card-body d-flex justify-content-between align-items-center">
                                 <div>
-                                    <p class="mb-1"><strong>Servicio:</strong> <%# Eval("Descripcion") %></p>
-                                    <p class="mb-1"><strong>Profesional:</strong> <%# Eval("Nombre") + " " + Eval("Apellido") %></p>
-                                    <p class="mb-0"><strong>Fecha y Hora:</strong> <%# Eval("Fecha") + " " + Eval("HoraInicio") %></p>
-                                    <p class="mb-0"><strong>Estado</strong> <%# Eval("Fecha") + " " + Eval("Estado") %></p>
+                                    <p class="mb-1"><strong>Servicio:</strong> <%# Eval("Servicio.Nombre") %></p>
+                                    <p class="mb-1"><strong>Profesional:</strong> <%# Eval("Profesional.Nombre") + " " + Eval("Profesional.Apellido") %></p>
+                                    <p class="mb-0"><strong>Fecha y Hora:</strong> <%# Eval("FechaString") + " " + Eval("HoraInicio") %></p>
+                                    <p class="mb-0"><strong>Estado</strong> <%# Eval("Estado") %></p>
                                 </div>
                                 <button class="btn btn-danger btn-sm">Cancelar</button>
                             </div>
@@ -161,34 +161,6 @@
         </div>
     </div>
 
-    <script type="text/javascript">
-
-        $(document).ready(function () {
-
-            var modal = $('#modalCambiarPass');
-
-
-            modal.on('show.bs.modal', function () {
-
-                $("input[id$='txtPassActual']").val('');
-                $("input[id$='txtPassNueva']").val('');
-                $("input[id$='txtPassConfirmar']").val('');
-
-
-                $("span[id$='lblModalError']").hide().text('');
-                $("span[id$='lblModalExito']").hide().text('');
-
-
-                $("div[id$='divPassActual']").show();
-                $("div[id$='divPassNueva']").show();
-                $("div[id$='divPassConfirmar']").show();
-
-
-                $("div[id$='modalFooter']").css('display', 'flex');
-            });
-        });
-
-    </script>
 
 
 </asp:Content>

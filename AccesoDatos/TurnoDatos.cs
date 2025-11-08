@@ -24,8 +24,8 @@ namespace AccesoDatos
                     {
                         Turno aux = new Turno();
                         aux.IDTurno = (int)datos.Lector["IDTurno"];
-                        aux.Fecha = (DateTime)datos.Lector["Fecha"];
-                        aux.HoraInicio = (TimeSpan)datos.Lector["HoraInicio"];
+                        aux.Fecha = ((DateTime)datos.Lector["Fecha"]).Date; // para que no muestra la hora
+                       aux.HoraInicio = (TimeSpan)datos.Lector["HoraInicio"];
                         aux.Profesional = new Profesional()
                         {
 
@@ -37,7 +37,7 @@ namespace AccesoDatos
                             Nombre = (string)datos.Lector["Servicio"],
                         };
 
-                        aux.Estado = (EstadoTurno)(int)datos.Lector["IDEstado"];
+                        aux.Estado = (EstadoTurno)(int)datos.Lector["Estado"];
 
 
                         lista.Add(aux);
