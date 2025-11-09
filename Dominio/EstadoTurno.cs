@@ -9,8 +9,9 @@ namespace Dominio
     public enum EstadoTurno
     {
         Confirmado = 1,
-        CanceladoCliente = 2,
-        CanceladoProfesional = 3,
-        Finalizado = 4
+        Pendiente = 2,
+        CanceladoCliente = 3,
+        CanceladoProfesional = 4,
+        Finalizado = 5
     }
 }

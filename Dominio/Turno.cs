@@ -15,6 +15,17 @@ namespace Dominio
         public Usuario Cliente { get; set; }
         public Servicio Servicio { get; set; }
         public Pago Pago { get; set; }
-        public EstadoTurno Estado { get; set; } 
+        public EstadoTurno Estado { get; set; }
+
+        //para que me devuela la fecha en formato dd/MM/yyyy
+        public string FechaString
+        {
+            get
+            {
+                return Fecha.ToString("dd/MM/yyyy");
+            }
+        }
+
+
     }
 }
