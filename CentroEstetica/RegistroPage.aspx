@@ -8,6 +8,11 @@
     <div class="container py-5">
 
         <!-- PANEL 1: VALIDACIÓN DE MAIL Y CONTRASEÑA -->
+
+        <asp:Panel ID="pnlMensaje" runat="server" Visible="false" role="alert">
+            <asp:Literal ID="litMensaje" runat="server"></asp:Literal>
+        </asp:Panel>
+
         <asp:Panel ID="pnlCredenciales" runat="server" CssClass="card shadow-sm mb-4">
             <div class="card-body">
                 <h2 class="h4 mb-3">Crear cuenta</h2>
@@ -39,7 +44,33 @@
 
                 <asp:Button ID="btnValidar" runat="server" Text="Validar datos" CssClass="btn btn-primary"
                     OnClick="btnValidar_Click" />
-                <asp:Label ID="lblMensaje" runat="server" CssClass="text-danger ms-3"></asp:Label>
+                
+            </div>
+        </asp:Panel>
+
+        </asp:Panel>
+
+
+        <asp:Panel ID="pnlAdminControls" runat="server" Visible="false" CssClass="card shadow-sm mb-4">
+            <div class="card-body">
+                <h2 class="h4 mb-3">Opciones de Administrador</h2>
+                
+                <div class="mb-3">
+                    <label for="<%= ddlRoles.ClientID %>" class="form-label"><strong>Crear usuario como:</strong></label>
+                    <asp:DropDownList ID="ddlRoles" runat="server" CssClass="form-select"
+                        AutoPostBack="true" OnSelectedIndexChanged="ddlRoles_SelectedIndexChanged">
+                    </asp:DropDownList>
+                </div>
+
+                <asp:Panel ID="pnlEspecialidad" runat="server" Visible="false">
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Asignar Especialidades:</strong></label>
+                        
+                        <asp:CheckBoxList ID="cblEspecialidades" runat="server" CssClass="form-check">
+                            </asp:CheckBoxList>
+                    </div>
+                </asp:Panel>
+
             </div>
         </asp:Panel>
 

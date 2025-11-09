@@ -33,6 +33,11 @@ namespace Negocio
         {
             return datos.ObtenerPorId(id);
         }
+        public void AsignarEspecialidadAProfesional(int idUsuario, int idEspecialidad)
+        {
+            
+            datos.AsignarEspecialidad(idUsuario, idEspecialidad);
+        }
 
         public void Agregar(Especialidad nueva)
         {

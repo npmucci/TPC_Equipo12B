@@ -147,5 +147,24 @@ namespace AccesoDatos
             }
         }
 
+        public void AsignarEspecialidad(int idUsuario, int idEspecialidad)
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    string consulta = "INSERT INTO ProfesionalEspecialidad (IDUsuario, IDEspecialidad) VALUES (@idUsuario, @idEspecialidad)";
+                    datos.SetearConsulta(consulta);
+                    datos.SetearParametro("@idUsuario", idUsuario);
+                    datos.SetearParametro("@idEspecialidad", idEspecialidad);
+                    datos.EjecutarAccion();
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
     }
 }
