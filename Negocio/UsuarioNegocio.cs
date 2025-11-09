@@ -84,5 +84,11 @@ namespace Negocio
                 throw ex;
             }
         }
+
+        public bool VerificarEmail(string email)
+        {
+           
+            return datos.ExisteEmail(email);
+        }
     }
 }

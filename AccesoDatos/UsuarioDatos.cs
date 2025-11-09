@@ -218,5 +218,22 @@ namespace AccesoDatos
                 catch (Exception ex) { throw ex; }
             }
         }
+
+        public bool ExisteEmail(string email)
+        {
+            using (Datos datos = new Datos())
+            {
+                datos.SetearConsulta("SELECT COUNT(*) FROM Usuario WHERE Mail = @Mail");
+                datos.SetearParametro("@Mail", email);
+                datos.EjecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    int count = (int)datos.Lector[0];
+                    return count > 0;
+                }
+                return false;
+            }
+        }
     }
 }
