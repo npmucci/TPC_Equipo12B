@@ -115,6 +115,9 @@ namespace CentroEstetica
                     case Rol.Recepcionista:
                         nuevo = new Recepcionista();
                         break;
+                    case Rol.ProfesionalUnico:
+                        nuevo = new ProfesionalUnico();
+                        break;
                     case Rol.Cliente:
                     default:
                         nuevo = new Cliente();
@@ -178,7 +181,8 @@ namespace CentroEstetica
             ddlRoles.Items.Add(new ListItem("Profesional", ((int)Rol.Profesional).ToString()));
             ddlRoles.Items.Add(new ListItem("Recepcionista", ((int)Rol.Recepcionista).ToString()));
             ddlRoles.Items.Add(new ListItem("Administrador", ((int)Rol.Admin).ToString()));
-            
+            ddlRoles.Items.Add(new ListItem("Profesional y Administrador", ((int)Rol.ProfesionalUnico).ToString()));
+
 
             ddlRoles.SelectedValue = ((int)Rol.Cliente).ToString(); // Default
         }
