@@ -53,9 +53,7 @@
                 <asp:Button ID="btnEditar" runat="server" Text="Modificar" CssClass="btn btn-danger btn-sm mt-2" OnClick="btnEditar_Click" />
                 <asp:Button ID="btnGuardar" runat="server" Text="Guardar" CssClass="btn btn-success btn-sm mt-2" OnClick="btnGuardar_Click" Visible="false" />
                 <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" CssClass="btn btn-secondary btn-sm mt-2" OnClick="btnCancelar_Click" Visible="false" CausesValidation="false" />
-                <asp:Button ID="btnCambiarPass" runat="server" Text="Modificar Contraseña"
-                    CssClass="btn btn-success btn-sm mt-2"
-                    OnClientClick="abrirModalCambiarPass(); return false;" />
+                <asp:Button ID="btnCambiarPass" runat="server" Text="Modificar Contraseña" CssClass="btn btn-success btn-sm mt-2" Visible = false OnClientClick="abrirModalCambiarPass();" />
 
 
             </div>
@@ -110,7 +108,7 @@
 
 
         <!--  Cambiar Contraseña -->
-        <!-- Modal Cambiar Contraseña -->
+    
         <div class="modal fade" id="modalCambiarPass" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -121,7 +119,7 @@
                     </div>
 
                     <div class="modal-body">
-                        <asp:UpdatePanel ID="updCambiarPass" runat="server">
+                        <asp:UpdatePanel ID="updCambiarPass" runat="server" UpdateMode="Conditional">
                             <ContentTemplate>
 
                                 <div class="mb-3">
@@ -155,8 +153,8 @@
                                         CssClass="text-danger" Display="Dynamic" ValidationGroup="PassGroup" />
                                 </div>
 
-                                <asp:Label ID="lblErrorPass" runat="server" CssClass="text-danger d-block"></asp:Label>
-                                <asp:Label ID="lblExitoPass" runat="server" CssClass="text-success d-block"></asp:Label>
+                                <asp:Label ID="lblErrorPass" runat="server" CssClass="text-danger d-block" EnableViewState="false"></asp:Label>
+                                <asp:Label ID="lblExitoPass" runat="server" CssClass="text-success d-block" EnableViewState="false"></asp:Label>
 
                                 <div class="text-end">
                                     <asp:Button ID="btnGuardarContraseniaPnl" runat="server" Text="Guardar" CssClass="btn btn-primary btn-sm"
@@ -181,6 +179,13 @@
         function abrirModalCambiarPass() {
             var modal = new bootstrap.Modal(document.getElementById('modalCambiarPass'));
             modal.show();
+        }
+        function cerrarModalCambiarPass() {
+            var modalElement = document.getElementById('modalCambiarPass');
+            var modalInstance = bootstrap.Modal.getInstance(modalElement);
+            if (modalInstance) {
+                modalInstance.hide();
+            }
         }
     </script>
 

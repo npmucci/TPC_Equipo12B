@@ -136,6 +136,7 @@ namespace CentroEstetica
             lblExitoPass.Text = string.Empty;
 
             updCambiarPass.Update();
+            ScriptManager.RegisterStartupScript(this, GetType(), "MostrarModalCambiarPass", "abrirModalCambiarPass();", true);
 
         }
         protected void btnGuardarContrasenia_Click(object sender, EventArgs e)
@@ -150,6 +151,7 @@ namespace CentroEstetica
             if (!Page.IsValid)
             {
                 updCambiarPass.Update();
+                ScriptManager.RegisterStartupScript(this, GetType(), "ReabrirModal", "abrirModalCambiarPass();", true);
                 return;
             }
 
@@ -166,7 +168,9 @@ namespace CentroEstetica
 
                     // Error: Contraseña actual incorrecta
                     lblErrorPass.Text = "La **Contraseña Actual** es incorrecta.";
-                    lblErrorPass.Visible = true; // MOSTRAR usando Visible
+                    lblErrorPass.Visible = true;
+
+                    ScriptManager.RegisterStartupScript(this, GetType(), "ReabrirModal", "abrirModalCambiarPass();", true);
                     updCambiarPass.Update();
 
                     return;
@@ -174,24 +178,25 @@ namespace CentroEstetica
 
 
                 string passNueva = txtPassNueva.Text;
-                negocio.ActualizarPassword(usuario.ID, passNueva);
+                negocio.ActualizarPassword(usuarioVerificado.ID, passNueva);
 
 
                 // exito
-                lblExitoPass.Text = "¡Contraseña actualizada con éxito! Puede cerrar el modal.";
+                lblExitoPass.Text = "Contraseña actualizada con éxito.";
                 lblExitoPass.Visible = true;
-
+                ScriptManager.RegisterStartupScript(this, GetType(), "CerrarModalCambiarPass", "setTimeout(function() { cerrarModalCambiarPass(); }, 1500);", true);
 
                 // Limpiar campos
                 txtPassActual.Text = string.Empty;
                 txtPassNueva.Text = string.Empty;
                 txtPassConfirmar.Text = string.Empty;
                 updCambiarPass.Update();
+                btnCambiarPass.Visible = false;
             }
             catch (Exception ex)
             {
                 lblErrorPass.Text = "Ocurrió un error inesperado al actualizar: " + ex.Message;
-                lblErrorPass.Visible = true; // MOSTRAR usando Visible
+                lblErrorPass.Visible = true; 
 
 
             }

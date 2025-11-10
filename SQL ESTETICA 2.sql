@@ -532,7 +532,46 @@ BEGIN
     ORDER BY T.Fecha, T.HoraInicio;
 END
 GO
+
+CREATE OR ALTER PROCEDURE sp_ListarTodosLosTurnos
+AS
+BEGIN
+    SELECT 
+        T.IDTurno,
+        T.Fecha,
+        T.HoraInicio,
+        P.Nombre AS NombreProfesional,
+		P.Apellido AS ApellidoProfesional,
+        C.Nombre AS NombreCliente,
+		C.Apellido AS ApellidoCliente,
+        S.Nombre AS Servicio,
+        E.IDEstado,
+        Pago.Monto,
+        TP.IDTipoPago,
+        FP.IDFormaPago
+    FROM Turno T
+    INNER JOIN Usuario P
+        ON T.IDUsuarioProfesional = P.IDUsuario
+    INNER JOIN Usuario C
+        ON T.IDUsuarioCliente = C.IDUsuario
+    INNER JOIN Servicio S
+        ON T.IDServicio = S.IDServicio
+    INNER JOIN EstadoTurno E
+        ON T.IDEstado = E.IDEstado
+    INNER JOIN Pago 
+        ON T.IDPago = Pago.IDPago
+    INNER JOIN TipoPago TP
+        ON Pago.IDTipoPago = TP.IDTipoPago
+    INNER JOIN FormaPago FP
+        ON Pago.IDFormaPago = FP.IDFormaPago
+    ORDER BY T.Fecha, T.HoraInicio;
+END
+GO
+
+
+
+
 -- insert para probar turnos confrimados
 INSERT INTO Turno (Fecha, HoraInicio, IDUsuarioCliente, IDUsuarioProfesional, IDServicio, IDPago, IDEstado)
 VALUES 
-('2025-11-15', '10:30:00', 12, 8, 20,10, 2); -- 2 = Confirmado
+('2025-11-15', '10:30:00', 12, 8, 20,10, 2); 

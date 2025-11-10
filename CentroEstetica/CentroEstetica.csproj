@@ -76,6 +76,7 @@
     <Content Include="PanelAdmin.aspx" />
     <Content Include="PanelCliente.aspx" />
     <Content Include="PanelProfesional.aspx" />
+    <Content Include="PanelSecretaria.aspx" />
     <Content Include="PanelTurnos.aspx" />
     <Content Include="RegistroPage.aspx" />
     <Content Include="Servicios.aspx" />
@@ -126,6 +127,13 @@
     </Compile>
     <Compile Include="PanelProfesional.aspx.designer.cs">
       <DependentUpon>PanelProfesional.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PanelSecretaria.aspx.cs">
+      <DependentUpon>PanelSecretaria.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PanelSecretaria.aspx.designer.cs">
+      <DependentUpon>PanelSecretaria.aspx</DependentUpon>
     </Compile>
     <Compile Include="PanelTurnos.aspx.cs">
       <DependentUpon>PanelTurnos.aspx</DependentUpon>
