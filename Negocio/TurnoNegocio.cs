@@ -16,5 +16,15 @@ namespace Negocio
         {
             return datos.ListarTurnosCliente(idCliente);
         }
+
+        public List<Turno> ListarTurnosPasados(int idCliente)
+        {
+            return datos.ListarTurnosCliente(idCliente).FindAll(turnos => turnos.Estado != EstadoTurno.Confirmado && turnos.Estado != EstadoTurno.Pendiente);
+        }
+
+        public List<Turno> ListarTurnosActuales(int idCliente)
+        {
+            return datos.ListarTurnosCliente(idCliente).FindAll(turnos => turnos.Estado == EstadoTurno.Confirmado || turnos.Estado == EstadoTurno.Pendiente);
+        }
     }
 }

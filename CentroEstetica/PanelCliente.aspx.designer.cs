@@ -159,31 +159,40 @@ namespace CentroEstetica
         protected global::System.Web.UI.WebControls.Button btnCancelar;
 
         /// <summary>
-        /// Control rptTurnos.
+        /// Control btnCambiarPass.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptTurnos;
+        protected global::System.Web.UI.WebControls.Button btnCambiarPass;
 
         /// <summary>
-        /// Control updModalPass.
+        /// Control rptTurnosPasados.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel updModalPass;
+        protected global::System.Web.UI.WebControls.Repeater rptTurnosPasados;
 
         /// <summary>
-        /// Control divPassActual.
+        /// Control rptTurnosActuales.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divPassActual;
+        protected global::System.Web.UI.WebControls.Repeater rptTurnosActuales;
+
+        /// <summary>
+        /// Control updCambiarPass.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel updCambiarPass;
 
         /// <summary>
         /// Control txtPassActual.
@@ -204,15 +213,6 @@ namespace CentroEstetica
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvPassActual;
 
         /// <summary>
-        /// Control divPassNueva.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divPassNueva;
-
-        /// <summary>
         /// Control txtPassNueva.
         /// </summary>
         /// <remarks>
@@ -229,15 +229,6 @@ namespace CentroEstetica
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvPassNueva;
-
-        /// <summary>
-        /// Control divPassConfirmar.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divPassConfirmar;
 
         /// <summary>
         /// Control txtPassConfirmar.
@@ -267,48 +258,30 @@ namespace CentroEstetica
         protected global::System.Web.UI.WebControls.CompareValidator cvPassConfirmar;
 
         /// <summary>
-        /// Control lblModalError.
+        /// Control lblErrorPass.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblModalError;
+        protected global::System.Web.UI.WebControls.Label lblErrorPass;
 
         /// <summary>
-        /// Control lblModalExito.
+        /// Control lblExitoPass.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblModalExito;
+        protected global::System.Web.UI.WebControls.Label lblExitoPass;
 
         /// <summary>
-        /// Control modalFooter.
+        /// Control btnGuardarContraseniaPnl.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl modalFooter;
-
-        /// <summary>
-        /// Control btnModalCancelar.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlButton btnModalCancelar;
-
-        /// <summary>
-        /// Control btnGuardarContrasenia.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnGuardarContrasenia;
+        protected global::System.Web.UI.WebControls.Button btnGuardarContraseniaPnl;
     }
 }

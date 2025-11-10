@@ -11,7 +11,7 @@ namespace CentroEstetica
 {
     public partial class PanelCliente : System.Web.UI.Page
     {
-        
+
         ClienteNegocio negocio = new ClienteNegocio();
         TurnoNegocio turnosNegocio = new TurnoNegocio();
 
@@ -22,14 +22,17 @@ namespace CentroEstetica
                 if (!Seguridad.EsCliente(Session["usuario"]))
                 {
                     Response.Redirect("Default.aspx", false);
-                    return; 
+                    return;
                 }
 
                 Cliente cliente = (Cliente)Session["usuario"];
                 CargarDatosCliente(cliente);
-                
-                rptTurnos.DataSource = turnosNegocio.ListarTurnosCliente((int) cliente.ID);
-                rptTurnos.DataBind();
+
+                rptTurnosPasados.DataSource = turnosNegocio.ListarTurnosPasados((int)cliente.ID);
+                rptTurnosPasados.DataBind();
+
+                rptTurnosActuales.DataSource = turnosNegocio.ListarTurnosActuales((int)cliente.ID);
+                rptTurnosActuales.DataBind();
             }
         }
 
@@ -42,7 +45,7 @@ namespace CentroEstetica
             txtDomicilio.Text = cliente.Domicilio;
             txtDni.Text = cliente.Dni;
 
-           
+
 
         }
 
@@ -60,16 +63,17 @@ namespace CentroEstetica
             btnGuardar.Visible = true;
             btnCancelar.Visible = true;
             btnEditar.Visible = false;
+            btnCambiarPass.Visible = true;
         }
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
             try
             {
-               
+
                 Cliente clienteActual = (Cliente)Session["usuario"];
 
-               
+
                 clienteActual.Nombre = txtNombre.Text;
                 clienteActual.Apellido = txtApellido.Text;
                 //clienteActual.Mail = txtMail.Text;
@@ -79,10 +83,10 @@ namespace CentroEstetica
 
                 negocio.Modificar(clienteActual);
 
-                
+
                 Session["usuario"] = clienteActual;
 
-                
+
                 ResetearControles();
 
                 // Mostrar un mensaje de exito....
@@ -95,13 +99,13 @@ namespace CentroEstetica
 
         protected void btnCancelar_Click(object sender, EventArgs e)
         {
-           
+
             Cliente clienteOriginal = (Cliente)Session["usuario"];
 
-            
+
             CargarDatosCliente(clienteOriginal);
 
-            
+
             ResetearControles();
         }
 
@@ -118,17 +122,36 @@ namespace CentroEstetica
             btnEditar.Visible = true;
         }
 
+        protected void btnCambiarPass_Click(object sender, EventArgs e)
+        {
+            
+
+            txtPassActual.Text = string.Empty;
+            txtPassNueva.Text = string.Empty;
+            txtPassConfirmar.Text = string.Empty;
+
+            lblErrorPass.Visible = false;
+            lblExitoPass.Visible = false;
+            lblErrorPass.Text = string.Empty;
+            lblExitoPass.Text = string.Empty;
+
+            updCambiarPass.Update();
+
+        }
         protected void btnGuardarContrasenia_Click(object sender, EventArgs e)
         {
-         
-            lblModalError.Text = "";
-            lblModalError.Style["display"] = "none";
-            lblModalExito.Text = "";
-            lblModalExito.Style["display"] = "none";
+            //escondemos los mensajes y ponemos el texto en vacio
+            lblErrorPass.Visible = false;
+            lblExitoPass.Visible = false;
+            lblErrorPass.Text = string.Empty;
+            lblExitoPass.Text = string.Empty;
 
             Page.Validate("PassGroup");
             if (!Page.IsValid)
+            {
+                updCambiarPass.Update();
                 return;
+            }
 
             try
             {
@@ -140,33 +163,44 @@ namespace CentroEstetica
 
                 if (usuarioVerificado == null)
                 {
-                   
-                    lblModalError.Text = "La contraseña actual es incorrecta.";
-                    lblModalError.Style["display"] = "block";
+
+                    // Error: Contraseña actual incorrecta
+                    lblErrorPass.Text = "La **Contraseña Actual** es incorrecta.";
+                    lblErrorPass.Visible = true; // MOSTRAR usando Visible
+                    updCambiarPass.Update();
+
                     return;
                 }
 
-               
+
                 string passNueva = txtPassNueva.Text;
                 negocio.ActualizarPassword(usuario.ID, passNueva);
 
-                
-                lblModalExito.Text = "¡Contraseña actualizada con éxito!";
-                lblModalExito.Style["display"] = "block";
 
-                
-                divPassActual.Style["display"] = "none";
-                divPassNueva.Style["display"] = "none";
-                divPassConfirmar.Style["display"] = "none";
+                // exito
+                lblExitoPass.Text = "¡Contraseña actualizada con éxito! Puede cerrar el modal.";
+                lblExitoPass.Visible = true;
 
-                
-                modalFooter.Style["display"] = "none";
+
+                // Limpiar campos
+                txtPassActual.Text = string.Empty;
+                txtPassNueva.Text = string.Empty;
+                txtPassConfirmar.Text = string.Empty;
+                updCambiarPass.Update();
             }
             catch (Exception ex)
             {
-                lblModalError.Text = "Ocurrió un error inesperado: " + ex.Message;
-                lblModalError.Style["display"] = "block";
+                lblErrorPass.Text = "Ocurrió un error inesperado al actualizar: " + ex.Message;
+                lblErrorPass.Visible = true; // MOSTRAR usando Visible
+
+
             }
         }
+
+
     }
 }
+
+
+
+

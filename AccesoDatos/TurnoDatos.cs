@@ -37,7 +37,7 @@ namespace AccesoDatos
                             Nombre = (string)datos.Lector["Servicio"],
                         };
 
-                        aux.Estado = (EstadoTurno)(int)datos.Lector["Estado"];
+                        aux.Estado = (EstadoTurno)(int)datos.Lector["IDEstado"];
 
 
                         lista.Add(aux);

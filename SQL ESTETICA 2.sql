@@ -515,7 +515,7 @@ BEGIN
 		T.IDTurno,
         T.Fecha,
         T.HoraInicio,
-        T.IDEstado AS Estado,
+        T.IDEstado,
         P.Nombre,
         P.Apellido,
 		S.Nombre AS Servicio
@@ -532,4 +532,7 @@ BEGIN
     ORDER BY T.Fecha, T.HoraInicio;
 END
 GO
-
+-- insert para probar turnos confrimados
+INSERT INTO Turno (Fecha, HoraInicio, IDUsuarioCliente, IDUsuarioProfesional, IDServicio, IDPago, IDEstado)
+VALUES 
+('2025-11-15', '10:30:00', 12, 8, 20,10, 2); -- 2 = Confirmado
