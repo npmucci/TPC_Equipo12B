@@ -28,10 +28,10 @@ namespace CentroEstetica
                 Cliente cliente = (Cliente)Session["usuario"];
                 CargarDatosCliente(cliente);
 
-                rptTurnosPasados.DataSource = turnosNegocio.ListarTurnosPasados((int)cliente.ID);
+                rptTurnosPasados.DataSource = turnosNegocio.ListarTurnosPasadosCliente((int)cliente.ID);
                 rptTurnosPasados.DataBind();
 
-                rptTurnosActuales.DataSource = turnosNegocio.ListarTurnosActuales((int)cliente.ID);
+                rptTurnosActuales.DataSource = turnosNegocio.ListarTurnosActualesCliente((int)cliente.ID);
                 rptTurnosActuales.DataBind();
             }
         }

@@ -59,6 +59,9 @@ namespace CentroEstetica
                         case Rol.Admin:
                             Response.Redirect("PanelAdmin.aspx", false);
                             break;
+                        case Rol.Recepcionista:
+                            Response.Redirect("PanelRecepcionista.aspx", false);
+                            break;
                         case Rol.Profesional:
                             Response.Redirect("PanelProfesional.aspx", false);
                             break;

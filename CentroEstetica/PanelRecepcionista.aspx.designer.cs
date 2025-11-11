@@ -11,7 +11,7 @@ namespace CentroEstetica
 {
 
 
-    public partial class PanelSecretaria
+    public partial class PanelRecepcionista
     {
 
         /// <summary>

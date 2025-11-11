@@ -547,6 +547,7 @@ BEGIN
         S.Nombre AS Servicio,
         E.IDEstado,
         Pago.Monto,
+		Pago.FechaPago,
         TP.IDTipoPago,
         FP.IDFormaPago
     FROM Turno T

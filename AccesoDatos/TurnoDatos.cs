@@ -46,6 +46,7 @@ namespace AccesoDatos
                             Monto = (decimal)datos.Lector["Monto"],
                             FormaDePago = (FormaPago)(int)datos.Lector["IDFormaPago"],
                             Tipo = (TipoPago)(int)datos.Lector["IDTipoPago"],
+                            FechaPago= ((DateTime)datos.Lector["FechaPago"]).Date
                         };
 
                         aux.Estado = (EstadoTurno)(int)datos.Lector["IDEstado"];
