@@ -166,5 +166,38 @@ namespace AccesoDatos
             }
         }
 
+        public List<Especialidad> ListarPorProfesional(int idProfesional)
+        {
+            List<Especialidad> lista = new List<Especialidad>();
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    string consulta = @"
+                    SELECT E.IDEspecialidad, E.Nombre
+                    FROM Especialidad E
+                    INNER JOIN ProfesionalEspecialidad PE ON E.IDEspecialidad = PE.IDEspecialidad
+                    WHERE PE.IDUsuario = @idProfesional AND E.Activo = 1";
+
+                    datos.SetearConsulta(consulta);
+                    datos.SetearParametro("@idProfesional", idProfesional);
+                    datos.EjecutarLectura();
+
+                    while (datos.Lector.Read())
+                    {
+                        Especialidad aux = new Especialidad();
+                        aux.IDEspecialidad = (int)datos.Lector["IDEspecialidad"];
+                        aux.Nombre = (string)datos.Lector["Nombre"];
+                        lista.Add(aux);
+                    }
+                    return lista;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
     }
 }

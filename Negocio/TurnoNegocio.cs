@@ -38,5 +38,11 @@ namespace Negocio
         {
             return datos.ListarTurnosCliente(idCliente).FindAll(turnos => turnos.Estado == EstadoTurno.Confirmado || turnos.Estado == EstadoTurno.Pendiente);
         }
+
+        public bool ProfesionalTieneTurnosPendientes(int idProfesional)
+        {
+            TurnoDatos datos = new TurnoDatos();
+            return datos.ProfesionalTieneTurnosPendientes(idProfesional);
+        }
     }
 }

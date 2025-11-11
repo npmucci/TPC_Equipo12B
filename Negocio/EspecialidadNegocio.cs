@@ -62,5 +62,10 @@ namespace Negocio
             EspecialidadDatos datos = new EspecialidadDatos();
             datos.EliminarLogico(id);
         }
+
+        public List<Especialidad> ListarPorProfesional(int idProfesional)
+        {
+            return datos.ListarPorProfesional(idProfesional);
+        }
     }
 }

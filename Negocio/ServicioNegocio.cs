@@ -72,5 +72,10 @@ namespace Negocio
             ServicioDatos datos = new ServicioDatos();
             datos.EliminarLogico(id);
         }
+
+        public List<Servicio> ListarPorEspecialidad(int idEspecialidad)
+        {
+            return datos.ListarPorEspecialidad(idEspecialidad);
+        }
     }
 }

@@ -235,5 +235,24 @@ namespace AccesoDatos
                 return false;
             }
         }
+
+        public void CambiarEstado(int idUsuario, bool estado)
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    string consulta = "UPDATE Usuario SET Activo = @estado WHERE IDUsuario = @id";
+                    datos.SetearConsulta(consulta);
+                    datos.SetearParametro("@estado", estado);
+                    datos.SetearParametro("@id", idUsuario);
+                    datos.EjecutarAccion();
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
     }
 }

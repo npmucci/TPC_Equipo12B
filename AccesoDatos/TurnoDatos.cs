@@ -102,5 +102,32 @@ namespace AccesoDatos
             
             return lista;
         }
+
+        public bool ProfesionalTieneTurnosPendientes(int idProfesional)
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                   
+                    string consulta = @"
+                    SELECT COUNT(*) FROM Turno 
+                    WHERE IDUsuarioProfesional = @idProf 
+                    AND Fecha >= CONVERT(date, GETDATE())
+                    AND IDEstado IN (1, 2)"; // 1=Confirmado, 2=Pendiente
+
+                    datos.SetearConsulta(consulta);
+                    datos.SetearParametro("@idProf", idProfesional);
+
+                    
+                    int cantidad = datos.EjecutarAccionEscalar();
+                    return cantidad > 0;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
     }
 }

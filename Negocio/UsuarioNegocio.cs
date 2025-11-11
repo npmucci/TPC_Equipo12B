@@ -54,10 +54,10 @@ namespace Negocio
         {
             try
             {
-                
+
                 string nuevoHash = BCrypt.Net.BCrypt.HashPassword(passwordPlano);
 
-                
+
                 datos.ActualizarPassword(idUsuario, nuevoHash);
             }
             catch (Exception ex)
@@ -87,8 +87,18 @@ namespace Negocio
 
         public bool VerificarEmail(string email)
         {
-           
+
             return datos.ExisteEmail(email);
+        }
+
+        public List<Usuario> ListarPorRol(int idRol)
+        {
+            return datos.ListarPorRol(idRol);
+        }
+
+        public void CambiarEstado(int idUsuario, bool estado)
+        {
+            datos.CambiarEstado(idUsuario, estado);
         }
     }
 }
