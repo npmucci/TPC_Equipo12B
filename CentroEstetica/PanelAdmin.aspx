@@ -56,21 +56,15 @@
                                             <%# (bool)Eval("Activo") ? "Activo" : "Inactivo" %>
                                         </span>
 
-                                        <div class="d-flex gap-2 mt-auto">
-                                            <asp:Button ID="btnModificar" runat="server" Text="Editar" CssClass="btn btn-outline-secondary btn-sm" Enabled="false" />
-                                            
-                                            <asp:Button ID="btnCambiarEstado" runat="server" 
-                                                Text='<%# (bool)Eval("Activo") ? "Dar de Baja" : "Dar de Alta" %>'
-                                                CssClass='<%# (bool)Eval("Activo") ? "btn btn-outline-danger btn-sm" : "btn btn-outline-success btn-sm" %>'
-                                                CommandName='<%# (bool)Eval("Activo") ? "DarDeBaja" : "DarDeAlta" %>'
-                                                CommandArgument='<%# Eval("ID") %>' />
-
-                                            <asp:Button ID="btnGestionarTurnos" runat="server" 
-                                                Text="Ver Turnos" 
-                                                CssClass="btn btn-outline-info btn-sm"
-                                                CommandName="VerTurnos"
-                                                CommandArgument='<%# Eval("ID") %>' />
+                                       <div class="d-flex gap-2 mt-auto">
+                                             <asp:Button ID="btnModificar" runat="server" Text="Editar"
+                                                 CssClass="btn btn-outline-secondary btn-sm" Enabled="false" />
+                                             <asp:Button ID="btnCambiarEstado" runat="server" />
+                                             <asp:Button ID="btnGestionarTurnos" runat="server" Text="Ver Turnos"
+                                                 CssClass="btn btn-outline-info btn-sm"
+                                                 CommandName="VerTurnos" CommandArgument='<%# Eval("ID") %>' />
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -80,59 +74,75 @@
             </div>
         </div>
 
-        <div class="card mb-4">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h2 class="h5 mb-0">Especialidades y Servicios</h2>
-                    <asp:Button ID="btnAgregarEspecialidad" runat="server" Text="+ Agregar Especialidad" CssClass="btn btn-primary btn-sm" Enabled="false" />
-                </div>
-                
-                <div class="accordion" id="especialidadesAccordion">
-                    <asp:Repeater ID="rptEspecialidadesLista" runat="server" OnItemDataBound="rptEspecialidadesLista_ItemDataBound">
-                        <ItemTemplate>
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id='heading<%# Eval("IDEspecialidad") %>'>
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
-                                        data-bs-target='#collapse<%# Eval("IDEspecialidad") %>' aria-expanded="false" 
-                                        aria-controls='collapse<%# Eval("IDEspecialidad") %>'>
-                                        <span class="me-2"><%# Eval("Nombre") %></span>
-                                        <span class='badge <%# (bool)Eval("Activo") ? "bg-success" : "bg-danger" %>'>
-                                            <%# (bool)Eval("Activo") ? "Activo" : "Inactivo" %>
-                                        </span>
-                                    </button>
-                                </h2>
-                                <div id='collapse<%# Eval("IDEspecialidad") %>' class="accordion-collapse collapse" 
-                                    aria-labelledby='heading<%# Eval("IDEspecialidad") %>' data-bs-parent="#especialidadesAccordion">
-                                    <div class="accordion-body">
-                                        <ul class="list-group mb-2">
-                                            <asp:Repeater ID="rptServicios" runat="server">
-                                                <ItemTemplate>
-                                                    <li class="list-group-item d-flex justify-content-between align-items-start">
-                                                        <div>
-                                                            <h6 class="mb-1"><%# Eval("Nombre") %></h6>
-                                                            <small class="text-muted">Duración: <%# Eval("DuracionMinutos") %> min</small>
-                                                        </div>
-                                                        <div class="text-end">
-                                                            <div class="fw-bold text-primary mb-1">$<%# Eval("Precio", "{0:N0}") %></div>
-                                                            <div class="btn-group btn-group-sm">
-                                                                <asp:Button ID="btnEditarServicio" runat="server" Text="Editar" CssClass="btn btn-outline-secondary" Enabled="false" />
-                                                                <asp:Button ID="btnEliminarServicio" runat="server" Text="Eliminar" CssClass="btn btn-outline-danger" Enabled="false" />
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ItemTemplate>
-                                            </asp:Repeater>
-                                        </ul>
-                                        <asp:Button ID="btnAgregarServicio" runat="server" Text="+ Agregar Servicio" CssClass="btn btn-outline-primary btn-sm" Enabled="false" />
-                                        <asp:Button ID="btnEliminarEspecialidad" runat="server" Text="Eliminar Especialidad" CssClass="btn btn-outline-danger btn-sm mt-2" Enabled="false" />
-                                    </div>
-                                </div>
-                            </div>
-                        </ItemTemplate>
-                    </asp:Repeater>
-                </div>
-            </div>
+   <div class="card mb-4">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="h5 mb-0">Especialidades y Servicios</h2>
+            <asp:Button ID="btnAgregarEspecialidad" runat="server" Text="+ Agregar Especialidad" 
+                CssClass="btn btn-primary btn-sm" OnClick="btnAgregarEspecialidad_Click" />
         </div>
+        
+        <div class="accordion" id="especialidadesAccordion">
+            <asp:Repeater ID="rptEspecialidadesLista" runat="server" 
+                OnItemDataBound="rptEspecialidadesLista_ItemDataBound"
+                OnItemCommand="rptEspecialidadesLista_ItemCommand">
+                <ItemTemplate>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id='heading<%# Eval("IDEspecialidad") %>'>
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                data-bs-target='#collapse<%# Eval("IDEspecialidad") %>' aria-expanded="false" 
+                                aria-controls='collapse<%# Eval("IDEspecialidad") %>'>
+                                <span class="me-2"><%# Eval("Nombre") %></span>
+                                <span class='badge <%# (bool)Eval("Activo") ? "bg-success" : "bg-danger" %>'>
+                                    <%# (bool)Eval("Activo") ? "Activo" : "Inactivo" %>
+                                </span>
+                            </button>
+                        </h2>
+                        <div id='collapse<%# Eval("IDEspecialidad") %>' class="accordion-collapse collapse" 
+                            aria-labelledby='heading<%# Eval("IDEspecialidad") %>' data-bs-parent="#especialidadesAccordion">
+                            <div class="accordion-body">
+                                <ul class="list-group mb-2">
+                                    <asp:Repeater ID="rptServicios" runat="server" 
+                                        OnItemDataBound="rptServicios_ItemDataBound"
+                                        OnItemCommand="rptServicios_ItemCommand">
+                                        <ItemTemplate>
+                                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                                <div>
+                                                    <h6 class="mb-1">
+                                                        <%# Eval("Nombre") %>
+                                                        
+                                                        <%# !(bool)Eval("Activo") ? "<span class='badge bg-danger ms-2'>Inactivo</span>" : "" %>
+                                                    </h6>
+                                                    <small class="text-muted">Duración: <%# Eval("DuracionMinutos") %> min</small>
+                                                </div>
+                                                <div class="text-end">
+                                                    <div class="fw-bold text-primary mb-1">$<%# Eval("Precio", "{0:N0}") %></div>
+                                                    <div class="btn-group btn-group-sm">
+                                                        
+                                                        <asp:Button ID="btnEditarServicio" runat="server" Text="Editar" 
+                                                            CssClass="btn btn-outline-secondary" CommandName="EditarServicio" />
+                                                        <asp:Button ID="btnCambiarEstadoServicio" runat="server" />
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ItemTemplate>
+                                    </asp:Repeater>
+                                </ul>
+                                
+                                <asp:Button ID="btnAgregarServicio" runat="server" Text="+ Agregar Servicio" 
+                                    CssClass="btn btn-outline-primary btn-sm" CommandName="AgregarServicio" />
+                                <asp:Button ID="btnEditarEspecialidad" runat="server" Text="Editar Especialidad" 
+                                    CssClass="btn btn-outline-secondary btn-sm mt-2 ms-1" CommandName="EditarEspecialidad" />
+                                <asp:Button ID="btnCambiarEstadoEspecialidad" runat="server" 
+                                    CssClass="btn btn-sm mt-2 ms-1" />
+                            </div>
+                        </div>
+                    </div>
+                </ItemTemplate>
+            </asp:Repeater>
+        </div>
+    </div>
+</div>
         
         <div class="card mb-4">
                 <div class="card-body">

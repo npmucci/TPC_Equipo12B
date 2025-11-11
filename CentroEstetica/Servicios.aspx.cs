@@ -1,5 +1,5 @@
-﻿using Dominio; // Asegúrate de tener tus using
-using Negocio; // Asegúrate de tener tus using
+﻿using Dominio; 
+using Negocio; 
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,13 +27,13 @@ namespace CentroEstetica
                     }
                     else
                     {
-                        // Si el ID no es un número, redirigir
+                        
                         Response.Redirect("Default.aspx", false);
                     }
                 }
                 else
                 {
-                    // Si no hay ID en la URL, redirigir
+                    
                     Response.Redirect("Default.aspx", false);
                 }
             }
@@ -46,7 +46,7 @@ namespace CentroEstetica
                 // servicios filtrados...
 
                 ServicioNegocio negocioServicio = new ServicioNegocio();
-                List<Servicio> listaFiltrada = negocioServicio.listarPorEspecialidad(idEspecialidad);
+                List<Servicio> listaFiltrada = negocioServicio.ListarPorEspecialidad(idEspecialidad);
 
                 if (listaFiltrada.Count > 0)
                 {

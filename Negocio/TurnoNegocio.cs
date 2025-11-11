@@ -44,5 +44,10 @@ namespace Negocio
             TurnoDatos datos = new TurnoDatos();
             return datos.ProfesionalTieneTurnosPendientes(idProfesional);
         }
+
+        public bool ServicioTieneTurnosPendientes(int idServicio)
+        {
+            return datos.TieneTurnosPendientesPorServicio(idServicio);
+        }
     }
 }

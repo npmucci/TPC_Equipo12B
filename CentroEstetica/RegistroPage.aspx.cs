@@ -20,15 +20,31 @@ namespace CentroEstetica
                 pnlCredenciales.Visible = true;
                 pnlDatos.Visible = false;
 
-               
+
                 pnlMensaje.Visible = false;
-               
+
 
                 if (Seguridad.EsAdmin(Session["usuario"]))
                 {
                     pnlAdminControls.Visible = true;
+
+
                     CargarRoles();
                     CargarEspecialidades();
+
+
+                    if (Request.QueryString["rol"] != null)
+                    {
+                        string idRolDesdeURL = Request.QueryString["rol"];
+
+
+                        if (ddlRoles.Items.FindByValue(idRolDesdeURL) != null)
+                        {
+
+                            ddlRoles.SelectedValue = idRolDesdeURL;
+                            ddlRoles_SelectedIndexChanged(null, null);
+                        }
+                    }
                 }
                 else
                 {

@@ -147,6 +147,25 @@ namespace AccesoDatos
             }
         }
 
+        public void ActivarLogico(int id)
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    
+                    string consulta = "UPDATE Especialidad SET Activo = 1 WHERE IDEspecialidad = @ID";
+                    datos.SetearConsulta(consulta);
+                    datos.SetearParametro("@ID", id);
+                    datos.EjecutarAccion();
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
         public void AsignarEspecialidad(int idUsuario, int idEspecialidad)
         {
             using (Datos datos = new Datos())

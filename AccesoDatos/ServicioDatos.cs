@@ -127,10 +127,11 @@ namespace AccesoDatos
             {
                 try
                 {
-
+                    
                     string consulta = @"
                         SELECT S.IDServicio, S.Nombre, S.Descripcion, S.Precio, 
-                               S.DuracionMinutos, S.Activo, E.IDEspecialidad, E.Nombre AS NombreEspecialidad
+                               S.DuracionMinutos, S.Activo, 
+                               E.IDEspecialidad, E.Nombre AS NombreEspecialidad, E.Activo AS EspecialidadActivo
                         FROM Servicio S
                         INNER JOIN Especialidad E ON S.IDEspecialidad = E.IDEspecialidad
                         WHERE S.IDServicio = @id";
@@ -152,6 +153,9 @@ namespace AccesoDatos
                         aux.Especialidad = new Especialidad();
                         aux.Especialidad.IDEspecialidad = (int)datos.Lector["IDEspecialidad"];
                         aux.Especialidad.Nombre = (string)datos.Lector["NombreEspecialidad"];
+
+                        
+                        aux.Especialidad.Activo = (bool)datos.Lector["EspecialidadActivo"];
                     }
                     return aux;
                 }
@@ -203,6 +207,21 @@ namespace AccesoDatos
                 try
                 {
                     datos.SetearProcedimiento("sp_EliminarLogicoServicio");
+                    datos.SetearParametro("@IDServicio", id);
+                    datos.EjecutarAccion();
+                }
+                catch (Exception ex) { throw ex; }
+            }
+        }
+
+        public void ActivarLogico(int id)
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    string consulta = "UPDATE Servicio SET Activo = 1 WHERE IDServicio = @IDServicio";
+                    datos.SetearConsulta(consulta);
                     datos.SetearParametro("@IDServicio", id);
                     datos.EjecutarAccion();
                 }

@@ -58,9 +58,34 @@ namespace Negocio
 
         public void EliminarLogico(int id)
         {
-            // VALIDACIONES
-            EspecialidadDatos datos = new EspecialidadDatos();
+            
+            ServicioNegocio servicioNegocio = new ServicioNegocio();
+            TurnoNegocio turnoNegocio = new TurnoNegocio();
+
+            List<Servicio> serviciosActivosAsociados = servicioNegocio.ListarPorEspecialidad(id);
+
+            foreach (Servicio servicio in serviciosActivosAsociados)
+            {
+                if (turnoNegocio.ServicioTieneTurnosPendientes(servicio.IDServicio))
+                {
+                    
+                    throw new Exception($"No se puede dar de baja la especialidad. El servicio '{servicio.Nombre}' tiene turnos pendientes.");
+                }
+            }
+
             datos.EliminarLogico(id);
+
+            ServicioDatos servicioDatos = new ServicioDatos();
+            foreach (Servicio servicio in serviciosActivosAsociados)
+            {
+                servicioDatos.EliminarLogico(servicio.IDServicio);
+            }
+        }
+
+        public void ActivarLogico(int id)
+        {
+            EspecialidadDatos datos = new EspecialidadDatos();
+            datos.ActivarLogico(id);
         }
 
         public List<Especialidad> ListarPorProfesional(int idProfesional)

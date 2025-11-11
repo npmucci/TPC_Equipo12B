@@ -129,5 +129,35 @@ namespace AccesoDatos
                 }
             }
         }
+
+        public bool TieneTurnosPendientesPorServicio(int idServicio)
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    
+                    string consulta = @"
+                    SELECT COUNT(*) 
+                    FROM Turno
+                    WHERE IDServicio = @idServicio 
+                      AND IDEstado IN (1, 2)
+                      AND Fecha > GETDATE()";
+
+                    datos.SetearConsulta(consulta);
+                    datos.SetearParametro("@idServicio", idServicio);
+
+                    
+                    int cantidad = (int)datos.EjecutarAccionEscalar();
+
+                    return cantidad > 0; 
+                }
+                catch (Exception ex)
+                {
+                    
+                    throw ex;
+                }
+            }
+        }
     }
 }

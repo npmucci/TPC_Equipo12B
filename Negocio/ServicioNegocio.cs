@@ -27,7 +27,7 @@ namespace Negocio
             return listaFiltrada;
         }
 
-        public List<Servicio> listarPorEspecialidad(int idEspecialidad)
+        public List<Servicio> ListarPorEspecialidad(int idEspecialidad)
         {
 
             List<Servicio> listaCompleta = datos.ListarPorEspecialidad(idEspecialidad);
@@ -38,6 +38,14 @@ namespace Negocio
             return listaFiltrada;
         }
 
+        public List<Servicio> ListarPorEspecialidadTodos(int idEspecialidad)
+        {
+
+            List<Servicio> listaCompleta = datos.ListarPorEspecialidad(idEspecialidad);
+
+            return listaCompleta;
+        }
+
         // Para Admin ⬇️
         public List<Servicio> ListarTodos()
         {
@@ -46,7 +54,7 @@ namespace Negocio
 
         public Servicio ObtenerPorId(int id)
         {
-            ServicioDatos datos = new ServicioDatos();
+            
             return datos.ObtenerPorId(id);
         }
 
@@ -61,21 +69,49 @@ namespace Negocio
 
         public void Modificar(Servicio mod)
         {
-            // VALIDACIONES
-            ServicioDatos datos = new ServicioDatos();
+            TurnoNegocio turnoNegocio = new TurnoNegocio();
+
+            if (turnoNegocio.ServicioTieneTurnosPendientes(mod.IDServicio))
+            {
+                throw new Exception("No se puede modificar el servicio porque tiene turnos pendientes.");
+            }
+
+            if (mod.Precio <= 0)
+                throw new Exception("El precio debe ser mayor a cero");
+
             datos.Modificar(mod);
         }
 
         public void EliminarLogico(int id)
         {
-            // VALIDACIONES
-            ServicioDatos datos = new ServicioDatos();
+            
+            TurnoNegocio turnoNegocio = new TurnoNegocio();
+
+            
+            if (turnoNegocio.ServicioTieneTurnosPendientes(id))
+            {
+                
+                throw new Exception("No se puede dar de baja el servicio porque tiene turnos pendientes.");
+            }
+
+            
             datos.EliminarLogico(id);
         }
 
-        public List<Servicio> ListarPorEspecialidad(int idEspecialidad)
+        public void ActivarLogico(int id)
         {
-            return datos.ListarPorEspecialidad(idEspecialidad);
+            
+            Servicio servicio = ObtenerPorId(id);
+
+            
+            if (servicio.Especialidad == null || !servicio.Especialidad.Activo)
+            {
+               
+                throw new Exception("No se puede activar el servicio. Su especialidad ('" + servicio.Especialidad.Nombre + "') está inactiva. Active la especialidad primero.");
+            }
+
+            datos.ActivarLogico(id);
         }
+
     }
 }
