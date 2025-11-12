@@ -593,7 +593,7 @@ GO
 
 --sp para pagos
 
-CREATE or ALTER PROCEDURE SP_GetIngresosPorRango
+CREATE or ALTER  PROCEDURE sp_ObtenerIngresos
     @IDProfesional INT,
     @FechaInicio DATE,
     @FechaFin DATE
@@ -630,7 +630,24 @@ VALUES (DATEADD(day, 2, CAST(GETDATE() AS DATE)),'15:30:00',5, 14, 3, 6, 1);
 INSERT INTO Turno (Fecha, HoraInicio,IDUsuarioProfesional,IDUsuarioCliente,IDServicio, IDPago, IDEstado)
 VALUES (CAST(GETDATE() AS DATE), '11:00:00', 5, 15, 3, 7, 3 );
 
+--insert para ingresos del mes
+-- PROFESIONAL ID 5 (Ingreso 1: 05/11/2025)
+INSERT INTO Turno (Fecha, HoraInicio, IDUsuarioProfesional, IDUsuarioCliente, IDServicio, IDEstado, IDPago)
+VALUES 
+(
+    '2025-11-05', -- Fecha en el mes actual, no hoy
+    '11:00:00', 
+    5, 
+    16, -- ID Cliente (Debe existir)
+    4,  -- ID Servicio (Debe existir)
+    5,  -- FINALIZADO (Cuenta)
+    8   -- ID Pago (Debe existir)
+);
 
+-- PROFESIONAL ID 5 (Ingreso 2: 19/11/2025)
+INSERT INTO Turno (Fecha, HoraInicio, IDUsuarioProfesional, IDUsuarioCliente, IDServicio, IDEstado, IDPago)
+VALUES 
+( '2025-11-19','15:00:00', 5, 17,4, 5,  9 );
 
 
 

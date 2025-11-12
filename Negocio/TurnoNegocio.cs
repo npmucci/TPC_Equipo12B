@@ -64,5 +64,10 @@ namespace Negocio
         {
             return datos.ContarTurnos(fechaInicio, fechaFin, idProfesional);
         }
+
+        public decimal ObtenerIngresos(DateTime fechaInicio, DateTime fechaFin, int idProfesional)
+        {
+            return datos.ObtenerIngresos(fechaInicio, fechaFin, idProfesional);
+        }
     }
 }

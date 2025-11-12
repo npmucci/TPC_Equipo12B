@@ -75,13 +75,19 @@ namespace CentroEstetica
             DateTime inicioSemana = hoy.AddDays(1); // asi se muestran los turnos a partir del dia siguiente;
             DateTime finSemana = hoy.AddDays(7);
 
+            DateTime primerDiaDelMes = new DateTime(hoy.Year, hoy.Month, 1);
+            DateTime ultimoDiaDelMes = primerDiaDelMes.AddMonths(1).AddDays(-1);
+
             int turnosProximos = negocio.ContarTurnos(inicioSemana, finSemana, idProfesional);
             int turnosHoy = negocio.ContarTurnos(hoy, hoy, idProfesional);
+            decimal ingresosMes = negocio.ObtenerIngresos(primerDiaDelMes, ultimoDiaDelMes, idProfesional);
 
 
             lblTurnosHoy.Text = turnosHoy.ToString();
 
             lblTurnosProximos.Text = turnosProximos.ToString();
+
+            lblIngresosMes.Text = ingresosMes.ToString();
         }
     }
 }
