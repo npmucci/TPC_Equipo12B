@@ -17,14 +17,14 @@ namespace CentroEstetica
 
         protected void Page_Load(object sender, EventArgs e)
         {
+
+            if (!Seguridad.EsCliente(Session["usuario"]))
+            {
+                Response.Redirect("Default.aspx", false);
+                return;
+            }
             if (!IsPostBack)
             {
-                if (!Seguridad.EsCliente(Session["usuario"]))
-                {
-                    Response.Redirect("Default.aspx", false);
-                    return;
-                }
-
                 Cliente cliente = (Cliente)Session["usuario"];
                 CargarDatosCliente(cliente);
 
@@ -124,7 +124,7 @@ namespace CentroEstetica
 
         protected void btnCambiarPass_Click(object sender, EventArgs e)
         {
-            
+
 
             txtPassActual.Text = string.Empty;
             txtPassNueva.Text = string.Empty;
@@ -196,7 +196,7 @@ namespace CentroEstetica
             catch (Exception ex)
             {
                 lblErrorPass.Text = "Ocurrió un error inesperado al actualizar: " + ex.Message;
-                lblErrorPass.Visible = true; 
+                lblErrorPass.Visible = true;
 
 
             }

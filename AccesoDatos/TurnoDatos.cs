@@ -46,7 +46,7 @@ namespace AccesoDatos
                             Monto = (decimal)datos.Lector["Monto"],
                             FormaDePago = (FormaPago)(int)datos.Lector["IDFormaPago"],
                             Tipo = (TipoPago)(int)datos.Lector["IDTipoPago"],
-                            FechaPago= ((DateTime)datos.Lector["FechaPago"]).Date
+                            FechaPago = ((DateTime)datos.Lector["FechaPago"]).Date
                         };
 
                         aux.Estado = (EstadoTurno)(int)datos.Lector["IDEstado"];
@@ -63,7 +63,7 @@ namespace AccesoDatos
         public List<Turno> ListarTurnosCliente(int idCliente)
         {
             List<Turno> lista = new List<Turno>();
-          
+
             using (Datos datos = new Datos())
             {
                 try
@@ -76,7 +76,7 @@ namespace AccesoDatos
                         Turno aux = new Turno();
                         aux.IDTurno = (int)datos.Lector["IDTurno"];
                         aux.Fecha = ((DateTime)datos.Lector["Fecha"]).Date; // para que no muestra la hora
-                       aux.HoraInicio = (TimeSpan)datos.Lector["HoraInicio"];
+                        aux.HoraInicio = (TimeSpan)datos.Lector["HoraInicio"];
                         aux.Profesional = new Profesional()
                         {
 
@@ -99,11 +99,11 @@ namespace AccesoDatos
                     throw ex;
                 }
             }
-            
+
             return lista;
         }
 
-        
+
 
         public bool TieneTurnosPendientesPorProfesional(int idProfesional)
         {
@@ -111,7 +111,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    
+
                     string consulta = @"
                         SELECT COUNT(*) 
                         FROM Turno 
@@ -122,7 +122,7 @@ namespace AccesoDatos
                     datos.SetearConsulta(consulta);
                     datos.SetearParametro("@idProf", idProfesional);
 
-                    
+
                     int cantidad = (int)datos.EjecutarAccionEscalar();
 
                     return cantidad > 0;
@@ -167,7 +167,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    
+
                     string consulta = "UPDATE Turno SET IDEstado = @idEstado WHERE IDTurno = @idTurno";
                     datos.SetearConsulta(consulta);
                     datos.SetearParametro("@idEstado", idEstado);
@@ -188,7 +188,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                   
+
                     string consulta = @"
                         SELECT 
                             T.IDTurno, T.Fecha, T.HoraInicio,
@@ -214,15 +214,15 @@ namespace AccesoDatos
                         Turno aux = new Turno();
                         aux.IDTurno = (int)datos.Lector["IDTurno"];
 
-                        
+
                         DateTime fecha = (DateTime)datos.Lector["Fecha"];
                         TimeSpan hora = (TimeSpan)datos.Lector["HoraInicio"];
-                        
+
                         aux.Fecha = fecha.Add(hora);
 
-                        
+
                         aux.Estado = (EstadoTurno)(int)datos.Lector["IDEstado"];
-                        
+
 
                         aux.Servicio = new Servicio();
                         aux.Servicio.Nombre = (string)datos.Lector["ServicioNombre"];
@@ -239,6 +239,24 @@ namespace AccesoDatos
                 {
                     throw ex;
                 }
+            }
+        }
+        public int ContarTurnos(DateTime fechaInicio, DateTime fechaFin, int idProfesional)
+        {
+            int cantidad = 0;
+            using (Datos datos = new Datos())
+            {
+
+                datos.SetearProcedimiento("sp_contarTurnos");
+                datos.SetearParametro("@IDProfesional", idProfesional);
+                datos.SetearParametro("@FechaInicio", fechaInicio.Date);
+                datos.SetearParametro("@FechaFin", fechaFin.Date);
+
+                cantidad = datos.EjecutarAccionEscalar();
+
+
+
+                return cantidad;
             }
         }
     }

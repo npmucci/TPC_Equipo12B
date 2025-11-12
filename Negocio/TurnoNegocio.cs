@@ -59,5 +59,10 @@ namespace Negocio
         {
             return datos.ListarTurnosPendientesPorProfesional(idProfesional);
         }
+
+        public int ContarTurnos(DateTime fechaInicio, DateTime fechaFin, int idProfesional)
+        {
+            return datos.ContarTurnos(fechaInicio, fechaFin, idProfesional);
+        }
     }
 }

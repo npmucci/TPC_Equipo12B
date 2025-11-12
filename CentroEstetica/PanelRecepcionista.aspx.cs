@@ -12,12 +12,13 @@ namespace CentroEstetica
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            
+            /*
           if (!Seguridad.EsRecepcionista(Session["usuario"]))
           {
               Response.Redirect("Default.aspx", false);
               return;
           }
+            */
           
             if (!IsPostBack)
             {

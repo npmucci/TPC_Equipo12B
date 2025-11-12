@@ -569,6 +569,200 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROCEDURE sp_contarTurnos
+    @IDProfesional INT,
+    @FechaInicio DATE,
+    @FechaFin DATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        COUNT(T.IDTurno) AS CantidadTurnos
+    FROM 
+        Turno T
+    INNER JOIN
+        EstadoTurno ET ON T.IDEstado = ET.IDEstado
+    WHERE 
+        T.IDUsuarioProfesional = @IDProfesional       
+        AND T.Fecha >= @FechaInicio               
+        AND T.Fecha <= @FechaFin      
+        AND T.IDEstado IN (1, 3);  
+END
+GO
+
+--sp para pagos
+
+CREATE or ALTER PROCEDURE SP_GetIngresosPorRango
+    @IDProfesional INT,
+    @FechaInicio DATE,
+    @FechaFin DATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        ISNULL(SUM(P.Monto), 0.00) AS IngresoTotal
+    FROM 
+        Turno T
+    INNER JOIN 
+        Pago P ON T.IDPago = P.IDPago
+    WHERE 
+        T.IDUsuarioProfesional = @IDProfesional  
+        AND T.Fecha >= @FechaInicio 
+        AND T.Fecha <= @FechaFin      
+        AND T.IDEstado = 5
+END
+GO
+
+-- insert para probar turnos confrimados
+INSERT INTO Turno (Fecha, HoraInicio, IDUsuarioCliente, IDUsuarioProfesional, IDServicio, IDPago, IDEstado)
+VALUES 
+('2025-11-15', '10:30:00', 12, 8, 20,10, 2); 
+
+
+--insert para probar contar turnos
+INSERT INTO Turno (Fecha, HoraInicio, IDUsuarioProfesional, IDUsuarioCliente, IDServicio, IDPago, IDEstado)
+VALUES (DATEADD(day, 1, CAST(GETDATE() AS DATE)),'15:30:00',5, 14, 3, 6, 1);
+INSERT INTO Turno (Fecha, HoraInicio, IDUsuarioProfesional, IDUsuarioCliente, IDServicio, IDPago, IDEstado)
+VALUES (DATEADD(day, 2, CAST(GETDATE() AS DATE)),'15:30:00',5, 14, 3, 6, 1);
+
+INSERT INTO Turno (Fecha, HoraInicio,IDUsuarioProfesional,IDUsuarioCliente,IDServicio, IDPago, IDEstado)
+VALUES (CAST(GETDATE() AS DATE), '11:00:00', 5, 15, 3, 7, 3 );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
