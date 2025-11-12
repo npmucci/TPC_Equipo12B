@@ -99,6 +99,63 @@ namespace AccesoDatos
             }
         }
 
+        public Usuario ObtenerPorId(int id)
+        {
+            Usuario aux = null;
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    string consulta = "SELECT IDUsuario, Mail, ContraseniaHash, Nombre, Apellido, Dni, Telefono, Domicilio, IDRol, Activo, Foto FROM Usuario WHERE IDUsuario = @id";
+                    datos.SetearConsulta(consulta);
+                    datos.SetearParametro("@id", id);
+                    datos.EjecutarLectura();
+
+                    if (datos.Lector.Read())
+                    {
+                       
+                        Rol rol = (Rol)datos.Lector["IDRol"];
+
+                        switch (rol)
+                        {
+                            case Rol.Admin:
+                                aux = new Administrador();
+                                break;
+                            case Rol.Profesional:
+                                aux = new Profesional();
+                                break;
+                            case Rol.Recepcionista:
+                                aux = new Recepcionista();
+                                break;
+                            case Rol.ProfesionalUnico:
+                                aux = new ProfesionalUnico();
+                                break;
+                            case Rol.Cliente:
+                            default:
+                                aux = new Cliente();
+                                break;
+                        }
+                     
+                        aux.ID = (int)datos.Lector["IDUsuario"];
+                        aux.Mail = (string)datos.Lector["Mail"];
+                        aux.Nombre = (string)datos.Lector["Nombre"];
+                        aux.Apellido = (string)datos.Lector["Apellido"];
+                        aux.Dni = (string)datos.Lector["Dni"];
+                        aux.Telefono = (string)datos.Lector["Telefono"];
+                        aux.Domicilio = datos.Lector["Domicilio"] is DBNull ? null : (string)datos.Lector["Domicilio"];
+                        aux.Foto = datos.Lector["Foto"] is DBNull ? null : (string)datos.Lector["Foto"];
+                        aux.Rol = rol;
+                        aux.Activo = (bool)datos.Lector["Activo"];
+                    }
+                    return aux;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
         public void ActualizarPassword(int idUsuario, string nuevoHash)
         {
             using (Datos datos = new Datos())
@@ -236,16 +293,17 @@ namespace AccesoDatos
             }
         }
 
-        public void CambiarEstado(int idUsuario, bool estado)
+        public void CambiarEstado(int idUsuario, bool activo)
         {
             using (Datos datos = new Datos())
             {
                 try
                 {
-                    string consulta = "UPDATE Usuario SET Activo = @estado WHERE IDUsuario = @id";
+                    
+                    string consulta = "UPDATE Usuario SET Activo = @activo WHERE IDUsuario = @idUsuario";
                     datos.SetearConsulta(consulta);
-                    datos.SetearParametro("@estado", estado);
-                    datos.SetearParametro("@id", idUsuario);
+                    datos.SetearParametro("@activo", activo);
+                    datos.SetearParametro("@idUsuario", idUsuario);
                     datos.EjecutarAccion();
                 }
                 catch (Exception ex)

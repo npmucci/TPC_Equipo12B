@@ -71,6 +71,8 @@
     <Content Include="Assets\logo.png" />
     <Content Include="Assets\masajista.jpeg" />
     <Content Include="Default.aspx" />
+    <Content Include="FormEspecialidad.aspx" />
+    <Content Include="FormServicio.aspx" />
     <Content Include="GestionTurnosProfesional.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Login.aspx" />
@@ -90,6 +92,20 @@
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="FormEspecialidad.aspx.cs">
+      <DependentUpon>FormEspecialidad.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="FormEspecialidad.aspx.designer.cs">
+      <DependentUpon>FormEspecialidad.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="FormServicio.aspx.cs">
+      <DependentUpon>FormServicio.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="FormServicio.aspx.designer.cs">
+      <DependentUpon>FormServicio.aspx</DependentUpon>
     </Compile>
     <Compile Include="GestionTurnosProfesional.aspx.cs">
       <DependentUpon>GestionTurnosProfesional.aspx</DependentUpon>

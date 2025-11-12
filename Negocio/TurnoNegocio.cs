@@ -42,12 +42,22 @@ namespace Negocio
         public bool ProfesionalTieneTurnosPendientes(int idProfesional)
         {
             TurnoDatos datos = new TurnoDatos();
-            return datos.ProfesionalTieneTurnosPendientes(idProfesional);
+            return datos.TieneTurnosPendientesPorProfesional(idProfesional);
         }
 
         public bool ServicioTieneTurnosPendientes(int idServicio)
         {
             return datos.TieneTurnosPendientesPorServicio(idServicio);
+        }
+        
+        public void CambiarEstado(int idTurno, int idEstado)
+        {
+            datos.CambiarEstado(idTurno, idEstado);
+        }
+
+        public List<Turno> ListarTurnosPendientesPorProfesional(int idProfesional)
+        {
+            return datos.ListarTurnosPendientesPorProfesional(idProfesional);
         }
     }
 }

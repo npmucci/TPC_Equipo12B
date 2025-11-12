@@ -17,11 +17,12 @@ namespace AccesoDatos
             {
                 try
                 {
+                    
                     string consulta = @"
                         SELECT 
                             S.IDServicio, S.Nombre, S.Descripcion, S.Precio, 
                             S.DuracionMinutos, S.Activo,
-                            E.IDEspecialidad, E.Nombre AS NombreEspecialidad, E.Descripcion AS DescripcionEspecialidad
+                            E.IDEspecialidad, E.Nombre AS NombreEspecialidad, E.Activo AS EspecialidadActivo
                         FROM Servicio S
                         INNER JOIN Especialidad E ON S.IDEspecialidad = E.IDEspecialidad";
 
@@ -45,8 +46,8 @@ namespace AccesoDatos
                         aux.Especialidad.IDEspecialidad = (int)datos.Lector["IDEspecialidad"];
                         aux.Especialidad.Nombre = (string)datos.Lector["NombreEspecialidad"];
 
-                        if (!(datos.Lector["DescripcionEspecialidad"] is DBNull))
-                            aux.Especialidad.Descripcion = (string)datos.Lector["DescripcionEspecialidad"];
+                        
+                        aux.Especialidad.Activo = (bool)datos.Lector["EspecialidadActivo"];
 
                         lista.Add(aux);
                     }
@@ -55,16 +56,15 @@ namespace AccesoDatos
                 {
                     throw ex;
                 }
-                
             }
 
             return lista;
         }
 
 
-
         public List<Servicio> ListarPorEspecialidad(int idEspecialidad)
         {
+            // (Este es el que usa el Admin, trae activos e inactivos)
             List<Servicio> lista = new List<Servicio>();
 
             using (Datos datos = new Datos())
@@ -73,24 +73,20 @@ namespace AccesoDatos
                 {
                     
                     string consulta = @"
-                SELECT 
-                    S.IDServicio, S.Nombre, S.Descripcion, S.Precio, 
-                    S.DuracionMinutos, S.Activo,
-                    E.IDEspecialidad, E.Nombre AS NombreEspecialidad, E.Descripcion AS DescripcionEspecialidad
-                FROM Servicio S
-                INNER JOIN Especialidad E ON S.IDEspecialidad = E.IDEspecialidad
-                WHERE S.IDEspecialidad = @idEspecialidad"; 
+                        SELECT 
+                            S.IDServicio, S.Nombre, S.Descripcion, S.Precio, 
+                            S.DuracionMinutos, S.Activo,
+                            E.IDEspecialidad, E.Nombre AS NombreEspecialidad, E.Activo AS EspecialidadActivo
+                        FROM Servicio S
+                        INNER JOIN Especialidad E ON S.IDEspecialidad = E.IDEspecialidad
+                        WHERE S.IDEspecialidad = @idEspecialidad";
 
                     datos.SetearConsulta(consulta);
-
-                    
                     datos.SetearParametro("@idEspecialidad", idEspecialidad);
-
                     datos.EjecutarLectura();
 
                     while (datos.Lector.Read())
                     {
-                        
                         Servicio aux = new Servicio();
                         aux.IDServicio = (int)datos.Lector["IDServicio"];
                         aux.Nombre = (string)datos.Lector["Nombre"];
@@ -106,8 +102,8 @@ namespace AccesoDatos
                         aux.Especialidad.IDEspecialidad = (int)datos.Lector["IDEspecialidad"];
                         aux.Especialidad.Nombre = (string)datos.Lector["NombreEspecialidad"];
 
-                        if (!(datos.Lector["DescripcionEspecialidad"] is DBNull))
-                            aux.Especialidad.Descripcion = (string)datos.Lector["DescripcionEspecialidad"];
+                        
+                        aux.Especialidad.Activo = (bool)datos.Lector["EspecialidadActivo"];
 
                         lista.Add(aux);
                     }
@@ -153,8 +149,6 @@ namespace AccesoDatos
                         aux.Especialidad = new Especialidad();
                         aux.Especialidad.IDEspecialidad = (int)datos.Lector["IDEspecialidad"];
                         aux.Especialidad.Nombre = (string)datos.Lector["NombreEspecialidad"];
-
-                        
                         aux.Especialidad.Activo = (bool)datos.Lector["EspecialidadActivo"];
                     }
                     return aux;

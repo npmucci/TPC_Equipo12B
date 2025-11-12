@@ -50,6 +50,11 @@ namespace Negocio
             }
         }
 
+        public Usuario ObtenerPorId(int id)
+        {
+            return datos.ObtenerPorId(id);
+        }
+
         public void ActualizarPassword(int idUsuario, string passwordPlano)
         {
             try
