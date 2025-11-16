@@ -29,17 +29,7 @@ namespace Negocio
             return ListarClientes().Find(cli=> cli.ID == id);
         }
         
-        public void Modificar(Usuario cliente)
-        {
-            try
-            {
-                datos.Modificar(cliente);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+      
 
 
     }

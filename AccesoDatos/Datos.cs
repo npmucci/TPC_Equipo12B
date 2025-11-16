@@ -87,7 +87,14 @@ namespace AccesoDatos
             {
                 conexion.Open();
                 object resultado = comando.ExecuteScalar();
-                return resultado != null ? Convert.ToInt32(resultado) : 0;
+               
+                if (resultado != null && resultado != DBNull.Value)
+                {
+                    return Convert.ToInt32(resultado);
+                }
+
+                
+                return 0;
             }
             catch (Exception ex)
             {

@@ -14,7 +14,7 @@ namespace CentroEstetica
         {
             if (!IsPostBack)
             {
-
+                string paginaActual = Request.Url.AbsolutePath.ToLower();// para saber en que pagina estoy y ver que boton muestro
                 if (Session["usuario"] == null) //USUARIO INVITADO
                 {
 
@@ -31,23 +31,43 @@ namespace CentroEstetica
                     btnCerrarSesion.Visible = true;
 
                     Usuario logueado = (Usuario)Session["usuario"];
+                    Rol idRol = logueado.Rol;
+                    hlPerfil.Visible = true;
+                    btnCerrarSesion.Visible = true;
 
-                    switch (logueado.Rol)
+                    hlPerfil.NavigateUrl = "~/PanelPerfil.aspx";
+
+                    //LÓGICA DE LA BARRA DE NAVEGACIÓN)
+                    hlEspecialidades.Visible = true;
+                    hlContacto.Visible = true;
+
+                    if (idRol == Rol.Cliente)
                     {
-                        case Rol.Admin:
-                            hlPerfil.NavigateUrl = "~/PanelAdmin.aspx";
-                            break;
-                        case Rol.Profesional:
-                            hlPerfil.NavigateUrl = "~/PanelProfesional.aspx";
-                            break;
-                        case Rol.Cliente:
-                        default:
-                            hlPerfil.NavigateUrl = "~/PanelCliente.aspx";
-                            break;
+                        if (paginaActual.Contains("/panelcliente.aspx"))
+                        {
+
+                            hlEspecialidades.Visible = false;
+                        }
+                    }
+
+                    else if (idRol == Dominio.Rol.Admin ||
+                             idRol == Dominio.Rol.Profesional ||
+                             idRol == Dominio.Rol.Recepcionista ||
+                             idRol == Dominio.Rol.ProfesionalUnico)
+                    {
+
+                        if (paginaActual.Contains("/default.aspx") || paginaActual.Contains("/paneladmin.aspx") | paginaActual.Contains("/panelprofesional.aspx") || paginaActual.Contains("/panelrecepcionista.aspx") || paginaActual.Contains("/panelperfil.aspx"))
+                        {
+                            hlContacto.Visible = false;
+                            hlEspecialidades.Visible = false;
+                        }
                     }
                 }
+
             }
         }
+        
+        
 
 
         protected void btnCerrarSesion_Click(object sender, EventArgs e)

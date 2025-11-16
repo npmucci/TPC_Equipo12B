@@ -22,23 +22,33 @@
 
         <nav class="navbar navbar-expand-lg fixed-top shadow-sm">
             <div class="container">
-                <a class="navbar-brand fw-bold text-uppercase" href="Default.aspx"> <img src="Assets/logo.png" alt="Centro Estética" class="logo">   Centro Estética</a>
+                <a class="navbar-brand fw-bold text-uppercase" href="Default.aspx">
+                    <img src="Assets/logo.png" alt="Centro Estética" class="logo">
+                    Centro Estética</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                    
+
                     <ul class="navbar-nav">
-                        <li class="nav-item"><a class="nav-link" href="Default.aspx">Inicio</a></li>
-                        <li class="nav-item"><a class="nav-link" href="Default.aspx#servicios">Especialidades</a></li>
-                        
+                        <li class="nav-item">
+                            <asp:HyperLink ID="hlInicio" runat="server" CssClass="nav-link" NavigateUrl="~/Default.aspx">Inicio</asp:HyperLink>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <asp:HyperLink ID="hlEspecialidades" runat="server" CssClass="nav-link" NavigateUrl="~/Default.aspx#servicios">Especialidades</asp:HyperLink>
+                        </li>
+
                         <li class="nav-item">
                             <asp:HyperLink ID="hlPerfil" runat="server" CssClass="nav-link">Perfil</asp:HyperLink>
                         </li>
 
-                        <li class="nav-item"><a class="nav-link" href="Contacto.aspx">Contacto</a></li>
-                        
+                        <li class="nav-item">
+                            <asp:HyperLink ID="hlContacto" runat="server" CssClass="nav-link" NavigateUrl="~/Contacto.aspx">Contacto</asp:HyperLink>
+                        </li>
+
                         <li class="nav-item">
                             <asp:HyperLink ID="hlIniciarSesion" runat="server" CssClass="nav-link" NavigateUrl="~/Login.aspx">Iniciar Sesión</asp:HyperLink>
                         </li>
@@ -46,7 +56,7 @@
                             <asp:LinkButton ID="btnCerrarSesion" runat="server" CssClass="nav-link" OnClick="btnCerrarSesion_Click" CausesValidation="false">Cerrar Sesión</asp:LinkButton>
                         </li>
                     </ul>
-                    </div>
+                </div>
             </div>
         </nav>
 

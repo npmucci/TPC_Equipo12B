@@ -26,7 +26,7 @@ namespace CentroEstetica
             if (!IsPostBack)
             {
                 Cliente cliente = (Cliente)Session["usuario"];
-                CargarDatosCliente(cliente);
+             
 
                 rptTurnosPasados.DataSource = turnosNegocio.ListarTurnosPasadosCliente((int)cliente.ID);
                 rptTurnosPasados.DataBind();
@@ -35,93 +35,7 @@ namespace CentroEstetica
                 rptTurnosActuales.DataBind();
             }
         }
-
-        private void CargarDatosCliente(Usuario cliente)
-        {
-            txtNombre.Text = cliente.Nombre;
-            txtApellido.Text = cliente.Apellido;
-            txtMail.Text = cliente.Mail;
-            txtTelefono.Text = cliente.Telefono;
-            txtDomicilio.Text = cliente.Domicilio;
-            txtDni.Text = cliente.Dni;
-
-
-
-        }
-
-        protected void btnEditar_Click(object sender, EventArgs e)
-        {
-            // Habilitar edición
-
-            txtNombre.ReadOnly = false;
-            txtApellido.ReadOnly = false;
-            // txtMail.ReadOnly = false; 
-            txtTelefono.ReadOnly = false;
-            txtDomicilio.ReadOnly = false;
-            txtDni.ReadOnly = false;
-
-            btnGuardar.Visible = true;
-            btnCancelar.Visible = true;
-            btnEditar.Visible = false;
-            btnCambiarPass.Visible = true;
-        }
-
-        protected void btnGuardar_Click(object sender, EventArgs e)
-        {
-            try
-            {
-
-                Cliente clienteActual = (Cliente)Session["usuario"];
-
-
-                clienteActual.Nombre = txtNombre.Text;
-                clienteActual.Apellido = txtApellido.Text;
-                //clienteActual.Mail = txtMail.Text;
-                clienteActual.Telefono = txtTelefono.Text;
-                clienteActual.Domicilio = txtDomicilio.Text;
-                clienteActual.Dni = txtDni.Text;
-
-                negocio.Modificar(clienteActual);
-
-
-                Session["usuario"] = clienteActual;
-
-
-                ResetearControles();
-
-                // Mostrar un mensaje de exito....
-            }
-            catch (Exception ex)
-            {
-                // Mostrar un mensaje de error....
-            }
-        }
-
-        protected void btnCancelar_Click(object sender, EventArgs e)
-        {
-
-            Cliente clienteOriginal = (Cliente)Session["usuario"];
-
-
-            CargarDatosCliente(clienteOriginal);
-
-
-            ResetearControles();
-        }
-
-        private void ResetearControles()
-        {
-            txtNombre.ReadOnly = true;
-            txtApellido.ReadOnly = true;
-            txtMail.ReadOnly = true;
-            txtTelefono.ReadOnly = true;
-            txtDomicilio.ReadOnly = true;
-
-            btnGuardar.Visible = false;
-            btnCancelar.Visible = false;
-            btnEditar.Visible = true;
-        }
-
+        /*
         protected void btnCambiarPass_Click(object sender, EventArgs e)
         {
 
@@ -200,7 +114,8 @@ namespace CentroEstetica
 
 
             }
-        }
+        */
+        
 
 
     }

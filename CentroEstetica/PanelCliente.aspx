@@ -12,52 +12,6 @@
             <div class="card-body">
                 <h2 class="h4 mb-3">Mi Perfil</h2>
 
-                <div class="mb-3">
-                    <label for="txtNombre" class="form-label"><strong>Nombre:</strong></label>
-                    <asp:TextBox ID="txtNombre" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
-                    <asp:RequiredFieldValidator ID="rfvNombre" runat="server" ControlToValidate="txtNombre" ErrorMessage="El nombre es obligatorio." CssClass="text-danger" Display="Dynamic" />
-                </div>
-
-                <div class="mb-3">
-                    <label for="txtApellido" class="form-label"><strong>Apellido:</strong></label>
-                    <asp:TextBox ID="txtApellido" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
-                    <asp:RequiredFieldValidator ID="rfvApellido" runat="server" ControlToValidate="txtApellido" ErrorMessage="El apellido es obligatorio." CssClass="text-danger" Display="Dynamic" />
-                </div>
-
-                <div class="mb-3">
-                    <label for="txtDni" class="form-label"><strong>Dni:</strong></label>
-                    <asp:TextBox ID="txtDni" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
-                    <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtDni" ErrorMessage="El Dni es obligatorio." CssClass="text-danger" Display="Dynamic" />
-                </div>
-
-                <div class="mb-3">
-                    <label for="txtMail" class="form-label"><strong>Email:</strong></label>
-                    <asp:TextBox ID="txtMail" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
-                    <asp:RequiredFieldValidator ID="rfvMail" runat="server" ControlToValidate="txtMail" ErrorMessage="El email es obligatorio." CssClass="text-danger" Display="Dynamic" />
-                    <asp:RegularExpressionValidator ID="revMail" runat="server" ControlToValidate="txtMail" ErrorMessage="Formato de email no válido." CssClass="text-danger" Display="Dynamic" ValidationExpression="^[\w\.-]+@[\w\.-]+\.\w+$" />
-
-                </div>
-
-                <div class="mb-3">
-                    <label for="txtTelefono" class="form-label"><strong>Teléfono:</strong></label>
-                    <asp:TextBox ID="txtTelefono" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
-                    <asp:RequiredFieldValidator ID="rfvTelefono" runat="server" ControlToValidate="txtTelefono" ErrorMessage="El teléfono es obligatorio." CssClass="text-danger" Display="Dynamic" />
-                    <asp:RegularExpressionValidator ID="revTelefono" runat="server" ControlToValidate="txtTelefono" ErrorMessage="El teléfono solo debe contener números." CssClass="text-danger" Display="Dynamic" ValidationExpression="^\d{10}$" />
-                </div>
-
-                <div class="mb-3">
-                    <label for="txtDomicilio" class="form-label"><strong>Domicilio:</strong></label>
-                    <asp:TextBox ID="txtDomicilio" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
-                </div>
-
-                <asp:Button ID="btnEditar" runat="server" Text="Modificar" CssClass="btn btn-danger btn-sm mt-2" OnClick="btnEditar_Click" />
-                <asp:Button ID="btnGuardar" runat="server" Text="Guardar" CssClass="btn btn-success btn-sm mt-2" OnClick="btnGuardar_Click" Visible="false" />
-                <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" CssClass="btn btn-secondary btn-sm mt-2" OnClick="btnCancelar_Click" Visible="false" CausesValidation="false" />
-                <asp:Button ID="btnCambiarPass" runat="server" Text="Modificar Contraseña" CssClass="btn btn-success btn-sm mt-2" Visible = false OnClientClick="abrirModalCambiarPass();" />
-
-
-            </div>
-        </div>
 
         <!-- TURNOS Pasados-->
         <h3>Turnos Pasados</h3>

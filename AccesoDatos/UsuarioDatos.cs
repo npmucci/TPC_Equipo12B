@@ -258,7 +258,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    /*
+                    
                     datos.SetearProcedimiento("sp_ModificarUsuario");
                     datos.SetearParametro("@IDUsuario", usuario.ID);
                     datos.SetearParametro("@Nombre", usuario.Nombre);
@@ -270,7 +270,7 @@ namespace AccesoDatos
                     datos.SetearParametro("@Foto", (object)usuario.Foto ?? DBNull.Value);
                     datos.SetearParametro("@Activo", usuario.Activo);
                     datos.EjecutarAccion();
-                    */
+                    
                 }
                 catch (Exception ex) { throw ex; }
             }

@@ -105,5 +105,17 @@ namespace Negocio
         {
             datos.CambiarEstado(idUsuario, estado);
         }
+
+        public void Modificar(Usuario usuario)
+        {
+            try
+            {
+                datos.Modificar(usuario);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
