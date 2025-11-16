@@ -25,36 +25,48 @@
                 <a class="navbar-brand fw-bold text-uppercase" href="Default.aspx">
                     <img src="Assets/logo.png" alt="Centro Estética" class="logo">
                     Centro Estética</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
 
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <asp:HyperLink ID="hlInicio" runat="server" CssClass="nav-link" NavigateUrl="~/Default.aspx">Inicio</asp:HyperLink>
-                        </li>
-
-
-                        <li class="nav-item">
-                            <asp:HyperLink ID="hlEspecialidades" runat="server" CssClass="nav-link" NavigateUrl="~/Default.aspx#servicios">Especialidades</asp:HyperLink>
+                            <a class="nav-link" href="Default.aspx">Inicio</a>
                         </li>
 
                         <li class="nav-item">
-                            <asp:HyperLink ID="hlPerfil" runat="server" CssClass="nav-link">Perfil</asp:HyperLink>
+                            <asp:HyperLink ID="hlEspecialidades" runat="server"
+                                CssClass="nav-link"
+                                NavigateUrl="~/Default.aspx#servicios">Especialidades</asp:HyperLink>
                         </li>
 
                         <li class="nav-item">
-                            <asp:HyperLink ID="hlContacto" runat="server" CssClass="nav-link" NavigateUrl="~/Contacto.aspx">Contacto</asp:HyperLink>
+                            <asp:HyperLink ID="hlContacto" runat="server"
+                                CssClass="nav-link"
+                                NavigateUrl="~/Contacto.aspx">Contacto</asp:HyperLink>
                         </li>
 
-                        <li class="nav-item">
-                            <asp:HyperLink ID="hlIniciarSesion" runat="server" CssClass="nav-link" NavigateUrl="~/Login.aspx">Iniciar Sesión</asp:HyperLink>
+                        <li class="nav-item dropdown" id="menuUsuario" runat="server" visible="false">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" id="usuarioTexto" runat="server">Usuario</a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="PanelPerfil.aspx">Mi Perfil</a></li>
+                                <li><a class="dropdown-item" href="CambiarContrasenia.aspx">Cambiar Contraseña</a></li>
+                                <li>
+                                    <hr class="dropdown-divider" />
+                                </li>
+                                <li>
+                                    <asp:LinkButton ID="btnCerrarSesion" runat="server" CssClass="dropdown-item" OnClick="btnCerrarSesion_Click" CausesValidation="false"> Cerrar Sesión </asp:LinkButton>
+                                </li>
+                            </ul>
                         </li>
-                        <li class="nav-item">
-                            <asp:LinkButton ID="btnCerrarSesion" runat="server" CssClass="nav-link" OnClick="btnCerrarSesion_Click" CausesValidation="false">Cerrar Sesión</asp:LinkButton>
+
+                        <li class="nav-item" id="menuLogin" runat="server" visible="false">
+                            <a class="nav-link" href="Login.aspx">Iniciar Sesión</a>
                         </li>
+
                     </ul>
                 </div>
             </div>

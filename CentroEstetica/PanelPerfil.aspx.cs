@@ -44,7 +44,7 @@ namespace CentroEstetica
 
         protected void btnEditar_Click(object sender, EventArgs e)
         {
-
+            divMensaje.Visible = false;
             ModoEdicion();
         }
 

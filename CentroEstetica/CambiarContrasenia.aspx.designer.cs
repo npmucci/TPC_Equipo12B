@@ -11,97 +11,106 @@ namespace CentroEstetica
 {
 
 
-    public partial class MasterPage
+    public partial class CambiarContrasenia
     {
 
         /// <summary>
-        /// Control head.
+        /// Control txtPassActual.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder head;
+        protected global::System.Web.UI.WebControls.TextBox txtPassActual;
 
         /// <summary>
-        /// Control form1.
+        /// Control rfvPassActual.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm form1;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvPassActual;
 
         /// <summary>
-        /// Control ScriptManager1.
+        /// Control txtPassNueva.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.ScriptManager ScriptManager1;
+        protected global::System.Web.UI.WebControls.TextBox txtPassNueva;
 
         /// <summary>
-        /// Control hlEspecialidades.
+        /// Control rfvPassNueva.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink hlEspecialidades;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvPassNueva;
 
         /// <summary>
-        /// Control hlContacto.
+        /// Control txtPassConfirmar.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink hlContacto;
+        protected global::System.Web.UI.WebControls.TextBox txtPassConfirmar;
 
         /// <summary>
-        /// Control menuUsuario.
+        /// Control rfvPassConfirmar.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl menuUsuario;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvPassConfirmar;
 
         /// <summary>
-        /// Control usuarioTexto.
+        /// Control cvPassConfirmar.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlAnchor usuarioTexto;
+        protected global::System.Web.UI.WebControls.CompareValidator cvPassConfirmar;
 
         /// <summary>
-        /// Control btnCerrarSesion.
+        /// Control lblErrorPass.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton btnCerrarSesion;
+        protected global::System.Web.UI.WebControls.Label lblErrorPass;
 
         /// <summary>
-        /// Control menuLogin.
+        /// Control lblExitoPass.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl menuLogin;
+        protected global::System.Web.UI.WebControls.Label lblExitoPass;
 
         /// <summary>
-        /// Control ContentPlaceHolder1.
+        /// Control hlCancelar.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder ContentPlaceHolder1;
+        protected global::System.Web.UI.WebControls.HyperLink hlCancelar;
+
+        /// <summary>
+        /// Control btnGuardarContraseniaPnl.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnGuardarContraseniaPnl;
     }
 }

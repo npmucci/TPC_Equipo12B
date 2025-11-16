@@ -17,25 +17,21 @@ namespace CentroEstetica
                 string paginaActual = Request.Url.AbsolutePath.ToLower();// para saber en que pagina estoy y ver que boton muestro
                 if (Session["usuario"] == null) //USUARIO INVITADO
                 {
-
-                    hlIniciarSesion.Visible = true;
-                    hlPerfil.Visible = false;
-                    btnCerrarSesion.Visible = false;
+                    menuUsuario.Visible = false;
+                    menuLogin.Visible = true;
                 }
                 else
                 {
                     //USUARIO LOGUEADO
-
-                    hlIniciarSesion.Visible = false;
-                    hlPerfil.Visible = true;
-                    btnCerrarSesion.Visible = true;
+                                      
 
                     Usuario logueado = (Usuario)Session["usuario"];
-                    Rol idRol = logueado.Rol;
-                    hlPerfil.Visible = true;
-                    btnCerrarSesion.Visible = true;
+                    menuUsuario.Visible = true;
+                    menuLogin.Visible = false;
 
-                    hlPerfil.NavigateUrl = "~/PanelPerfil.aspx";
+                    usuarioTexto.InnerText = logueado.Nombre;
+                    Rol idRol = logueado.Rol;
+              
 
                     //LÓGICA DE LA BARRA DE NAVEGACIÓN)
                     hlEspecialidades.Visible = true;
@@ -56,7 +52,7 @@ namespace CentroEstetica
                              idRol == Dominio.Rol.ProfesionalUnico)
                     {
 
-                        if (paginaActual.Contains("/default.aspx") || paginaActual.Contains("/paneladmin.aspx") | paginaActual.Contains("/panelprofesional.aspx") || paginaActual.Contains("/panelrecepcionista.aspx") || paginaActual.Contains("/panelperfil.aspx"))
+                        if (paginaActual.Contains("/default.aspx") || paginaActual.Contains("/paneladmin.aspx") | paginaActual.Contains("/panelprofesional.aspx") || paginaActual.Contains("/panelrecepcionista.aspx") || paginaActual.Contains("/panelperfil.aspx") || paginaActual.Contains("/cambiarcontrasenia.aspx"))
                         {
                             hlContacto.Visible = false;
                             hlEspecialidades.Visible = false;
