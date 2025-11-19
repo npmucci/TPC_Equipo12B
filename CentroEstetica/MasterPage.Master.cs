@@ -1,10 +1,11 @@
-﻿using Dominio;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Dominio;
+using Negocio;
 
 namespace CentroEstetica
 {
@@ -12,64 +13,94 @@ namespace CentroEstetica
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
+            // Lógica de Especialidades (Solo visible en Default.aspx)
+            string paginaActual = System.IO.Path.GetFileName(Request.Url.AbsolutePath).ToLower();
+
+            // Si estamos en la raíz o en default.aspx mostramos las especialidades...
+            if (paginaActual == "default.aspx" || paginaActual == "")
             {
-                string paginaActual = Request.Url.AbsolutePath.ToLower();// para saber en que pagina estoy y ver que boton muestro
-                if (Session["usuario"] == null) //USUARIO INVITADO
+                liEspecialidades.Visible = true;
+            }
+            else
+            {
+                liEspecialidades.Visible = false;
+            }
+
+            // Lógica de Sesión
+            if (Seguridad.SesionActiva(Session["usuario"]))
+            {
+                // USUARIO LOGUEADO
+                Usuario user = (Usuario)Session["usuario"];
+
+                menuLogin.Visible = false;
+                menuUsuario.Visible = true;
+                usuarioTexto.InnerText = user.Nombre + " " + user.Apellido;
+
+                // Reiniciar visibilidad por defecto para logueados
+                liReservarTurno.Visible = false;
+                liMisTurnos.Visible = false;
+                liAdministracion.Visible = false;
+                liContacto.Visible = true; // Visible por defecto (útil para Cliente), se oculta abajo si es staff (recep, admin, profUnico o profesional)
+
+                switch (user.Rol)
                 {
-                    menuUsuario.Visible = false;
-                    menuLogin.Visible = true;
+                    case Rol.Cliente:
+
+                        liReservarTurno.Visible = true;
+                        liMisTurnos.Visible = true;
+                        liAdministracion.Visible = false;
+                        liContacto.Visible = true;
+                        break;
+
+                    case Rol.Profesional:
+
+                        liReservarTurno.Visible = true;
+                        liMisTurnos.Visible = false;
+                        liAdministracion.Visible = true;
+                        hlAdministracion.NavigateUrl = "~/PanelProfesional.aspx";
+                        liContacto.Visible = false;
+                        break;
+
+                    case Rol.Recepcionista:
+
+                        liReservarTurno.Visible = true;
+                        liMisTurnos.Visible = false;
+                        liAdministracion.Visible = true;
+                        hlAdministracion.NavigateUrl = "~/PanelRecepcionista.aspx";
+                        liContacto.Visible = false;
+                        break;
+
+                    case Rol.Admin:
+                    case Rol.ProfesionalUnico:
+
+                        liReservarTurno.Visible = true;
+                        liMisTurnos.Visible = false;
+                        liAdministracion.Visible = true;
+                        hlAdministracion.NavigateUrl = "~/PanelAdmin.aspx";
+                        liContacto.Visible = false;
+                        break;
                 }
-                else
-                {
-                    //USUARIO LOGUEADO
-                                      
+            }
+            else
+            {
+                // USUARIO NO LOGUEADO (Invitado)
+                menuLogin.Visible = true;
+                menuUsuario.Visible = false;
 
-                    Usuario logueado = (Usuario)Session["usuario"];
-                    menuUsuario.Visible = true;
-                    menuLogin.Visible = false;
+                // Ocultar opciones de usuario registrado
+                liReservarTurno.Visible = false;
+                liMisTurnos.Visible = false;
+                liAdministracion.Visible = false;
 
-                    usuarioTexto.InnerText = logueado.Nombre;
-                    Rol idRol = logueado.Rol;
-              
-
-                    //LÓGICA DE LA BARRA DE NAVEGACIÓN)
-                    hlEspecialidades.Visible = true;
-                    hlContacto.Visible = true;
-
-                    if (idRol == Rol.Cliente)
-                    {
-                        if (paginaActual.Contains("/panelcliente.aspx"))
-                        {
-
-                            hlEspecialidades.Visible = false;
-                        }
-                    }
-
-                    else if (idRol == Dominio.Rol.Admin ||
-                             idRol == Dominio.Rol.Profesional ||
-                             idRol == Dominio.Rol.Recepcionista ||
-                             idRol == Dominio.Rol.ProfesionalUnico)
-                    {
-
-                        if (paginaActual.Contains("/default.aspx") || paginaActual.Contains("/paneladmin.aspx") | paginaActual.Contains("/panelprofesional.aspx") || paginaActual.Contains("/panelrecepcionista.aspx") || paginaActual.Contains("/panelperfil.aspx") || paginaActual.Contains("/cambiarcontrasenia.aspx"))
-                        {
-                            hlContacto.Visible = false;
-                            hlEspecialidades.Visible = false;
-                        }
-                    }
-                }
-
+                // Mostrar contacto para invitados
+                liContacto.Visible = true;
             }
         }
-        
-        
-
 
         protected void btnCerrarSesion_Click(object sender, EventArgs e)
         {
-            Session.Clear(); // Limpiamos la sesión
-            Response.Redirect("~/Default.aspx"); // Lo mandamos al inicio
+            Session.Clear();
+            Response.Redirect("Default.aspx");
         }
     }
 }

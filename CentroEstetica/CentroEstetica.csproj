@@ -84,6 +84,7 @@
     <Content Include="PanelRecepcionista.aspx" />
     <Content Include="PanelTurnos.aspx" />
     <Content Include="RegistroPage.aspx" />
+    <Content Include="ReservarTurno.aspx" />
     <Content Include="Servicios.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -189,6 +190,13 @@
     </Compile>
     <Compile Include="RegistroPage.aspx.designer.cs">
       <DependentUpon>RegistroPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ReservarTurno.aspx.cs">
+      <DependentUpon>ReservarTurno.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ReservarTurno.aspx.designer.cs">
+      <DependentUpon>ReservarTurno.aspx</DependentUpon>
     </Compile>
     <Compile Include="Servicios.aspx.cs">
       <DependentUpon>Servicios.aspx</DependentUpon>
