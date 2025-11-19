@@ -71,6 +71,7 @@
     <Content Include="Assets\logo.png" />
     <Content Include="Assets\masajista.jpeg" />
     <Content Include="CambiarContrasenia.aspx" />
+    <Content Include="Contacto.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="FormEspecialidad.aspx" />
     <Content Include="FormServicio.aspx" />
@@ -95,6 +96,13 @@
     </Compile>
     <Compile Include="CambiarContrasenia.aspx.designer.cs">
       <DependentUpon>CambiarContrasenia.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Contacto.aspx.cs">
+      <DependentUpon>Contacto.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Contacto.aspx.designer.cs">
+      <DependentUpon>Contacto.aspx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
