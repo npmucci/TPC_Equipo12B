@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Negocio;
@@ -11,7 +10,6 @@ namespace CentroEstetica
 {
     public partial class PanelAdmin : System.Web.UI.Page
     {
-        // Negocias a utilizar
         private UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
         private EspecialidadNegocio espNegocio = new EspecialidadNegocio();
         private ServicioNegocio servNegocio = new ServicioNegocio();
@@ -19,53 +17,72 @@ namespace CentroEstetica
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            
             pnlMensajes.Visible = false;
 
             if (!Seguridad.EsAdmin(Session["usuario"]))
             {
                 Response.Redirect("Default.aspx", false);
+                return;
             }
 
             if (!IsPostBack)
             {
-                CargarProfesionales(true);
-                CargarEspecialidadesConServicios();
+                CargarDashboardCompleto();
             }
         }
 
-        // --- MÉTODOS DE CARGA Y AUXILIARES ---
+        // --- METODO PRINCIPAL DE CARGA ---
 
-        private void CargarProfesionales(bool activos)
+        private void CargarDashboardCompleto()
         {
-            rptProfesionales.DataSource = usuarioNegocio.ListarPorRol((int)Rol.Profesional)
-                                         .Where(u => u.Activo == activos)
-                                         .ToList();
-            rptProfesionales.DataBind();
+            // Carga Profesionales (Activos e Inactivos)
+            CargarProfesionales();
 
-            if (activos)
-            {
-                lnkVerActivos.CssClass = "btn btn-link fw-bold p-0";
-                lnkVerInactivos.CssClass = "btn btn-link p-0";
-            }
-            else
-            {
-                lnkVerActivos.CssClass = "btn btn-link p-0";
-                lnkVerInactivos.CssClass = "btn btn-link fw-bold p-0";
-            }
+            // Carga Servicios y Especialidades
+            CargarEspecialidadesConServicios();
+
+            // Actualiza KPIs (Contadores)
+            ActualizarKPIs();
+        }
+
+        private void CargarProfesionales()
+        {
+
+            ProfesionalNegocio negocio = new ProfesionalNegocio();
+            List<Usuario> todosLosProfesionales = negocio.ListarProfesionales();
+
+
+            // Lista Activos
+            rptProfesionalesActivos.DataSource = todosLosProfesionales.FindAll(x => x.Activo == true);
+            rptProfesionalesActivos.DataBind();
+
+            // Lista Inactivos
+            rptProfesionalesInactivos.DataSource = todosLosProfesionales.FindAll(x => x.Activo == false);
+            rptProfesionalesInactivos.DataBind();
         }
 
         private void CargarEspecialidadesConServicios()
         {
-            
-            rptEspecialidadesLista.DataSource = espNegocio.Listar();
+            List<Especialidad> listaEspecialidades = espNegocio.Listar();
+            rptEspecialidadesLista.DataSource = listaEspecialidades;
             rptEspecialidadesLista.DataBind();
         }
 
-        private void MostrarMensaje(string mensaje, string tipo) // tipo = "success" o "danger"
+        private void ActualizarKPIs()
+        {
+            // KPI Profesionales Activos
+            List<Usuario> profs = usuarioNegocio.ListarPorRol((int)Rol.Profesional);
+            litCantProfesionales.Text = profs.Count(p => p.Activo).ToString();
+
+            // KPI Servicios Activos
+            List<Servicio> servs = servNegocio.ListarActivos();
+            litCantServicios.Text = servs.Count.ToString();
+        }
+
+        private void MostrarMensaje(string mensaje, string tipo)
         {
             pnlMensajes.Visible = true;
-            pnlMensajes.CssClass = $"alert alert-{tipo}";
+            pnlMensajes.CssClass = $"alert alert-{tipo} alert-dismissible fade show mb-4 shadow-sm";
             litMensaje.Text = mensaje;
         }
 
@@ -78,16 +95,6 @@ namespace CentroEstetica
             Response.Redirect($"RegistroPage.aspx?rol={idRolProfesional}", false);
         }
 
-        protected void lnkVerActivos_Click(object sender, EventArgs e)
-        {
-            CargarProfesionales(true);
-        }
-
-        protected void lnkVerInactivos_Click(object sender, EventArgs e)
-        {
-            CargarProfesionales(false);
-        }
-
         protected void rptProfesionales_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
             pnlMensajes.Visible = false;
@@ -96,6 +103,7 @@ namespace CentroEstetica
             switch (e.CommandName)
             {
                 case "DarDeBaja":
+
                     if (turnoNegocio.ProfesionalTieneTurnosPendientes(idUsuario))
                     {
                         MostrarMensaje("<strong>Error:</strong> No se puede dar de baja al profesional porque tiene turnos pendientes.", "danger");
@@ -103,13 +111,15 @@ namespace CentroEstetica
                     else
                     {
                         usuarioNegocio.CambiarEstado(idUsuario, false);
-                        CargarProfesionales(true); 
+                        CargarProfesionales();
+                        MostrarMensaje("Profesional dado de baja correctamente.", "success");
                     }
                     break;
 
                 case "DarDeAlta":
                     usuarioNegocio.CambiarEstado(idUsuario, true);
-                    CargarProfesionales(false); 
+                    CargarProfesionales();
+                    MostrarMensaje("Profesional reactivado correctamente.", "success");
                     break;
 
                 case "VerTurnos":
@@ -124,30 +134,12 @@ namespace CentroEstetica
             {
                 Usuario profesional = (Usuario)e.Item.DataItem;
 
-                
+
                 Repeater rptEspecialidadesProf = (Repeater)e.Item.FindControl("rptEspecialidadesProf");
-                rptEspecialidadesProf.DataSource = espNegocio.ListarPorProfesional(profesional.ID);
-                rptEspecialidadesProf.DataBind();
-
-                
-                Button btnCambiarEstado = (Button)e.Item.FindControl("btnCambiarEstado");
-                if (btnCambiarEstado != null)
+                if (rptEspecialidadesProf != null)
                 {
-                    bool activo = profesional.Activo;
-                    btnCambiarEstado.Text = activo ? "Dar de Baja" : "Dar de Alta";
-                    btnCambiarEstado.CssClass = activo ? "btn btn-outline-danger btn-sm" : "btn btn-outline-success btn-sm";
-                    btnCambiarEstado.CommandName = activo ? "DarDeBaja" : "DarDeAlta";
-                    btnCambiarEstado.CommandArgument = profesional.ID.ToString();
-
-                    if (activo)
-                        btnCambiarEstado.OnClientClick = "return confirm('¿Está seguro que desea dar de baja a este profesional?');";
-                }
-
-                
-                Button btnGestionarTurnos = (Button)e.Item.FindControl("btnGestionarTurnos");
-                if (btnGestionarTurnos != null)
-                {
-                    btnGestionarTurnos.CommandArgument = profesional.ID.ToString();
+                    rptEspecialidadesProf.DataSource = espNegocio.ListarPorProfesional(profesional.ID);
+                    rptEspecialidadesProf.DataBind();
                 }
             }
         }
@@ -164,35 +156,36 @@ namespace CentroEstetica
         {
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
-                
                 Especialidad especialidad = (Especialidad)e.Item.DataItem;
                 bool activo = especialidad.Activo;
 
-                
+
                 Repeater rptServicios = (Repeater)e.Item.FindControl("rptServicios");
                 Button btnAgregarServicio = (Button)e.Item.FindControl("btnAgregarServicio");
                 Button btnEditarEspecialidad = (Button)e.Item.FindControl("btnEditarEspecialidad");
                 Button btnCambiarEstadoEspecialidad = (Button)e.Item.FindControl("btnCambiarEstadoEspecialidad");
 
-                
+
                 rptServicios.DataSource = servNegocio.ListarPorEspecialidadTodos(especialidad.IDEspecialidad);
                 rptServicios.DataBind();
+
 
                 btnAgregarServicio.CommandArgument = especialidad.IDEspecialidad.ToString();
                 btnEditarEspecialidad.CommandArgument = especialidad.IDEspecialidad.ToString();
                 btnCambiarEstadoEspecialidad.CommandArgument = especialidad.IDEspecialidad.ToString();
 
+
                 if (activo)
                 {
-                    btnCambiarEstadoEspecialidad.Text = "Dar de Baja";
-                    btnCambiarEstadoEspecialidad.CssClass = "btn btn-outline-danger btn-sm mt-2 ms-1";
+                    btnCambiarEstadoEspecialidad.Text = "Desactivar";
+                    btnCambiarEstadoEspecialidad.CssClass = "btn btn-sm btn-outline-danger bg-white";
                     btnCambiarEstadoEspecialidad.CommandName = "DarDeBajaEspecialidad";
-                    btnCambiarEstadoEspecialidad.OnClientClick = "return confirm('¿Está seguro que desea dar de baja esta especialidad? Esto dará de baja TODOS sus servicios asociados.');";
+                    btnCambiarEstadoEspecialidad.OnClientClick = "return confirm('¿Seguro que desea desactivar esta especialidad?');";
                 }
                 else
                 {
-                    btnCambiarEstadoEspecialidad.Text = "Dar de Alta";
-                    btnCambiarEstadoEspecialidad.CssClass = "btn btn-outline-success btn-sm mt-2 ms-1";
+                    btnCambiarEstadoEspecialidad.Text = "Activar";
+                    btnCambiarEstadoEspecialidad.CssClass = "btn btn-sm btn-outline-success bg-white";
                     btnCambiarEstadoEspecialidad.CommandName = "DarDeAltaEspecialidad";
                     btnCambiarEstadoEspecialidad.OnClientClick = "";
                 }
@@ -217,7 +210,7 @@ namespace CentroEstetica
                     try
                     {
                         espNegocio.EliminarLogico(id);
-                        MostrarMensaje("Especialidad (y sus servicios) dada de baja.", "success");
+                        MostrarMensaje("Especialidad desactivada.", "success");
                     }
                     catch (Exception ex)
                     {
@@ -237,8 +230,8 @@ namespace CentroEstetica
                     }
                     break;
             }
-            
-            CargarEspecialidadesConServicios();
+
+            CargarDashboardCompleto();
         }
 
 
@@ -248,29 +241,28 @@ namespace CentroEstetica
         {
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
-                
                 Servicio servicio = (Servicio)e.Item.DataItem;
                 bool activo = servicio.Activo;
 
-                
                 Button btnEditarServicio = (Button)e.Item.FindControl("btnEditarServicio");
                 Button btnCambiarEstadoServicio = (Button)e.Item.FindControl("btnCambiarEstadoServicio");
 
-                
                 btnEditarServicio.CommandArgument = servicio.IDServicio.ToString();
                 btnCambiarEstadoServicio.CommandArgument = servicio.IDServicio.ToString();
 
                 if (activo)
                 {
-                    btnCambiarEstadoServicio.Text = "Dar de Baja";
-                    btnCambiarEstadoServicio.CssClass = "btn btn-outline-danger";
+                    btnCambiarEstadoServicio.Text = "🔒";
+                    btnCambiarEstadoServicio.ToolTip = "Desactivar Servicio";
+                    btnCambiarEstadoServicio.CssClass = "btn btn-light btn-sm border text-danger";
                     btnCambiarEstadoServicio.CommandName = "DarDeBajaServicio";
-                    btnCambiarEstadoServicio.OnClientClick = "return confirm('¿Está seguro que desea dar de baja este servicio?');";
+                    btnCambiarEstadoServicio.OnClientClick = "return confirm('¿Desactivar servicio?');";
                 }
                 else
                 {
-                    btnCambiarEstadoServicio.Text = "Dar de Alta";
-                    btnCambiarEstadoServicio.CssClass = "btn btn-outline-success";
+                    btnCambiarEstadoServicio.Text = "🔓";
+                    btnCambiarEstadoServicio.ToolTip = "Activar Servicio";
+                    btnCambiarEstadoServicio.CssClass = "btn btn-light btn-sm border text-success";
                     btnCambiarEstadoServicio.CommandName = "DarDeAltaServicio";
                     btnCambiarEstadoServicio.OnClientClick = "";
                 }
@@ -291,7 +283,7 @@ namespace CentroEstetica
                     try
                     {
                         servNegocio.EliminarLogico(id);
-                        MostrarMensaje("Servicio dado de baja.", "success");
+                        MostrarMensaje("Servicio desactivado.", "success");
                     }
                     catch (Exception ex)
                     {
@@ -311,8 +303,8 @@ namespace CentroEstetica
                     }
                     break;
             }
-            
-            CargarEspecialidadesConServicios();
+
+            CargarDashboardCompleto();
         }
     }
 }

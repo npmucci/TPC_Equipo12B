@@ -8,7 +8,7 @@
         <div class="row justify-content-center">
             <div class="col-lg-8 col-md-10">
 
-                
+                <!-- Panel de Mensajes -->
                 <asp:Panel ID="pnlMensaje" runat="server" Visible="false" role="alert">
                     <asp:Literal ID="litMensaje" runat="server"></asp:Literal>
                 </asp:Panel>
@@ -17,15 +17,17 @@
                     <div class="card-body p-4">
                         <h2 class="h4 mb-4" runat="server" id="tituloPagina">Nuevo Servicio</h2>
 
+                        <!-- Especialidad -->
                         <div class="mb-3">
                             <label for="ddlEspecialidad" class="form-label"><strong>Especialidad:</strong></label>
                             <asp:DropDownList ID="ddlEspecialidad" runat="server" CssClass="form-select">
                             </asp:DropDownList>
                             <asp:RequiredFieldValidator ID="rfvEspecialidad" runat="server" ControlToValidate="ddlEspecialidad"
                                 ErrorMessage="Debe seleccionar una especialidad." CssClass="text-danger" Display="Dynamic"
-                                InitialValue="0" /> 
+                                InitialValue="0" />
                         </div>
 
+                        <!-- Nombre -->
                         <div class="mb-3">
                             <label for="txtNombre" class="form-label"><strong>Nombre del Servicio:</strong></label>
                             <asp:TextBox ID="txtNombre" runat="server" CssClass="form-control"></asp:TextBox>
@@ -33,11 +35,13 @@
                                 ErrorMessage="El nombre es obligatorio." CssClass="text-danger" Display="Dynamic" />
                         </div>
 
+                        <!-- Descripción -->
                         <div class="mb-3">
                             <label for="txtDescripcion" class="form-label"><strong>Descripción:</strong></label>
                             <asp:TextBox ID="txtDescripcion" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
                         </div>
 
+                        <!-- Precio y Duración -->
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="txtPrecio" class="form-label"><strong>Precio ($):</strong></label>
@@ -65,15 +69,19 @@
                             </div>
                         </div>
 
-                        
+                       
                         <asp:Panel ID="pnlControlesEdicion" runat="server" Visible="false">
-                            <div class="form-check mb-3">
-                                <asp:CheckBox ID="chkActivo" runat="server" Text=" Activo" CssClass="form-check-input" />
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" id="chkActivo" runat="server" class="form-check-input" />
+                                <label class="form-check-label" for="<%= chkActivo.ClientID %>">
+                                    Servicio Activo
+                                </label>
                             </div>
                         </asp:Panel>
 
-                        <div class="d-flex gap-2">
-                            <asp:Button ID="btnGuardar" runat="server" Text="Crear Servicio" CssClass="btn btn-primary" OnClick="btnGuardar_Click" />
+                        
+                        <div class="d-flex gap-2 mt-4">
+                            <asp:Button ID="btnGuardar" runat="server" Text="Guardar Cambios" CssClass="btn btn-primary" OnClick="btnGuardar_Click" />
                             <asp:Button ID="btnVolver" runat="server" Text="Volver" CssClass="btn btn-secondary" OnClick="btnVolver_Click" CausesValidation="false" />
                         </div>
 

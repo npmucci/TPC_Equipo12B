@@ -15,6 +15,15 @@ namespace CentroEstetica
     {
 
         /// <summary>
+        /// Control hfTabActivo.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hfTabActivo;
+
+        /// <summary>
         /// Control pnlMensajes.
         /// </summary>
         /// <remarks>
@@ -33,6 +42,24 @@ namespace CentroEstetica
         protected global::System.Web.UI.WebControls.Literal litMensaje;
 
         /// <summary>
+        /// Control litCantProfesionales.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litCantProfesionales;
+
+        /// <summary>
+        /// Control litCantServicios.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litCantServicios;
+
+        /// <summary>
         /// Control btnAgregarProfesional.
         /// </summary>
         /// <remarks>
@@ -42,31 +69,22 @@ namespace CentroEstetica
         protected global::System.Web.UI.WebControls.Button btnAgregarProfesional;
 
         /// <summary>
-        /// Control lnkVerActivos.
+        /// Control rptProfesionalesActivos.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lnkVerActivos;
+        protected global::System.Web.UI.WebControls.Repeater rptProfesionalesActivos;
 
         /// <summary>
-        /// Control lnkVerInactivos.
+        /// Control rptProfesionalesInactivos.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lnkVerInactivos;
-
-        /// <summary>
-        /// Control rptProfesionales.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptProfesionales;
+        protected global::System.Web.UI.WebControls.Repeater rptProfesionalesInactivos;
 
         /// <summary>
         /// Control btnAgregarEspecialidad.
