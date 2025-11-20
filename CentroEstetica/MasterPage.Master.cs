@@ -49,6 +49,7 @@ namespace CentroEstetica
                         liReservarTurno.Visible = true;
                         liMisTurnos.Visible = true;
                         liAdministracion.Visible = false;
+                        li1MiAgenda.Visible = false;
                         liContacto.Visible = true;
                         break;
 
@@ -56,8 +57,9 @@ namespace CentroEstetica
 
                         liReservarTurno.Visible = true;
                         liMisTurnos.Visible = false;
-                        liAdministracion.Visible = true;
-                        hlAdministracion.NavigateUrl = "~/PanelProfesional.aspx";
+                        liAdministracion.Visible = false;
+                        li1MiAgenda.Visible = true;
+                        hlMiAgenda.NavigateUrl = "~/PanelProfesional.aspx";
                         liContacto.Visible = false;
                         break;
 
@@ -65,6 +67,7 @@ namespace CentroEstetica
 
                         liReservarTurno.Visible = true;
                         liMisTurnos.Visible = false;
+                        li1MiAgenda.Visible = false;
                         liAdministracion.Visible = true;
                         hlAdministracion.NavigateUrl = "~/PanelRecepcionista.aspx";
                         liContacto.Visible = false;
@@ -75,6 +78,7 @@ namespace CentroEstetica
 
                         liReservarTurno.Visible = true;
                         liMisTurnos.Visible = false;
+                        li1MiAgenda.Visible = false;
                         liAdministracion.Visible = true;
                         hlAdministracion.NavigateUrl = "~/PanelAdmin.aspx";
                         liContacto.Visible = false;

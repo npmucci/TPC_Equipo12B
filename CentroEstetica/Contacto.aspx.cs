@@ -70,9 +70,7 @@ namespace CentroEstetica
                     smtp.Send(mail);
 
                     
-                    MostrarMensaje("¡Gracias! El correo se ha enviado exitosamente.", "success");
-
-                    
+                    MostrarMensaje("¡Gracias! El correo se ha enviado exitosamente.", "success"); 
                     LimpiarFormularioParcial();
                 }
                 catch (Exception ex)

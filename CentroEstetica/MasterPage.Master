@@ -61,6 +61,11 @@
                             <asp:HyperLink ID="hlAdministracion" runat="server" CssClass="nav-link">Administración</asp:HyperLink>
                         </li>
 
+                        <!-- MI AGENDA -->
+                        <li class="nav-item" id="li1MiAgenda" runat="server" visible="false">
+                            <asp:HyperLink ID="hlMiAgenda" runat="server" CssClass="nav-link">Mi Agenda</asp:HyperLink>
+                        </li>
+
                         <!-- CONTACTO  -->
                         <li class="nav-item" id="liContacto" runat="server">
                             <asp:HyperLink ID="hlContacto" runat="server"

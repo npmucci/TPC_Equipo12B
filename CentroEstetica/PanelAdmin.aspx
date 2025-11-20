@@ -26,7 +26,7 @@
         /* Contenido Principal */
         .content-area { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); min-height: 600px; }
         
-        /* Tarjetas KPI */
+        /* Tarjetas KPI (Admin) */
         .kpi-card { border: none; border-radius: 15px; padding: 20px; color: white; position: relative; overflow: hidden; transition: transform 0.3s; }
         .kpi-card:hover { transform: translateY(-5px); }
         .kpi-card h2 { font-size: 2.5rem; font-weight: bold; margin: 0; }
@@ -36,26 +36,36 @@
         .bg-gradient-success { background: linear-gradient(45deg, #1cc88a, #13855c); }
         .bg-gradient-info { background: linear-gradient(45deg, #36b9cc, #258391); }
 
-        /* Profesionales */
+        /* Tarjetas Profesionales */
         .prof-card { border: 1px solid #f0f0f0; border-radius: 15px; transition: all 0.3s; }
         .prof-card:hover { border-color: #b8daff; box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
         .avatar-initials { width: 50px; height: 50px; background: #e2e6ea; color: #6c757d; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; }
         
-        /* Servicios */
+        /* Acordeón Servicios */
         .custom-accordion .accordion-button:not(.collapsed) { background-color: #f0f8ff; color: #0d6efd; }
-        .custom-accordion .accordion-button:focus { box-shadow: none; border-color: rgba(13,110,253,.25); }
+
+        /* --- ESTILOS AGENDA PERSONAL (Migrados de PanelProfesional) --- */
+        .stat-card { background-color: #fff; border: 1px solid #e3e6f0; border-radius: 0.35rem; padding: 1.5rem; box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15); transition: transform 0.2s; }
+        .stat-card:hover { transform: translateY(-5px); }
+        .stat-label { font-weight: 700; color: #4e73df; text-transform: uppercase; margin-bottom: 0.5rem; font-size: 0.8rem; }
+        .stat-value { font-size: 1.8rem; font-weight: 700; color: #5a5c69; }
+        
+        /* Pestañas internas de la Agenda (Hoy/Proximos/Pasados) */
+        .nav-tabs .nav-link { color: #6c757d; border: none; border-bottom: 3px solid transparent; font-weight: 500; padding: 10px 20px; cursor: pointer; }
+        .nav-tabs .nav-link.active { color: #4e73df; border-bottom: 3px solid #4e73df; background: transparent; font-weight: bold;}
+        .nav-tabs .nav-link:hover { color: #4e73df; }
     </style>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     
-    
+    <!-- Campo oculto para mantener la pestaña activa tras PostBack -->
     <asp:HiddenField ID="hfTabActivo" runat="server" Value="#v-pills-dashboard" />
 
     <div class="container-fluid dashboard-container">
         <div class="row">
             
-            <!-- COLUMNA IZQUIERDA: MENÚ LATERAL -->
+            <!-- COLUMNA IZQUIERDAL -->
             <div class="col-lg-3 col-xl-2 mb-4">
                 <div class="sticky-top" style="top: 90px; z-index: 1;">
                     <h5 class="text-muted text-uppercase mb-3 ms-2 small fw-bold">Menú Principal</h5>
@@ -64,6 +74,13 @@
                         <button class="nav-link active" id="v-pills-dashboard-tab" data-bs-toggle="pill" data-bs-target="#v-pills-dashboard" type="button" role="tab">
                             <i class="bi bi-speedometer2"></i> Resumen
                         </button>
+                        
+                        <!-- BOTÓN MI AGENDA (Oculto por defecto, se activa en el back) -->
+                        
+                        <button class="nav-link" id="btnTabAgenda" runat="server" visible="false" data-bs-toggle="pill" data-bs-target="#v-pills-agenda" type="button" role="tab">
+                            <i class="bi bi-calendar-heart"></i> Mi Agenda
+                        </button>
+
                         <button class="nav-link" id="v-pills-profesionales-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profesionales" type="button" role="tab">
                             <i class="bi bi-people"></i> Profesionales
                         </button>
@@ -77,7 +94,7 @@
                 </div>
             </div>
 
-            <!-- COLUMNA DERECHA: ÁREA DE CONTENIDO -->
+            <!-- COLUMNA DERECHA -->
             <div class="col-lg-9 col-xl-10">
                 
                 <!-- Mensajes de Alerta -->
@@ -121,28 +138,147 @@
                         <!-- Accesos Rápidos -->
                         <h5 class="text-muted mb-3">Accesos Directos</h5>
                         <div class="row g-3">
-                            <div class="col-md-6">
+                            
+                            <!-- Acceso Agenda (Solo visible si es ProfesionalUnico) -->
+                            <asp:PlaceHolder ID="phAccesoAgenda" runat="server" Visible="false">
+                                <div class="col-md-4">
+                                    <div class="p-4 border rounded-3 bg-light d-flex align-items-center cursor-pointer border-primary" style="cursor:pointer;" onclick="document.getElementById('<%= btnTabAgenda.ClientID %>').click()">
+                                        <div class="bg-white p-3 rounded-circle shadow-sm me-3 text-primary"><i class="bi bi-calendar-heart fs-4"></i></div>
+                                        <div>
+                                            <h6 class="fw-bold mb-1">Mi Agenda</h6>
+                                            <small class="text-muted">Gestionar mis turnos</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </asp:PlaceHolder>
+
+                            <div class="col-md-4">
                                 <div class="p-4 border rounded-3 bg-light d-flex align-items-center" style="cursor:pointer;" onclick="document.getElementById('v-pills-profesionales-tab').click()">
-                                    <div class="bg-white p-3 rounded-circle shadow-sm me-3 text-primary"><i class="bi bi-person-plus fs-4"></i></div>
+                                    <div class="bg-white p-3 rounded-circle shadow-sm me-3 text-secondary"><i class="bi bi-person-plus fs-4"></i></div>
                                     <div>
                                         <h6 class="fw-bold mb-1">Gestionar Equipo</h6>
                                         <small class="text-muted">Altas y bajas de profesionales</small>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="p-4 border rounded-3 bg-light d-flex align-items-center" style="cursor:pointer;" onclick="document.getElementById('v-pills-servicios-tab').click()">
                                     <div class="bg-white p-3 rounded-circle shadow-sm me-3 text-success"><i class="bi bi-bag-plus fs-4"></i></div>
                                     <div>
-                                        <h6 class="fw-bold mb-1">Catálogo de Servicios</h6>
-                                        <small class="text-muted">Administrar especialidades</small>
+                                        <h6 class="fw-bold mb-1">Catálogo</h6>
+                                        <small class="text-muted">Administrar servicios</small>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 2. PROFESIONALES  -->
+                    <!-- 2. MI AGENDA -->
+                    <div class="tab-pane fade" id="v-pills-agenda" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div>
+                                <h2 class="fw-bold mb-1 text-dark">Mi Agenda</h2>
+                                <h5 class="text-muted fw-normal"><asp:Label ID="lblNombre" runat="server"></asp:Label></h5>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge bg-light text-secondary border px-3 py-2 fs-6">
+                                    <i class="bi bi-calendar-day me-2"></i><asp:Label ID="lblFechaHoy" runat="server"></asp:Label>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- ESTADÍSTICAS AGENDA -->
+                        <div class="row mb-5">
+                            <div class="col-md-4 mb-3">
+                                <div class="stat-card border-left-primary h-100">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <p class="stat-label text-primary">Turnos Hoy</p>
+                                            <div class="stat-value"><asp:Label ID="lblTurnosHoy" runat="server" Text="0"></asp:Label></div>
+                                        </div>
+                                        <i class="bi bi-calendar-check fs-1 text-gray-300 opacity-25"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="stat-card border-left-success h-100">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <p class="stat-label text-success">Próximos 7 Días</p>
+                                            <div class="stat-value"><asp:Label ID="lblTurnosProximos" runat="server" Text="0"></asp:Label></div>
+                                        </div>
+                                        <i class="bi bi-graph-up-arrow fs-1 text-gray-300 opacity-25"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="stat-card border-left-info h-100">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            <p class="stat-label text-info">Ingresos del Mes</p>
+                                            <div class="stat-value text-success">$<asp:Label ID="lblIngresosMes" runat="server" Text="0"></asp:Label></div>
+                                        </div>
+                                        <i class="bi bi-currency-dollar fs-1 text-gray-300 opacity-25"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CONTENEDOR DE TURNOS AGENDA -->
+                        <div class="card shadow-sm border-0 rounded-4">
+                            <div class="card-header bg-white border-0 pt-4 px-4">
+                                <ul class="nav nav-tabs card-header-tabs" id="tabTurnos">
+                                    <li class="nav-item">
+                                        <asp:LinkButton ID="lnkHoy" runat="server" CssClass="nav-link active" OnClick="lnkAgenda_Click">
+                                            <i class="bi bi-clock me-2"></i>Hoy
+                                        </asp:LinkButton>
+                                    </li>
+                                    <li class="nav-item">
+                                        <asp:LinkButton ID="lnkProximos" runat="server" CssClass="nav-link" OnClick="lnkAgenda_Click">
+                                            <i class="bi bi-calendar-week me-2"></i>Próximos
+                                        </asp:LinkButton>
+                                    </li>
+                                    <li class="nav-item">
+                                        <asp:LinkButton ID="lnkPasados" runat="server" CssClass="nav-link" OnClick="lnkAgenda_Click">
+                                            <i class="bi bi-archive me-2"></i>Pasados
+                                        </asp:LinkButton>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div class="card-body p-4">
+                                <asp:MultiView ID="mvTurnos" runat="server" ActiveViewIndex="0">
+
+                                    <asp:View ID="viewHoy" runat="server">
+                                        <h5 class="mb-3 fw-bold text-secondary">Turnos del Día</h5>
+                                        <div class="alert alert-light border text-center py-5">
+                                            <i class="bi bi-inbox fs-1 text-muted d-block mb-2"></i>
+                                            <p class="mb-0 text-muted">Aquí se mostrará el listado de turnos del día.</p>
+                                        </div>
+                                    </asp:View>
+
+                                    <asp:View ID="viewProximos" runat="server">
+                                        <h5 class="mb-3 fw-bold text-secondary">Próximos Turnos</h5>
+                                        <div class="alert alert-light border text-center py-5">
+                                            <i class="bi bi-calendar3 fs-1 text-muted d-block mb-2"></i>
+                                            <p class="mb-0 text-muted">Aquí se mostrará el listado de turnos futuros.</p>
+                                        </div>
+                                    </asp:View>
+
+                                    <asp:View ID="viewPasados" runat="server">
+                                        <h5 class="mb-3 fw-bold text-secondary">Historial de Turnos</h5>
+                                        <div class="alert alert-light border text-center py-5">
+                                            <i class="bi bi-clock-history fs-1 text-muted d-block mb-2"></i>
+                                            <p class="mb-0 text-muted">Aquí se mostrará el historial de turnos pasados.</p>
+                                        </div>
+                                    </asp:View>
+
+                                </asp:MultiView>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. PROFESIONALES (ADMIN) -->
                     <div class="tab-pane fade" id="v-pills-profesionales" role="tabpanel">
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <h4 class="fw-bold mb-0">Equipo Profesional</h4>
@@ -150,7 +286,6 @@
                                 CssClass="btn btn-primary rounded-pill px-4" OnClick="btnAgregarProfesional_Click" />
                         </div>
 
-                        <!-- Pestañas Internas  -->
                         <ul class="nav nav-tabs mb-4" id="profesionalesTabs" role="tablist">
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active" id="pills-activos-tab" data-bs-toggle="pill" data-bs-target="#pills-activos" type="button" role="tab">Activos</button>
@@ -161,10 +296,9 @@
                         </ul>
 
                         <div class="tab-content" id="profesionalesTabsContent">
-                            <!-- TABLA ACTIVOS -->
                             <div class="tab-pane fade show active" id="pills-activos" role="tabpanel">
                                 <div class="row g-3">
-                                   <asp:Repeater ID="rptProfesionalesActivos" runat="server" OnItemDataBound="rptProfesionales_ItemDataBound" OnItemCommand="rptProfesionales_ItemCommand">
+                                    <asp:Repeater ID="rptProfesionalesActivos" runat="server" OnItemDataBound="rptProfesionales_ItemDataBound" OnItemCommand="rptProfesionales_ItemCommand">
                                         <ItemTemplate>
                                             <div class="col-md-6 col-xl-4">
                                                 <div class="card prof-card h-100 p-3 border-success-subtle">
@@ -187,8 +321,6 @@
                                                                         CssClass="dropdown-item" CommandName="VerTurnos" CommandArgument='<%# Eval("ID") %>' />
                                                                 </li>
                                                                 <li><hr class="dropdown-divider"></li>
-                                                                
-                                                                
                                                                 <li>
                                                                     <asp:Button ID="btnBaja" runat="server" Text="Dar de Baja" 
                                                                         CssClass="dropdown-item text-danger" 
@@ -196,12 +328,9 @@
                                                                         CommandArgument='<%# Eval("ID") %>'
                                                                         OnClientClick="return confirm('¿Está seguro que desea dar de baja a este profesional?');" />
                                                                 </li>
-                                    
                                                             </ul>
                                                         </div>
                                                     </div>
-                                                    
-                                                    <!-- Sección de especialidades -->
                                                     <div class="mt-3 pt-3 border-top">
                                                         <small class="text-muted text-uppercase" style="font-size: 0.7rem;">Especialidades</small>
                                                         <div class="mt-1">
@@ -219,7 +348,6 @@
                                 </div>
                             </div>
 
-                            <!-- TABLA INACTIVOS -->
                             <div class="tab-pane fade" id="pills-inactivos" role="tabpanel">
                                 <div class="row g-3">
                                     <asp:Repeater ID="rptProfesionalesInactivos" runat="server" OnItemDataBound="rptProfesionales_ItemDataBound" OnItemCommand="rptProfesionales_ItemCommand">
@@ -263,7 +391,7 @@
                         </div>
                     </div>
 
-                    <!-- 3. CATÁLOGO -->
+                    <!-- 4. CATÁLOGO -->
                     <div class="tab-pane fade" id="v-pills-servicios" role="tabpanel">
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <h4 class="fw-bold mb-0">Catálogo de Servicios</h4>
@@ -335,7 +463,7 @@
                         </div>
                     </div>
 
-                    <!-- 4. CONFIGURACIÓN -->
+                    <!-- 5. CONFIGURACIÓN -->
                     <div class="tab-pane fade" id="v-pills-settings" role="tabpanel">
                         <h4 class="fw-bold mb-4">Configuración</h4>
                         <div class="card border-0 bg-light rounded-3">
@@ -363,11 +491,10 @@
         </div>
     </div>
 
-    
+    <!-- Script para mantener la pestaña activa -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var hiddenField = document.getElementById('<%= hfTabActivo.ClientID %>');
-            
             if (hiddenField && hiddenField.value) {
                 var tabToActivate = document.querySelector('button[data-bs-target="' + hiddenField.value + '"]');
                 if (tabToActivate) {
@@ -375,7 +502,6 @@
                     tab.show();
                 }
             }
-
             var tabButtons = document.querySelectorAll('button[data-bs-toggle="pill"]');
             tabButtons.forEach(function (btn) {
                 btn.addEventListener('shown.bs.tab', function (event) {
