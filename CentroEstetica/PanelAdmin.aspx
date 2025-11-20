@@ -251,7 +251,7 @@
                                 <div class="row g-3">
                                     <asp:Repeater ID="rptProfesionalesActivos" runat="server" OnItemDataBound="rptProfesionales_ItemDataBound" OnItemCommand="rptProfesionales_ItemCommand">
                                         <ItemTemplate>
-                                            <div class="col-md-6 col-xl-4">
+                                            <div class="col-md-6 col-lg-4 col-xl-3">
                                                 <div class="card prof-card h-100 p-3 border-success-subtle">
                                                     <div class="d-flex align-items-start">
                                                         <div class="avatar-initials me-3 bg-success-subtle text-success">
@@ -270,6 +270,11 @@
                                                                 <li>
                                                                     <asp:Button ID="btnGestionarTurnos" runat="server" Text="Ver Agenda" 
                                                                         CssClass="dropdown-item" CommandName="VerTurnos" CommandArgument='<%# Eval("ID") %>' />
+                                                                </li>
+                                                                <li>
+                                                                      <a class="dropdown-item" href='GestionProfesional.aspx?id=<%# Eval("ID") %>'>
+                                                                          Modificar Datos
+                                                                      </a>
                                                                 </li>
                                                                 <li><hr class="dropdown-divider"></li>
                                                                 <li>
@@ -303,7 +308,7 @@
                                 <div class="row g-3">
                                     <asp:Repeater ID="rptProfesionalesInactivos" runat="server" OnItemDataBound="rptProfesionales_ItemDataBound" OnItemCommand="rptProfesionales_ItemCommand">
                                         <ItemTemplate>
-                                            <div class="col-md-6 col-xl-4">
+                                            <div class="col-md-6 col-lg-4 col-xl-3">
                                                 <div class="card prof-card h-100 p-3 bg-light opacity-75">
                                                     <div class="d-flex align-items-start">
                                                         <div class="avatar-initials me-3 bg-secondary text-white">
@@ -326,7 +331,7 @@
                                                     <div class="mt-3 pt-3 border-top">
                                                         <small class="text-muted text-uppercase" style="font-size: 0.7rem;">Especialidades</small>
                                                         <div class="mt-1">
-                                                            <asp:Repeater ID="rptEspecialidadesProf" runat="server">
+                                                            <asp:Repeater ID="Repeater1" runat="server">
                                                                 <ItemTemplate>
                                                                     <span class="badge bg-light text-secondary border fw-normal"><%# Eval("Nombre") %></span>
                                                                 </ItemTemplate>
@@ -409,7 +414,7 @@
                                                                                   CssClass="btn btn-sm btn-light border text-primary" 
                                                                                   CommandName="VerTurnosCliente" CommandArgument='<%# Eval("ID") %>' />
 
-                                                                              <asp:Button ID="btnBaja" runat="server" Text="🗑️" ToolTip="Dar de Baja"
+                                                                              <asp:Button ID="Button1" runat="server" Text="🗑️" ToolTip="Dar de Baja"
                                                                                   CssClass="btn btn-sm btn-light border text-danger" 
                                                                                   CommandName="DarDeBajaCliente" CommandArgument='<%# Eval("ID") %>'
                                                                                   OnClientClick="return confirm('¿Seguro que desea dar de baja a este cliente?');" />
@@ -458,7 +463,7 @@
                                                                       <td><%# Eval("Mail") %></td>
                                                                       <td><span class="badge bg-secondary rounded-pill">Inactivo</span></td>
                                                                       <td class="text-end pe-4">
-                                                                          <asp:Button ID="btnAlta" runat="server" Text="Reactivar" 
+                                                                          <asp:Button ID="Button2" runat="server" Text="Reactivar" 
                                                                               CssClass="btn btn-sm btn-outline-success" 
                                                                               CommandName="DarDeAltaCliente" CommandArgument='<%# Eval("ID") %>' />
                                                                       </td>

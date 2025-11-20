@@ -39,6 +39,14 @@ namespace Negocio
             datos.AsignarEspecialidad(idUsuario, idEspecialidad);
         }
 
+        public void DesasignarEspecialidadAProfesional(int idUsuario, int idEspecialidad)
+        {
+
+            EspecialidadDatos datos = new EspecialidadDatos();
+            datos.EliminarEspecialidadDeProfesional(idUsuario, idEspecialidad);
+        }
+
+
         public void Agregar(Especialidad nueva)
         {
             // VALIDACIONES

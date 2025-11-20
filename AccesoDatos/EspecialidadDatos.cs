@@ -185,6 +185,30 @@ namespace AccesoDatos
             }
         }
 
+        public void EliminarEspecialidadDeProfesional(int idUsuario, int idEspecialidad)
+        {
+            Datos datos = new Datos();
+            try
+            {
+
+                string consulta = "DELETE FROM ProfesionalEspecialidad WHERE IDUsuario = @idUsuario AND IDEspecialidad = @idEsp";
+
+                datos.SetearConsulta(consulta);
+                datos.SetearParametro("@idUsuario", idUsuario);
+                datos.SetearParametro("@idEsp", idEspecialidad);
+
+                datos.EjecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.CerrarConexion();
+            }
+        }
+
         public List<Especialidad> ListarPorProfesional(int idProfesional)
         {
             List<Especialidad> lista = new List<Especialidad>();

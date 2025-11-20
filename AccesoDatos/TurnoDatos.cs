@@ -241,6 +241,36 @@ namespace AccesoDatos
                 }
             }
         }
+
+        public bool TieneTurnosPendientesPorEspecialidad(int idProfesional, int idEspecialidad)
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+
+                    string consulta = @"
+                     SELECT COUNT(*) 
+                     FROM Turno T
+                     INNER JOIN Servicio S ON T.IDServicio = S.IDServicio
+                     WHERE T.IDUsuarioProfesional = @idProf 
+                     AND S.IDEspecialidad = @idEsp
+                     AND T.IDEstado IN (1, 2) -- 1=Confirmado, 2=Pendiente
+                     AND (CAST(T.Fecha AS DATETIME) + CAST(T.HoraInicio AS DATETIME)) > GETDATE()";
+
+                    datos.SetearConsulta(consulta);
+                    datos.SetearParametro("@idProf", idProfesional);
+                    datos.SetearParametro("@idEsp", idEspecialidad);
+
+                    int cantidad = (int)datos.EjecutarAccionEscalar();
+                    return cantidad > 0;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
         public int ContarTurnos(DateTime fechaInicio, DateTime fechaFin, int idProfesional)
         {
             int cantidad = 0;
