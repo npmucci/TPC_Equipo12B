@@ -1,60 +1,7 @@
 ﻿<%@ Page Title="Administración" Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeBehind="PanelAdmin.aspx.cs" Inherits="CentroEstetica.PanelAdmin" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <!-- Iconos de Bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    
-    <style>
-        /* --- ESTILOS GENERALES DASHBOARD --- */
-        .dashboard-container { background-color: #f8f9fa; min-height: 80vh; padding: 20px; }
-        
-        /* Menú Lateral (Sidebar) */
-        .nav-pills .nav-link { 
-            color: #6c757d; 
-            font-weight: 500; 
-            padding: 15px 20px; 
-            border-radius: 10px; 
-            margin-bottom: 5px; 
-            transition: all 0.3s;
-            display: flex; align-items: center;
-            cursor: pointer;
-        }
-        .nav-pills .nav-link i { font-size: 1.2rem; margin-right: 10px; }
-        .nav-pills .nav-link:hover { background-color: #e9ecef; color: #0d6efd; transform: translateX(5px); }
-        .nav-pills .nav-link.active { background-color: #0d6efd; color: white; box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3); }
-
-        /* Contenido Principal */
-        .content-area { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); min-height: 600px; }
-        
-        /* Tarjetas KPI (Admin) */
-        .kpi-card { border: none; border-radius: 15px; padding: 20px; color: white; position: relative; overflow: hidden; transition: transform 0.3s; }
-        .kpi-card:hover { transform: translateY(-5px); }
-        .kpi-card h2 { font-size: 2.5rem; font-weight: bold; margin: 0; }
-        .kpi-card i { position: absolute; right: -10px; bottom: -10px; font-size: 5rem; opacity: 0.3; transform: rotate(-15deg); }
-        
-        .bg-gradient-primary { background: linear-gradient(45deg, #4e73df, #224abe); }
-        .bg-gradient-success { background: linear-gradient(45deg, #1cc88a, #13855c); }
-        .bg-gradient-info { background: linear-gradient(45deg, #36b9cc, #258391); }
-
-        /* Tarjetas Profesionales */
-        .prof-card { border: 1px solid #f0f0f0; border-radius: 15px; transition: all 0.3s; }
-        .prof-card:hover { border-color: #b8daff; box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
-        .avatar-initials { width: 50px; height: 50px; background: #e2e6ea; color: #6c757d; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; }
-        
-        /* Acordeón Servicios */
-        .custom-accordion .accordion-button:not(.collapsed) { background-color: #f0f8ff; color: #0d6efd; }
-
-        /* --- ESTILOS AGENDA PERSONAL (Migrados de PanelProfesional) --- */
-        .stat-card { background-color: #fff; border: 1px solid #e3e6f0; border-radius: 0.35rem; padding: 1.5rem; box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15); transition: transform 0.2s; }
-        .stat-card:hover { transform: translateY(-5px); }
-        .stat-label { font-weight: 700; color: #4e73df; text-transform: uppercase; margin-bottom: 0.5rem; font-size: 0.8rem; }
-        .stat-value { font-size: 1.8rem; font-weight: 700; color: #5a5c69; }
-        
-        /* Pestañas internas de la Agenda (Hoy/Proximos/Pasados) */
-        .nav-tabs .nav-link { color: #6c757d; border: none; border-bottom: 3px solid transparent; font-weight: 500; padding: 10px 20px; cursor: pointer; }
-        .nav-tabs .nav-link.active { color: #4e73df; border-bottom: 3px solid #4e73df; background: transparent; font-weight: bold;}
-        .nav-tabs .nav-link:hover { color: #4e73df; }
-    </style>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
@@ -65,7 +12,7 @@
     <div class="container-fluid dashboard-container">
         <div class="row">
             
-            <!-- COLUMNA IZQUIERDAL -->
+            <!-- COLUMNA IZQUIERDA: MENÚ LATERAL -->
             <div class="col-lg-3 col-xl-2 mb-4">
                 <div class="sticky-top" style="top: 90px; z-index: 1;">
                     <h5 class="text-muted text-uppercase mb-3 ms-2 small fw-bold">Menú Principal</h5>
@@ -75,8 +22,7 @@
                             <i class="bi bi-speedometer2"></i> Resumen
                         </button>
                         
-                        <!-- BOTÓN MI AGENDA (Oculto por defecto, se activa en el back) -->
-                        
+                        <!-- BOTÓN MI AGENDA (Oculto por defecto, se activa en el CodeBehind si es ProfesionalUnico) -->
                         <button class="nav-link" id="btnTabAgenda" runat="server" visible="false" data-bs-toggle="pill" data-bs-target="#v-pills-agenda" type="button" role="tab">
                             <i class="bi bi-calendar-heart"></i> Mi Agenda
                         </button>
@@ -94,7 +40,7 @@
                 </div>
             </div>
 
-            <!-- COLUMNA DERECHA -->
+            <!-- COLUMNA DERECHA: ÁREA DE CONTENIDO -->
             <div class="col-lg-9 col-xl-10">
                 
                 <!-- Mensajes de Alerta -->
@@ -173,7 +119,7 @@
                         </div>
                     </div>
 
-                    <!-- 2. MI AGENDA -->
+                    <!-- 2. MI AGENDA  -->
                     <div class="tab-pane fade" id="v-pills-agenda" role="tabpanel">
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <div>

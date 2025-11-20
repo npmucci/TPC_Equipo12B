@@ -13,24 +13,33 @@ namespace CentroEstetica
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            
             if (!IsPostBack && Session["usuario"] != null)
             {
                 Usuario logueado = (Usuario)Session["usuario"];
-                if (logueado.Rol == Rol.Admin)
-                    Response.Redirect("PanelAdmin.aspx");
+
+                // Admin y ProfesionalUnico van al Panel Admin
+                if (logueado.Rol == Rol.Admin || logueado.Rol == Rol.ProfesionalUnico)
+                {
+                    Response.Redirect("PanelAdmin.aspx", false);
+                }
+                else if (logueado.Rol == Rol.Recepcionista)
+                {
+                    Response.Redirect("PanelRecepcionista.aspx", false);
+                }
                 else if (logueado.Rol == Rol.Profesional)
-                    Response.Redirect("PanelProfesional.aspx");
+                {
+                    Response.Redirect("PanelProfesional.aspx", false);
+                }
                 else
-                    Response.Redirect("PanelCliente.aspx");
+                {
+                    Response.Redirect("PanelCliente.aspx", false);
+                }
             }
-
         }
-
 
         protected void btnIngresar_Click(object sender, EventArgs e)
         {
-
             if (string.IsNullOrEmpty(txtUsuario.Text) || string.IsNullOrEmpty(txtPassword.Text))
             {
                 lblError.Text = "Por favor, complete ambos campos.";
@@ -42,7 +51,6 @@ namespace CentroEstetica
             {
                 UsuarioNegocio negocio = new UsuarioNegocio();
 
-
                 string email = txtUsuario.Text;
                 string pass = txtPassword.Text;
 
@@ -50,21 +58,25 @@ namespace CentroEstetica
 
                 if (usuarioLogueado != null)
                 {
-                    // Login exitoso
-                    Session["usuario"] = usuarioLogueado;
+                    
+                    Session["usuario"] = usuarioLogueado;  // Login exitoso
 
-                    // Redirigimos al panel correspondiente
+                    
                     switch (usuarioLogueado.Rol)
                     {
                         case Rol.Admin:
+                        case Rol.ProfesionalUnico: 
                             Response.Redirect("PanelAdmin.aspx", false);
                             break;
+
                         case Rol.Recepcionista:
                             Response.Redirect("PanelRecepcionista.aspx", false);
                             break;
+
                         case Rol.Profesional:
                             Response.Redirect("PanelProfesional.aspx", false);
                             break;
+
                         case Rol.Cliente:
                         default:
                             Response.Redirect("PanelCliente.aspx", false);
@@ -73,17 +85,15 @@ namespace CentroEstetica
                 }
                 else
                 {
-
                     lblError.Text = "Usuario o contraseña incorrectos.";
                     lblError.Visible = true;
                 }
             }
             catch (Exception ex)
             {
-
                 lblError.Text = "Ocurrió un error inesperado.";
                 lblError.Visible = true;
-
+                
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿/*Paleta de colores */
+﻿/* Paleta de colores */
 :root {
     --colorPrincipal: #FCE8E4;
     --colorPrincipalHover: #D85C7E;
@@ -39,13 +39,10 @@ main {
 
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Playfair Display', serif;
-    color: black
+    color: black;
 }
 
-
-
 /* Navbar y secciones */
-
 .bg-dark-custom {
     background-color: var(--colorFondoOscuro);
 }
@@ -54,10 +51,7 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--colorPrincipal);
 }
 
-
-
-
-/*cards*/
+/* Cards Generales */
 .custom-card {
     border-radius: 16px;
     overflow: hidden;
@@ -68,37 +62,39 @@ h1, h2, h3, h4, h5, h6 {
     text-align: center;
 }
 
-.custom-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
- }
-.custom-card img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-    transition: transform 0.4s ease;
- }
-.custom-card:hover img {
-    transform: scale(1.05);
- }
+    .custom-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
 
-.custom-card .card-body {
-    padding: 1.5rem;
+    .custom-card img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+    }
 
-}
-.custom-card h3,
-.custom-card h4,
-.custom-card h5 {
-    font-family: 'Playfair Display', serif;
-    font-weight: 600;
-    color: var(--colorTexto);
-    margin-bottom: 0.75rem;
-}
+    .custom-card:hover img {
+        transform: scale(1.05);
+    }
 
-.custom-card p {
-    color: #6c757d;
-    font-size: 0.95rem;
- }
+    .custom-card .card-body {
+        padding: 1.5rem;
+    }
+
+    .custom-card h3,
+    .custom-card h4,
+    .custom-card h5 {
+        font-family: 'Playfair Display', serif;
+        font-weight: 600;
+        color: var(--colorTexto);
+        margin-bottom: 0.75rem;
+    }
+
+    .custom-card p {
+        color: #6c757d;
+        font-size: 0.95rem;
+    }
 
 .btn-custom {
     background-color: var(--colorPrincipal);
@@ -115,24 +111,19 @@ h1, h2, h3, h4, h5, h6 {
 
     .btn-custom:hover {
         background-color: var(--colorPrincipalHover);
-        color: #fff !important; 
-        transform: scale(1.07); 
+        color: #fff !important;
+        transform: scale(1.07);
         box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
     }
 
-}
-
-
 /* Responsive */
-
 @media (max-width: 576px) {
-
     .custom-card img {
-        height: 180px; 
+        height: 180px;
     }
 }
 
-/*footer*/
+/* Footer */
 footer {
     background: var(--coloroFondoOscuro);
     text-align: center;
@@ -140,3 +131,181 @@ footer {
     width: 100%;
     position: relative;
 }
+
+
+   /*--- ESTILOS PANEL DE ADMINISTRACIÓN  ---*/
+   
+
+/* Layout Dashboard */
+.dashboard-container {
+    background-color: #f8f9fa; /* Gris muy claro de Bootstrap */
+    min-height: 80vh;
+    padding: 20px;
+}
+
+/* Menú Lateral (Sidebar) */
+.nav-pills .nav-link {
+    color: #6c757d;
+    font-weight: 500;
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 5px;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+    .nav-pills .nav-link i {
+        font-size: 1.2rem;
+        margin-right: 10px;
+    }
+
+    .nav-pills .nav-link:hover {
+        background-color: #e9ecef;
+        color: #0d6efd;
+        transform: translateX(5px);
+    }
+
+    .nav-pills .nav-link.active {
+        background-color: #0d6efd;
+        color: white;
+        box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+    }
+
+/* Contenido Principal (Area Blanca) */
+.content-area {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    min-height: 600px;
+}
+
+/* Tarjetas KPI (Métricas) */
+.kpi-card {
+    border: none;
+    border-radius: 15px;
+    padding: 20px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s;
+}
+
+    .kpi-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .kpi-card h2 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .kpi-card i {
+        position: absolute;
+        right: -10px;
+        bottom: -10px;
+        font-size: 5rem;
+        opacity: 0.3;
+        transform: rotate(-15deg);
+    }
+
+/* Gradientes Dashboard */
+.bg-gradient-primary {
+    background: linear-gradient(45deg, #4e73df, #224abe);
+}
+
+.bg-gradient-success {
+    background: linear-gradient(45deg, #1cc88a, #13855c);
+}
+
+.bg-gradient-info {
+    background: linear-gradient(45deg, #36b9cc, #258391);
+}
+
+/* Tarjetas de Profesionales */
+.prof-card {
+    border: 1px solid #f0f0f0;
+    border-radius: 15px;
+    transition: all 0.3s;
+}
+
+    .prof-card:hover {
+        border-color: #b8daff;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+
+.avatar-initials {
+    width: 50px;
+    height: 50px;
+    background: #e2e6ea;
+    color: #6c757d;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* Acordeón Servicios */
+.custom-accordion .accordion-button:not(.collapsed) {
+    background-color: #f0f8ff;
+    color: #0d6efd;
+}
+
+.custom-accordion .accordion-button:focus {
+    box-shadow: none;
+    border-color: rgba(13, 110, 253, .25);
+}
+
+/* --- ESTILOS AGENDA PERSONAL --- */
+.stat-card {
+    background-color: #fff;
+    border: 1px solid #e3e6f0;
+    border-radius: 0.35rem;
+    padding: 1.5rem;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    transition: transform 0.2s;
+}
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+
+.stat-label {
+    font-weight: 700;
+    color: #4e73df;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+}
+
+.stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #5a5c69;
+}
+
+/* Pestañas internas de la Agenda (Hoy/Proximos/Pasados) */
+.nav-tabs .nav-link {
+    color: #6c757d;
+    border: none;
+    border-bottom: 3px solid transparent;
+    font-weight: 500;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+    .nav-tabs .nav-link.active {
+        color: #4e73df;
+        border-bottom: 3px solid #4e73df;
+        background: transparent;
+        font-weight: bold;
+    }
+
+    .nav-tabs .nav-link:hover {
+        color: #4e73df;
+    }
