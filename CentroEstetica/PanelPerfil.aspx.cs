@@ -3,7 +3,6 @@ using Negocio;
 using System;
 using System.Web.UI;
 
-
 namespace CentroEstetica
 {
     public partial class PanelPerfil : System.Web.UI.Page
@@ -12,7 +11,7 @@ namespace CentroEstetica
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!Seguridad.SesionActiva(Session["usuario"]))
+            if (Session["usuario"] == null)
             {
                 Response.Redirect("Default.aspx", false);
                 return;
@@ -20,14 +19,43 @@ namespace CentroEstetica
 
             if (!IsPostBack)
             {
-                Usuario usuario = (Usuario)Session["usuario"];
-                txtMail.ReadOnly = true;
-                CargarDatos(usuario);
-                ModoLectura();
+                Usuario usuarioLogueado = (Usuario)Session["usuario"];
+                string idQuery = Request.QueryString["id"];
+                string adminMode = Request.QueryString["adminMode"];
+
+                // DETECTAR SI ES ADMIN EDITANDO A OTRO
+                if (!string.IsNullOrEmpty(idQuery) && adminMode == "true" && Seguridad.EsAdmin(usuarioLogueado))
+                {
+                    int idUsuarioAEditar = int.Parse(idQuery);
+                    Usuario usuarioAEditar = negocio.ObtenerPorId(idUsuarioAEditar);
+
+                    if (usuarioAEditar != null)
+                    {
+                        hfIdUsuario.Value = usuarioAEditar.ID.ToString();
+                        lblTituloPerfil.Text = "Modificar Datos de Usuario";
+
+                        // MOSTRAR BOTONES DE ADMIN
+                        btnVolverAdmin.Visible = true;
+                        btnBlanquearPass.Visible = true; // Habilitamos blanquear pass
+
+                        CargarDatos(usuarioAEditar);
+                        ModoLectura();
+                    }
+                }
+                else
+                {
+                    // MI PERFIL (Usuario normal o Admin editandose a si mismo)
+                    hfIdUsuario.Value = usuarioLogueado.ID.ToString();
+                    lblTituloPerfil.Text = "Mi Perfil";
+
+                    btnVolverAdmin.Visible = false;
+                    btnBlanquearPass.Visible = false;
+
+                    CargarDatos(usuarioLogueado);
+                    ModoLectura();
+                }
             }
-
         }
-
 
         private void CargarDatos(Usuario usuario)
         {
@@ -38,8 +66,9 @@ namespace CentroEstetica
                 txtMail.Text = usuario.Mail;
                 txtTelefono.Text = usuario.Telefono;
                 txtDomicilio.Text = usuario.Domicilio;
-            }
 
+
+            }
         }
 
         protected void btnEditar_Click(object sender, EventArgs e)
@@ -52,16 +81,31 @@ namespace CentroEstetica
         {
             try
             {
-                Usuario UsuarioActual = (Usuario)Session["usuario"];
 
-                UsuarioActual.Nombre = txtNombre.Text;
-                UsuarioActual.Apellido = txtApellido.Text;
-                UsuarioActual.Telefono = txtTelefono.Text;
-                UsuarioActual.Domicilio = txtDomicilio.Text;
-             
+                int idUsuario = int.Parse(hfIdUsuario.Value);
 
-                negocio.Modificar(UsuarioActual);
-                Session["usuario"] = UsuarioActual;
+
+                Usuario usuarioAActualizar = negocio.ObtenerPorId(idUsuario);
+
+
+                usuarioAActualizar.Mail = usuarioAActualizar.Mail; //  restaurar mail por si intentan mandar el post con un campo oculto
+
+
+                // Actualizamos con los datos del formulario
+                usuarioAActualizar.Nombre = txtNombre.Text;
+                usuarioAActualizar.Apellido = txtApellido.Text;
+                usuarioAActualizar.Telefono = txtTelefono.Text;
+                usuarioAActualizar.Domicilio = txtDomicilio.Text;
+
+
+                negocio.Modificar(usuarioAActualizar);
+
+
+                Usuario usuarioLogueado = (Usuario)Session["usuario"];
+                if (usuarioLogueado.ID == idUsuario)
+                {
+                    Session["usuario"] = usuarioAActualizar;
+                }
 
 
                 divMensaje.Visible = true;
@@ -69,22 +113,27 @@ namespace CentroEstetica
                 lblMensaje.CssClass = "alert alert-success d-block mt-3";
 
                 ModoLectura(false);
-            }
-            catch (Exception ex) {
-                throw ex;
 
+
+            }
+            catch (Exception ex)
+            {
+
+                divMensaje.Visible = true;
+                lblMensaje.Text = "Error al guardar: " + ex.Message;
+                lblMensaje.CssClass = "alert alert-danger d-block mt-3";
             }
         }
-
 
         protected void btnCancelar_Click(object sender, EventArgs e)
         {
 
-            Usuario UsuarioOriginal = (Usuario)Session["usuario"];
-            CargarDatos(UsuarioOriginal);
+            int idUsuario = int.Parse(hfIdUsuario.Value);
+            Usuario u = negocio.ObtenerPorId(idUsuario);
+            CargarDatos(u);
             ModoLectura();
-
         }
+
 
         private void ModoLectura(bool ocultarMensaje = true)
         {
@@ -95,8 +144,7 @@ namespace CentroEstetica
             btnGuardar.Visible = false;
             btnCancelar.Visible = false;
 
-            if (ocultarMensaje)
-                divMensaje.Visible = false;
+            if (ocultarMensaje) divMensaje.Visible = false;
 
             rfvNombre.Enabled = false;
             rfvApellido.Enabled = false;
@@ -108,21 +156,48 @@ namespace CentroEstetica
 
         private void ModoEdicion()
         {
-            txtNombre.ReadOnly = txtApellido.ReadOnly = txtMail.ReadOnly =
+            txtNombre.ReadOnly = txtApellido.ReadOnly =
             txtTelefono.ReadOnly = txtDomicilio.ReadOnly = false;
 
+            txtMail.ReadOnly = true;
             btnEditar.Visible = false;
             btnGuardar.Visible = true;
             btnCancelar.Visible = true;
 
             rfvNombre.Enabled = true;
             rfvApellido.Enabled = true;
-            rfvMail.Enabled = true;
-            revMail.Enabled = true;
             rfvTelefono.Enabled = true;
             revTelefono.Enabled = true;
         }
 
+        protected void btnBlanquearPass_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int idUsuario = int.Parse(hfIdUsuario.Value);
 
+                //  contraseña por defecto
+                string passDefault = "1234";
+
+
+                negocio.ActualizarPassword(idUsuario, passDefault);
+
+                divMensaje.Visible = true;
+                lblMensaje.Text = $"Contraseña restablecida a '{passDefault}' correctamente.";
+                lblMensaje.CssClass = "alert alert-warning d-block mt-3 fw-bold text-dark";
+            }
+            catch (Exception ex)
+            {
+                divMensaje.Visible = true;
+                lblMensaje.Text = "Error al blanquear contraseña: " + ex.Message;
+                lblMensaje.CssClass = "alert alert-danger d-block mt-3";
+            }
+        }
+
+        protected void btnVolverAdmin_Click(object sender, EventArgs e)
+        {
+
+            Response.Redirect("PanelAdmin.aspx?view=clientes", false);
+        }
     }
 }

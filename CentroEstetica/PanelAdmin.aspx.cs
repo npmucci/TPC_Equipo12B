@@ -10,8 +10,9 @@ namespace CentroEstetica
 {
     public partial class PanelAdmin : System.Web.UI.Page
     {
-        
+
         private UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
+        private ClienteNegocio clienteNegocio = new ClienteNegocio();
         private EspecialidadNegocio espNegocio = new EspecialidadNegocio();
         private ServicioNegocio servNegocio = new ServicioNegocio();
         private TurnoNegocio turnoNegocio = new TurnoNegocio();
@@ -21,7 +22,7 @@ namespace CentroEstetica
         {
             pnlMensajes.Visible = false;
 
-            // Seguridad: Validamos que sea Admin O ProfesionalUnico
+            // Seguridad: Validamos que sea Admin
             if (!Seguridad.EsAdmin(Session["usuario"]))
             {
                 Response.Redirect("Default.aspx", false);
@@ -30,8 +31,9 @@ namespace CentroEstetica
 
             if (!IsPostBack)
             {
-                
                 string view = Request.QueryString["view"];
+
+                // Lógica para mantener la pestaña activa según URL
                 switch (view)
                 {
                     case "profesionales":
@@ -39,6 +41,9 @@ namespace CentroEstetica
                         break;
                     case "servicios":
                         hfTabActivo.Value = "#v-pills-servicios";
+                        break;
+                    case "clientes":
+                        hfTabActivo.Value = "#v-pills-clientes";
                         break;
                     case "settings":
                         hfTabActivo.Value = "#v-pills-settings";
@@ -57,41 +62,115 @@ namespace CentroEstetica
 
         private void CargarDashboardCompleto()
         {
-            // 1. Cargas de Admin (Siempre se cargan para este rol)
+
             CargarProfesionales();
             CargarEspecialidadesConServicios();
             ActualizarKPIsAdmin();
 
-            // 2. Carga de Agenda Personal (Solo si corresponde)
+
+            CargarClientes();
+
+            // Carga condicional de agenda
             CargarAgendaPersonal();
         }
 
-        
-        // LÓGICA DE "MI AGENDA"
-        
+
+
+
+        private void CargarClientes()
+        {
+
+            List<Usuario> listaClientes = clienteNegocio.ListarClientes();
+
+            // Vinculamos Clientes Activos
+            rptClientesActivos.DataSource = listaClientes.FindAll(x => x.Activo);
+            rptClientesActivos.DataBind();
+
+            // Vinculamos Clientes Inactivos
+            rptClientesInactivos.DataSource = listaClientes.FindAll(x => !x.Activo);
+            rptClientesInactivos.DataBind();
+        }
+
+        protected void rptClientes_ItemCommand(object source, RepeaterCommandEventArgs e)
+        {
+            int id = int.Parse(e.CommandArgument.ToString());
+
+            switch (e.CommandName)
+            {
+                case "EditarCliente":
+
+                    Response.Redirect($"PanelPerfil.aspx?id={id}&adminMode=true", false);
+                    break;
+
+                case "VerTurnosCliente":
+                    CargarTurnosEnModal(id);
+                    break;
+
+                case "DarDeBajaCliente":
+
+                    usuarioNegocio.CambiarEstado(id, false);
+                    MostrarMensaje("Cliente dado de baja correctamente.", "success");
+                    break;
+
+                case "DarDeAltaCliente":
+                    usuarioNegocio.CambiarEstado(id, true);
+                    MostrarMensaje("Cliente reactivado correctamente.", "success");
+                    break;
+            }
+
+            // Recargamos la lista y mantenemos la pestaña abierta
+            CargarClientes();
+            hfTabActivo.Value = "#v-pills-clientes";
+        }
+
+        private void CargarTurnosEnModal(int idCliente)
+        {
+
+            Usuario cliente = usuarioNegocio.ObtenerPorId(idCliente); // O usar clienteNegocio.ObtenerPorId(id)
+            litNombreClienteModal.Text = cliente != null ? $"{cliente.Nombre} {cliente.Apellido}" : "Cliente";
+
+
+            List<Turno> turnos = turnoNegocio.ListarTurnosCliente(idCliente);
+
+
+            List<Turno> pendientes = turnos.FindAll(t => t.Estado == EstadoTurno.Pendiente);
+
+            if (pendientes.Count > 0)
+            {
+                rptTurnosModal.DataSource = pendientes;
+                rptTurnosModal.DataBind();
+                pnlSinTurnos.Visible = false;
+                rptTurnosModal.Visible = true;
+            }
+            else
+            {
+                pnlSinTurnos.Visible = true;
+                rptTurnosModal.Visible = false;
+            }
+
+
+            upModalTurnos.Update();
+
+            ScriptManager.RegisterStartupScript(Page, Page.GetType(), "abrirModalTurnos", "new bootstrap.Modal(document.getElementById('modalTurnosCliente')).show();", true);
+        }
+
+
+
 
         private void CargarAgendaPersonal()
         {
             if (Session["usuario"] != null)
             {
                 Usuario u = (Usuario)Session["usuario"];
-
-                // Solo habilitamos la sección si es ProfesionalUnico
                 if (u.Rol == Rol.ProfesionalUnico)
                 {
-                    
                     btnTabAgenda.Visible = true;
-
-                    
                     lblNombre.Text = "Bienvenida/o, " + u.Nombre;
                     lblFechaHoy.Text = DateTime.Now.ToString("dddd, dd 'de' MMMM", System.Globalization.CultureInfo.CreateSpecificCulture("es-ES"));
-
-                    
                     CalcularEstadisticasPersonales(u.ID);
                 }
                 else
                 {
-                    
                     btnTabAgenda.Visible = false;
                 }
             }
@@ -105,21 +184,17 @@ namespace CentroEstetica
             DateTime primerDiaMes = new DateTime(hoy.Year, hoy.Month, 1);
             DateTime ultimoDiaMes = primerDiaMes.AddMonths(1).AddDays(-1);
 
-           
             int hoyCount = turnoNegocio.ContarTurnos(hoy, hoy, idProfesional);
             int proxCount = turnoNegocio.ContarTurnos(inicioSemana, finSemana, idProfesional);
             decimal ingresos = turnoNegocio.ObtenerIngresos(primerDiaMes, ultimoDiaMes, idProfesional);
 
-            
             lblTurnosHoy.Text = hoyCount.ToString();
             lblTurnosProximos.Text = proxCount.ToString();
-            lblIngresosMes.Text = ingresos.ToString("N0"); 
+            lblIngresosMes.Text = ingresos.ToString("N0");
         }
 
-        
         protected void lnkAgenda_Click(object sender, EventArgs e)
         {
-            
             lnkHoy.CssClass = "nav-link";
             lnkProximos.CssClass = "nav-link";
             lnkPasados.CssClass = "nav-link";
@@ -127,44 +202,29 @@ namespace CentroEstetica
             LinkButton clickedLink = (LinkButton)sender;
             clickedLink.CssClass = "nav-link active";
 
-            
             switch (clickedLink.ID)
             {
-                case "lnkHoy":
-                    mvTurnos.ActiveViewIndex = 0;
-                    break;
-                case "lnkProximos":
-                    mvTurnos.ActiveViewIndex = 1;
-                    break;
-                case "lnkPasados":
-                    mvTurnos.ActiveViewIndex = 2;
-                    break;
+                case "lnkHoy": mvTurnos.ActiveViewIndex = 0; break;
+                case "lnkProximos": mvTurnos.ActiveViewIndex = 1; break;
+                case "lnkPasados": mvTurnos.ActiveViewIndex = 2; break;
             }
-
-            
             hfTabActivo.Value = "#v-pills-agenda";
         }
 
-
-        
-        // LÓGICA DE ADMINISTRACIÓN (Profesionales, Servicios, KPIs Generales)
-        
-
         private void ActualizarKPIsAdmin()
         {
+            // KPI Profesionales
             List<Usuario> profs = usuarioNegocio.ListarPorRol((int)Rol.Profesional);
             litCantProfesionales.Text = profs.Count(p => p.Activo).ToString();
 
+            // KPI Servicios
             List<Servicio> servs = servNegocio.ListarActivos();
             litCantServicios.Text = servs.Count.ToString();
         }
 
         private void CargarProfesionales()
         {
-            
             List<Usuario> todos = profesionalNegocio.ListarProfesionales();
-
-
             rptProfesionalesActivos.DataSource = todos.FindAll(x => x.Activo);
             rptProfesionalesActivos.DataBind();
 
@@ -215,7 +275,6 @@ namespace CentroEstetica
                     Response.Redirect($"GestionTurnosProfesional.aspx?idProf={id}", false);
                     break;
             }
-            
             hfTabActivo.Value = "#v-pills-profesionales";
         }
 
@@ -244,7 +303,6 @@ namespace CentroEstetica
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
                 Especialidad esp = (Especialidad)e.Item.DataItem;
-
                 Repeater rptS = (Repeater)e.Item.FindControl("rptServicios");
                 Button btnAdd = (Button)e.Item.FindControl("btnAgregarServicio");
                 Button btnEdit = (Button)e.Item.FindControl("btnEditarEspecialidad");
@@ -291,10 +349,9 @@ namespace CentroEstetica
                     break;
             }
             CargarDashboardCompleto();
-            hfTabActivo.Value = "#v-pills-servicios"; // Mantener pestaña
+            hfTabActivo.Value = "#v-pills-servicios";
         }
 
-        // Eventos ABM Servicios
         protected void rptServicios_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
@@ -341,7 +398,7 @@ namespace CentroEstetica
                     break;
             }
             CargarDashboardCompleto();
-            hfTabActivo.Value = "#v-pills-servicios"; 
+            hfTabActivo.Value = "#v-pills-servicios";
         }
     }
 }

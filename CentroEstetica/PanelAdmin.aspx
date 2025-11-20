@@ -30,6 +30,11 @@
                         <button class="nav-link" id="v-pills-profesionales-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profesionales" type="button" role="tab">
                             <i class="bi bi-people"></i> Profesionales
                         </button>
+
+                        <button class="nav-link" id="v-pills-clientes-tab" data-bs-toggle="pill" data-bs-target="#v-pills-clientes" type="button" role="tab">
+                            <i class="bi bi-person-hearts"></i> Clientes
+                        </button>
+
                         <button class="nav-link" id="v-pills-servicios-tab" data-bs-toggle="pill" data-bs-target="#v-pills-servicios" type="button" role="tab">
                             <i class="bi bi-grid"></i> Catálogo
                         </button>
@@ -337,6 +342,145 @@
                         </div>
                     </div>
 
+                    <!-- 3. CLIENTES -->
+
+                    <div class="tab-pane fade" id="v-pills-clientes" role="tabpanel">
+    
+                      <asp:UpdatePanel ID="upClientes" runat="server" UpdateMode="Conditional">
+                          <ContentTemplate>
+
+                              <div class="d-flex justify-content-between align-items-center mb-4">
+                                  <h4 class="fw-bold mb-0">Gestión de Clientes</h4>
+                                  <asp:Button ID="btnNuevoCliente" runat="server" Text="+ Nuevo Cliente" 
+                                      CssClass="btn btn-outline-primary rounded-pill px-4" PostBackUrl="~/RegistroPage.aspx?rol=Cliente" />
+                              </div>
+
+                              <ul class="nav nav-tabs mb-3" id="clientesTabs" role="tablist">
+                                  <li class="nav-item" role="presentation">
+                                      <button class="nav-link active" id="cli-activos-tab" data-bs-toggle="pill" data-bs-target="#cli-activos" type="button" role="tab">Clientes Activos</button>
+                                  </li>
+                                  <li class="nav-item" role="presentation">
+                                      <button class="nav-link" id="cli-inactivos-tab" data-bs-toggle="pill" data-bs-target="#cli-inactivos" type="button" role="tab">Inactivos / Baja</button>
+                                  </li>
+                              </ul>
+
+                              <div class="tab-content" id="clientesTabsContent">
+                                  
+                                  <div class="tab-pane fade show active" id="cli-activos" role="tabpanel">
+                                      <div class="card border-0 shadow-sm">
+                                          <div class="card-body p-0">
+                                              <div class="table-responsive">
+                                                  <table class="table table-hover align-middle mb-0">
+                                                      <thead class="bg-light">
+                                                          <tr>
+                                                              <th class="ps-4">Nombre Completo</th>
+                                                              <th>Email / Contacto</th>
+                                                              <th>Estado</th>
+                                                              <th class="text-end pe-4">Acciones</th>
+                                                          </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                          <asp:Repeater ID="rptClientesActivos" runat="server" OnItemCommand="rptClientes_ItemCommand">
+                                                              <ItemTemplate>
+                                                                  <tr>
+                                                                      <td class="ps-4">
+                                                                          <div class="d-flex align-items-center">
+                                                                              <div class="avatar-initials-sm me-3 bg-primary-subtle text-primary rounded-circle d-flex justify-content-center align-items-center" style="width:35px; height:35px; font-size:0.9rem; font-weight:bold;">
+                                                                                  <%# Eval("Nombre").ToString().Substring(0,1) + Eval("Apellido").ToString().Substring(0,1) %>
+                                                                              </div>
+                                                                              <div>
+                                                                                  <h6 class="mb-0 fw-semibold"><%# Eval("Nombre") %> <%# Eval("Apellido") %></h6>
+                                                                              </div>
+                                                                          </div>
+                                                                      </td>
+                                                                      <td>
+                                                                          <span class="text-muted small"><i class="bi bi-envelope me-1"></i><%# Eval("Mail") %></span>
+                                                                      </td>
+                                                                      <td>
+                                                                          <span class="badge bg-success-subtle text-success rounded-pill">Activo</span>
+                                                                      </td>
+                                                                      <td class="text-end pe-4">
+                                                                          <div class="btn-group" role="group">
+                                                                              
+                                                                              <asp:Button ID="btnEditar" runat="server" Text="✏️" ToolTip="Modificar Datos"
+                                                                                  CssClass="btn btn-sm btn-light border" CommandName="EditarCliente" CommandArgument='<%# Eval("ID") %>' />
+
+                                                                              <asp:Button ID="btnVerTurnos" runat="server" Text="📅" ToolTip="Ver Turnos Pendientes"
+                                                                                  CssClass="btn btn-sm btn-light border text-primary" 
+                                                                                  CommandName="VerTurnosCliente" CommandArgument='<%# Eval("ID") %>' />
+
+                                                                              <asp:Button ID="btnBaja" runat="server" Text="🗑️" ToolTip="Dar de Baja"
+                                                                                  CssClass="btn btn-sm btn-light border text-danger" 
+                                                                                  CommandName="DarDeBajaCliente" CommandArgument='<%# Eval("ID") %>'
+                                                                                  OnClientClick="return confirm('¿Seguro que desea dar de baja a este cliente?');" />
+                                                                          </div>
+                                                                      </td>
+                                                                  </tr>
+                                                              </ItemTemplate>
+                                                          </asp:Repeater>
+                                                      </tbody>
+                                                  </table>
+                                                  <% if (rptClientesActivos.Items.Count == 0) { %>
+                                                      <div class="p-4 text-center text-muted">No hay clientes activos registrados.</div>
+                                                  <% } %>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+
+                                  <div class="tab-pane fade" id="cli-inactivos" role="tabpanel">
+                                       <div class="card border-0 shadow-sm">
+                                          <div class="card-body p-0">
+                                              <div class="table-responsive">
+                                                  <table class="table table-hover align-middle mb-0">
+                                                      <thead class="bg-light">
+                                                          <tr>
+                                                              <th class="ps-4">Nombre Completo</th>
+                                                              <th>Email</th>
+                                                              <th>Estado</th>
+                                                              <th class="text-end pe-4">Acciones</th>
+                                                          </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                          <asp:Repeater ID="rptClientesInactivos" runat="server" OnItemCommand="rptClientes_ItemCommand">
+                                                              <ItemTemplate>
+                                                                  <tr class="opacity-75">
+                                                                      <td class="ps-4">
+                                                                          <div class="d-flex align-items-center">
+                                                                              <div class="avatar-initials-sm me-3 bg-secondary text-white rounded-circle d-flex justify-content-center align-items-center" style="width:35px; height:35px; font-size:0.9rem;">
+                                                                                  <%# Eval("Nombre").ToString().Substring(0,1) + Eval("Apellido").ToString().Substring(0,1) %>
+                                                                              </div>
+                                                                              <div>
+                                                                                  <h6 class="mb-0 text-muted"><%# Eval("Nombre") %> <%# Eval("Apellido") %></h6>
+                                                                              </div>
+                                                                          </div>
+                                                                      </td>
+                                                                      <td><%# Eval("Mail") %></td>
+                                                                      <td><span class="badge bg-secondary rounded-pill">Inactivo</span></td>
+                                                                      <td class="text-end pe-4">
+                                                                          <asp:Button ID="btnAlta" runat="server" Text="Reactivar" 
+                                                                              CssClass="btn btn-sm btn-outline-success" 
+                                                                              CommandName="DarDeAltaCliente" CommandArgument='<%# Eval("ID") %>' />
+                                                                      </td>
+                                                                  </tr>
+                                                              </ItemTemplate>
+                                                          </asp:Repeater>
+                                                      </tbody>
+                                                  </table>
+                                                  <% if (rptClientesInactivos.Items.Count == 0) { %>
+                                                      <div class="p-4 text-center text-muted">No hay clientes inactivos.</div>
+                                                  <% } %>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+
+                              </div>
+                          
+                          </ContentTemplate>
+                      </asp:UpdatePanel>
+                      </div>
+
                     <!-- 4. CATÁLOGO -->
                     <div class="tab-pane fade" id="v-pills-servicios" role="tabpanel">
                         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -455,6 +599,59 @@
                 });
             });
         });
+    </script>
+
+    <div class="modal fade" id="modalTurnosCliente" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Turnos Pendientes</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <asp:UpdatePanel ID="upModalTurnos" runat="server" UpdateMode="Conditional">
+                        <ContentTemplate>
+                            
+                            <h6 class="mb-3 fw-bold"><asp:Literal ID="litNombreClienteModal" runat="server"></asp:Literal></h6>
+
+                            <asp:Repeater ID="rptTurnosModal" runat="server">
+                                <HeaderTemplate>
+                                    <ul class="list-group list-group-flush">
+                                </HeaderTemplate>
+                                <ItemTemplate>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <span class="fw-bold d-block"><%# Eval("Servicio.Nombre") %></span>
+                                            <small class="text-muted"><%# ((DateTime)Eval("Fecha")).ToString("dd/MM/yyyy") %> - <%# Eval("HoraInicio") %> hs</small>
+                                        </div>
+                                        <span class="badge bg-warning text-dark">Pendiente</span>
+                                    </li>
+                                </ItemTemplate>
+                                <FooterTemplate>
+                                    </ul>
+                                </FooterTemplate>
+                            </asp:Repeater>
+
+                            <asp:Panel ID="pnlSinTurnos" runat="server" Visible="false" CssClass="text-center py-3">
+                                <i class="bi bi-calendar-x text-muted fs-1"></i>
+                                <p class="text-muted mt-2">El cliente no tiene turnos pendientes.</p>
+                            </asp:Panel>
+
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModalTurnos() {
+            var myModal = new bootstrap.Modal(document.getElementById('modalTurnosCliente'));
+            myModal.show();
+        }
     </script>
 
 </asp:Content>
