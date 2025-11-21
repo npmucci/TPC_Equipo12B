@@ -500,56 +500,78 @@
                                 OnItemCommand="rptEspecialidadesLista_ItemCommand">
                                 <ItemTemplate>
                                     <div class="accordion-item border rounded mb-3 overflow-hidden shadow-sm">
+                                        
                                         <h2 class="accordion-header" id='heading<%# Eval("IDEspecialidad") %>'>
-                                            <button class="accordion-button collapsed bg-white" type="button" data-bs-toggle="collapse" 
+                                            <button class="accordion-button collapsed bg-white py-3" type="button" data-bs-toggle="collapse" 
                                                 data-bs-target='#collapse<%# Eval("IDEspecialidad") %>' aria-expanded="false">
-                                                <div class="d-flex align-items-center w-100 me-3">
-                                                    <i class="bi bi-tag-fill me-2 text-secondary"></i>
-                                                    <span class="fw-semibold me-auto"><%# Eval("Nombre") %></span>
-                                                    <span class='badge me-3 <%# (bool)Eval("Activo") ? "bg-success-subtle text-success" : "bg-danger-subtle text-danger" %>'>
-                                                        <%# (bool)Eval("Activo") ? "Activo" : "Inactivo" %>
-                                                    </span>
+                                                
+                                                <div class="d-flex align-items-center w-100 pe-3">
+                                                    
+                                                    <div class="d-flex align-items-center me-auto">
+                                                        <i class="bi bi-tag-fill me-2 text-secondary fs-5"></i>
+                                                        <span class="fw-bold fs-6 text-dark me-3"><%# Eval("Nombre") %></span>
+                                                        <span class='badge rounded-pill <%# (bool)Eval("Activo") ? "bg-success-subtle text-success" : "bg-secondary text-white" %>'>
+                                                            <%# (bool)Eval("Activo") ? "Activo" : "Inactivo" %>
+                                                        </span>
+                                                    </div>
+                        
+                                                    <div class="d-flex align-items-center gap-3" onclick="event.stopPropagation();">
+                                                        
+                                                        <asp:LinkButton ID="btnEditarEspecialidad" runat="server" 
+                                                            CssClass="btn btn-link p-0 text-secondary border-0 fs-5" 
+                                                            ToolTip="Editar" CommandName="EditarEspecialidad">
+                                                            <i class="bi bi-pencil-square"></i>
+                                                        </asp:LinkButton>
+                        
+                                                        <asp:LinkButton ID="btnCambiarEstadoEspecialidad" runat="server" />
+                        
+                                                        <div class="vr text-muted mx-1" style="height: 20px;"></div>
+                        
+                                                        <asp:Button ID="btnAgregarServicio" runat="server" Text="+ Servicio" 
+                                                            CssClass="btn btn-sm btn-outline-primary py-0 fw-bold" 
+                                                            style="font-size: 0.8rem;" CommandName="AgregarServicio" />
+                        
+                                                    </div>
                                                 </div>
                                             </button>
                                         </h2>
+                        
                                         <div id='collapse<%# Eval("IDEspecialidad") %>' class="accordion-collapse collapse" 
                                             data-bs-parent="#especialidadesAccordion">
-                                            <div class="accordion-body bg-light">
+                                            <div class="accordion-body bg-light pt-0">
                                                 
-                                                <div class="d-flex gap-2 mb-3 justify-content-end">
-                                                    <asp:Button ID="btnEditarEspecialidad" runat="server" Text="Editar Especialidad" 
-                                                        CssClass="btn btn-sm btn-outline-secondary bg-white" CommandName="EditarEspecialidad" />
-                                                    <asp:Button ID="btnCambiarEstadoEspecialidad" runat="server" 
-                                                        CssClass="btn btn-sm btn-outline-danger bg-white" />
-                                                    <div class="vr mx-2"></div>
-                                                    <asp:Button ID="btnAgregarServicio" runat="server" Text="+ Servicio" 
-                                                        CssClass="btn btn-sm btn-success text-white" CommandName="AgregarServicio" />
-                                                </div>
-
-                                                <div class="list-group">
+                                                <div class="list-group list-group-flush mt-2 rounded border-0">
                                                     <asp:Repeater ID="rptServicios" runat="server" 
                                                         OnItemDataBound="rptServicios_ItemDataBound"
                                                         OnItemCommand="rptServicios_ItemCommand">
                                                         <ItemTemplate>
-                                                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                                                <div>
-                                                                    <h6 class="mb-0"><%# Eval("Nombre") %></h6>
-                                                                    <small class="text-muted"><%# Eval("DuracionMinutos") %> min • <%# !(bool)Eval("Activo") ? "<span class='text-danger'>Inactivo</span>" : "<span class='text-success'>Activo</span>" %></small>
+                                                            <div class="list-group-item d-flex justify-content-between align-items-center bg-white border-bottom">
+                                                                <div class="d-flex flex-column">
+                                                                    <span class="fw-semibold text-dark"><%# Eval("Nombre") %></span>
+                                                                    <div class="d-flex align-items-center small text-muted gap-2">
+                                                                        <span><i class="bi bi-clock me-1"></i><%# Eval("DuracionMinutos") %> min</span>
+                                                                        <span>•</span>
+                                                                        <span><%# !(bool)Eval("Activo") ? "<span class='text-danger fw-bold'>Inactivo</span>" : "<span class='text-success'>Activo</span>" %></span>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="d-flex align-items-center gap-3">
-                                                                    <span class="fw-bold">$<%# Eval("Precio", "{0:N0}") %></span>
+                                                                    <span class="fw-bold text-primary fs-6">$<%# Eval("Precio", "{0:N0}") %></span>
                                                                     <div class="btn-group">
                                                                         <asp:Button ID="btnEditarServicio" runat="server" Text="✏️" ToolTip="Editar"
-                                                                            CssClass="btn btn-light btn-sm border" CommandName="EditarServicio" />
+                                                                            CssClass="btn btn-light btn-sm border shadow-sm" CommandName="EditarServicio" />
                                                                         <asp:Button ID="btnCambiarEstadoServicio" runat="server" Text="👁️" ToolTip="Activar/Desactivar"
-                                                                            CssClass="btn btn-light btn-sm border" />
+                                                                            CssClass="btn btn-light btn-sm border shadow-sm" />
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </ItemTemplate>
                                                     </asp:Repeater>
+                                                     <div id="pnlSinServicios" runat="server" visible="false" class="p-3 text-center text-muted small">
+                                                        <i class="bi bi-info-circle me-1"></i> No hay servicios cargados en esta especialidad.
+                                                      </div>
+                                                     
                                                 </div>
-
+                        
                                             </div>
                                         </div>
                                     </div>

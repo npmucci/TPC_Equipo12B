@@ -8,14 +8,12 @@
         <div class="row justify-content-center">
             <div class="col-lg-8 col-md-10">
 
-                
                 <asp:Panel ID="pnlMensaje" runat="server" Visible="false" role="alert">
                     <asp:Literal ID="litMensaje" runat="server"></asp:Literal>
                 </asp:Panel>
 
                 <div class="card shadow-sm mb-4">
                     <div class="card-body p-4">
-                        
                         
                         <h2 class="h4 mb-4" runat="server" id="tituloPagina">Nueva Especialidad</h2>
 
@@ -29,23 +27,23 @@
                         <div class="mb-3">
                             <label for="txtDescripcion" class="form-label"><strong>Descripción:</strong></label>
                             <asp:TextBox ID="txtDescripcion" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
-                            
                         </div>
 
                         <div class="mb-3">
                             <label for="txtFoto" class="form-label"><strong>URL de Foto:</strong></label>
                             <asp:TextBox ID="txtFoto" runat="server" CssClass="form-control" TextMode="Url"></asp:TextBox>
-                            
                         </div>
 
-                        
                         <asp:Panel ID="pnlControlesEdicion" runat="server" Visible="false">
-                            <div class="form-check mb-3">
-                                <asp:CheckBox ID="chkActivo" runat="server" Text=" Activa" CssClass="form-check-input" />
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" id="chkActivo" runat="server" class="form-check-input" />
+                                <label class="form-check-label" for="<%= chkActivo.ClientID %>">
+                                    Especialidad Activa
+                                </label>
                             </div>
                         </asp:Panel>
 
-                        <div class="d-flex gap-2">
+                        <div class="d-flex gap-2 mt-4">
                             <asp:Button ID="btnGuardar" runat="server" Text="Crear Especialidad" CssClass="btn btn-primary" OnClick="btnGuardar_Click" />
                             <asp:Button ID="btnVolver" runat="server" Text="Volver" CssClass="btn btn-secondary" OnClick="btnVolver_Click" CausesValidation="false" />
                         </div>

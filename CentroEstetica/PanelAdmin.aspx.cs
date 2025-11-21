@@ -303,29 +303,53 @@ namespace CentroEstetica
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
             {
                 Especialidad esp = (Especialidad)e.Item.DataItem;
-                Repeater rptS = (Repeater)e.Item.FindControl("rptServicios");
-                Button btnAdd = (Button)e.Item.FindControl("btnAgregarServicio");
-                Button btnEdit = (Button)e.Item.FindControl("btnEditarEspecialidad");
-                Button btnState = (Button)e.Item.FindControl("btnCambiarEstadoEspecialidad");
 
-                rptS.DataSource = servNegocio.ListarPorEspecialidadTodos(esp.IDEspecialidad);
+                
+                Repeater rptS = (Repeater)e.Item.FindControl("rptServicios");
+
+               
+                System.Web.UI.HtmlControls.HtmlGenericControl pnlMensaje =
+                    (System.Web.UI.HtmlControls.HtmlGenericControl)e.Item.FindControl("pnlSinServicios");
+
+                Button btnAdd = (Button)e.Item.FindControl("btnAgregarServicio");
+                LinkButton btnEdit = (LinkButton)e.Item.FindControl("btnEditarEspecialidad");
+                LinkButton btnState = (LinkButton)e.Item.FindControl("btnCambiarEstadoEspecialidad");
+
+                
+                List<Servicio> listaServicios = servNegocio.ListarPorEspecialidadTodos(esp.IDEspecialidad);
+
+               
+                rptS.DataSource = listaServicios;
                 rptS.DataBind();
 
+                
+                if (listaServicios.Count == 0)
+                {
+                    pnlMensaje.Visible = true; 
+                }
+                else
+                {
+                    pnlMensaje.Visible = false;
+                }
+
+                
                 btnAdd.CommandArgument = esp.IDEspecialidad.ToString();
                 btnEdit.CommandArgument = esp.IDEspecialidad.ToString();
                 btnState.CommandArgument = esp.IDEspecialidad.ToString();
 
                 if (esp.Activo)
                 {
-                    btnState.Text = "Desactivar";
-                    btnState.CssClass = "btn btn-sm btn-outline-danger bg-white";
+                    btnState.Text = "<i class='bi bi-unlock-fill'></i>";
+                    btnState.ToolTip = "Desactivar Especialidad";
+                    btnState.CssClass = "btn btn-link p-0 text-success border-0 fs-5";
                     btnState.CommandName = "DarDeBajaEspecialidad";
                     btnState.OnClientClick = "return confirm('¿Desactivar especialidad?');";
                 }
                 else
                 {
-                    btnState.Text = "Activar";
-                    btnState.CssClass = "btn btn-sm btn-outline-success bg-white";
+                    btnState.Text = "<i class='bi bi-lock-fill'></i>";
+                    btnState.ToolTip = "Activar Especialidad";
+                    btnState.CssClass = "btn btn-link p-0 text-danger border-0 fs-5";
                     btnState.CommandName = "DarDeAltaEspecialidad";
                     btnState.OnClientClick = "";
                 }
