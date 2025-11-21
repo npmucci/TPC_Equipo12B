@@ -51,6 +51,9 @@ namespace CentroEstetica
                     case "agenda":
                         hfTabActivo.Value = "#v-pills-agenda";
                         break;
+                    case "recepcionistas": 
+                        hfTabActivo.Value = "#v-pills-recepcionistas";
+                        break;
                     default:
                         hfTabActivo.Value = "#v-pills-dashboard";
                         break;
@@ -66,11 +69,8 @@ namespace CentroEstetica
             CargarProfesionales();
             CargarEspecialidadesConServicios();
             ActualizarKPIsAdmin();
-
-
             CargarClientes();
-
-            // Carga condicional de agenda
+            CargarRecepcionistas();
             CargarAgendaPersonal();
         }
 
@@ -209,6 +209,12 @@ namespace CentroEstetica
                 case "lnkPasados": mvTurnos.ActiveViewIndex = 2; break;
             }
             hfTabActivo.Value = "#v-pills-agenda";
+        }
+
+        protected void btnNuevoAdmin_Click(object sender, EventArgs e)
+        {
+            
+            Response.Redirect($"RegistroPage.aspx?rol={(int)Rol.Admin}", false);
         }
 
         private void ActualizarKPIsAdmin()
@@ -423,6 +429,52 @@ namespace CentroEstetica
             }
             CargarDashboardCompleto();
             hfTabActivo.Value = "#v-pills-servicios";
+        }
+
+        // LÓGICA DE RECEPCIONISTAS 
+        
+        private void CargarRecepcionistas()
+        {
+            
+            List<Usuario> lista = usuarioNegocio.ListarPorRol((int)Rol.Recepcionista);
+
+            rptRecepcionistasActivos.DataSource = lista.FindAll(x => x.Activo);
+            rptRecepcionistasActivos.DataBind();
+
+            rptRecepcionistasInactivos.DataSource = lista.FindAll(x => !x.Activo);
+            rptRecepcionistasInactivos.DataBind();
+        }
+
+        protected void btnAgregarRecepcionista_Click(object sender, EventArgs e)
+        {
+            
+            Response.Redirect($"RegistroPage.aspx?rol={(int)Rol.Recepcionista}", false);
+        }
+
+        protected void rptRecepcionistas_ItemCommand(object source, RepeaterCommandEventArgs e)
+        {
+            int id = int.Parse(e.CommandArgument.ToString());
+
+            switch (e.CommandName)
+            {
+                case "EditarRecepcionista":
+                    
+                    Response.Redirect($"PanelPerfil.aspx?id={id}&adminMode=true", false);
+                    break;
+
+                case "DarDeBajaRecepcionista":
+                    usuarioNegocio.CambiarEstado(id, false);
+                    MostrarMensaje("Recepcionista dada/o de baja.", "success");
+                    break;
+
+                case "DarDeAltaRecepcionista":
+                    usuarioNegocio.CambiarEstado(id, true);
+                    MostrarMensaje("Recepcionista reactivada/o.", "success");
+                    break;
+            }
+
+            CargarRecepcionistas();
+            hfTabActivo.Value = "#v-pills-recepcionistas";
         }
     }
 }

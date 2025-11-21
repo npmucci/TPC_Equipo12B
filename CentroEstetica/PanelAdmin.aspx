@@ -22,7 +22,7 @@
                             <i class="bi bi-speedometer2"></i> Resumen
                         </button>
                         
-                        <!-- BOTÓN MI AGENDA (Oculto por defecto, se activa en el CodeBehind si es ProfesionalUnico) -->
+                        
                         <button class="nav-link" id="btnTabAgenda" runat="server" visible="false" data-bs-toggle="pill" data-bs-target="#v-pills-agenda" type="button" role="tab">
                             <i class="bi bi-calendar-heart"></i> Mi Agenda
                         </button>
@@ -33,6 +33,10 @@
 
                         <button class="nav-link" id="v-pills-clientes-tab" data-bs-toggle="pill" data-bs-target="#v-pills-clientes" type="button" role="tab">
                             <i class="bi bi-person-hearts"></i> Clientes
+                        </button>
+
+                        <button class="nav-link" id="v-pills-recepcionistas-tab" data-bs-toggle="pill" data-bs-target="#v-pills-recepcionistas" type="button" role="tab">
+                            <i class="bi bi-headset"></i> Recepción
                         </button>
 
                         <button class="nav-link" id="v-pills-servicios-tab" data-bs-toggle="pill" data-bs-target="#v-pills-servicios" type="button" role="tab">
@@ -582,24 +586,171 @@
 
                     <!-- 5. CONFIGURACIÓN -->
                     <div class="tab-pane fade" id="v-pills-settings" role="tabpanel">
-                        <h4 class="fw-bold mb-4">Configuración</h4>
-                        <div class="card border-0 bg-light rounded-3">
-                            <div class="card-body">
+    
+                        <h4 class="fw-bold mb-4">Configuración del Sistema</h4>
+                        
+                        <div class="card border-0 shadow-sm rounded-4 mb-4">
+                            <div class="card-header bg-white border-0 pt-4 px-4">
+                                 <h5 class="fw-bold text-secondary"><i class="bi bi-shop me-2"></i>Datos del Centro</h5>
+                            </div>
+                            <div class="card-body p-4">
                                 <div class="row g-3">
                                     <div class="col-12">
-                                        <label class="form-label fw-bold">Nombre del Centro</label>
+                                        <label class="form-label fw-bold text-muted small">Nombre del Centro</label>
                                         <input type="text" class="form-control" value="Centro de Estética" disabled>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label fw-bold">Email de Notificaciones</label>
+                                        <label class="form-label fw-bold text-muted small">Email de Notificaciones</label>
                                         <input type="email" class="form-control" value="admin@sistema.com" disabled>
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label fw-bold">Porcentaje de Seña (%)</label>
+                                        <label class="form-label fw-bold text-muted small">Porcentaje de Seña (%)</label>
                                         <input type="number" class="form-control" value="50" disabled>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    
+                        <div class="card border-0 shadow-sm rounded-4 border-start border-4 border-dark">
+                            <div class="card-body p-4">
+                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                                    <div>
+                                        <h5 class="fw-bold text-dark mb-1"><i class="bi bi-shield-lock-fill me-2"></i>Gestión de Administradores</h5>
+                                        <p class="text-muted small mb-0">Registrar nuevos usuarios con acceso total al sistema.</p>
+                                    </div>
+                                    
+                                    <asp:Button ID="btnNuevoAdmin" runat="server" Text="+ Nuevo Administrador" 
+                                        CssClass="btn btn-dark px-4 rounded-pill fw-bold" OnClick="btnNuevoAdmin_Click" />
+                                </div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                    <!-- 6. RECEPCIONISTAS (NUEVA SECCIÓN) -->
+                    <div class="tab-pane fade" id="v-pills-recepcionistas" role="tabpanel">
+                        
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="fw-bold mb-0">Equipo de Recepción</h4>
+                            <asp:Button ID="btnAgregarRecepcionista" runat="server" Text="+ Nueva/o" 
+                                CssClass="btn btn-primary rounded-pill px-4" OnClick="btnAgregarRecepcionista_Click" />
+                        </div>
+                    
+                        <!-- Pestañas Activos/Inactivos -->
+                        <ul class="nav nav-tabs mb-4" id="recepcionistasTabs" role="tablist">
+                            <li class="nav-item">
+                                <button class="nav-link active" id="recep-activos-tab" data-bs-toggle="pill" data-bs-target="#recep-activos" type="button" role="tab">Personal Activo</button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" id="recep-inactivos-tab" data-bs-toggle="pill" data-bs-target="#recep-inactivos" type="button" role="tab">Inactivos</button>
+                            </li>
+                        </ul>
+                    
+                        <div class="tab-content">
+                            
+                            <!-- RECEPCIONISTAS ACTIVOS -->
+                            <div class="tab-pane fade show active" id="recep-activos" role="tabpanel">
+                                <div class="row g-3">
+                                    <asp:Repeater ID="rptRecepcionistasActivos" runat="server" OnItemCommand="rptRecepcionistas_ItemCommand">
+                                        <ItemTemplate>
+                                            <div class="col-md-6 col-lg-4 col-xl-3">
+                                                <div class="card h-100 border-0 shadow-sm rounded-3 position-relative">
+                                                    
+                                                    <div class="position-absolute top-0 start-0 w-100 bg-info rounded-top-3" style="height: 4px;"></div>
+                                                    
+                                                    <div class="card-body p-3">
+                                                        <div class="d-flex align-items-center justify-content-between mb-3">
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="rounded-circle bg-info-subtle text-info d-flex align-items-center justify-content-center fw-bold me-3" 
+                                                                    style="width: 45px; height: 45px; font-size: 1rem;">
+                                                                    <%# Eval("Nombre").ToString().Substring(0,1) + Eval("Apellido").ToString().Substring(0,1) %>
+                                                                </div>
+                                                                <div>
+                                                                    <h6 class="fw-bold mb-0 text-dark"><%# Eval("Nombre") %></h6>
+                                                                    <h6 class="fw-bold mb-0 text-dark"><%# Eval("Apellido") %></h6>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="dropdown">
+                                                                <button class="btn btn-light btn-sm rounded-circle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <i class="bi bi-three-dots-vertical text-muted"></i>
+                                                                </button>
+                                                                <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                                                                    <li>
+                                                                        <asp:LinkButton ID="lnkEditar" runat="server" CssClass="dropdown-item small" 
+                                                                            CommandName="EditarRecepcionista" CommandArgument='<%# Eval("ID") %>'>
+                                                                            <i class="bi bi-pencil me-2"></i>Modificar
+                                                                        </asp:LinkButton>
+                                                                    </li>
+                                                                    <li><hr class="dropdown-divider"></li>
+                                                                    <li>
+                                                                        <asp:LinkButton ID="lnkBaja" runat="server" CssClass="dropdown-item small text-danger" 
+                                                                            CommandName="DarDeBajaRecepcionista" CommandArgument='<%# Eval("ID") %>'
+                                                                            OnClientClick="return confirm('¿Dar de baja?');">
+                                                                            <i class="bi bi-trash me-2"></i>Baja
+                                                                        </asp:LinkButton>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                        
+                                                        <div class="small text-muted">
+                                                            <div class="mb-1 text-truncate" title='<%# Eval("Mail") %>'><i class="bi bi-envelope me-2"></i><%# Eval("Mail") %></div>
+                                                            <div><i class="bi bi-telephone me-2"></i><%# Eval("Telefono") %></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ItemTemplate>
+                                    </asp:Repeater>
+                                    
+                                    <% if (rptRecepcionistasActivos.Items.Count == 0) { %>
+                                       <div class="col-12 text-center text-muted py-5">No hay recepcionistas activos.</div>
+                                    <% } %>
+                                </div>
+                            </div>
+                    
+                            <!-- RECEPCIONISTAS INACTIVOS -->
+                            <div class="tab-pane fade" id="recep-inactivos" role="tabpanel">
+                                <div class="row g-3">
+                                    <asp:Repeater ID="rptRecepcionistasInactivos" runat="server" OnItemCommand="rptRecepcionistas_ItemCommand">
+                                        <ItemTemplate>
+                                            <div class="col-md-6 col-lg-4 col-xl-3">
+                                                <div class="card h-100 border rounded-3 bg-light opacity-75">
+                                                    <div class="card-body p-3">
+                                                        <div class="d-flex align-items-center justify-content-between mb-3">
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center fw-bold me-3" 
+                                                                    style="width: 45px; height: 45px;">
+                                                                    <%# Eval("Nombre").ToString().Substring(0,1) + Eval("Apellido").ToString().Substring(0,1) %>
+                                                                </div>
+                                                                <div>
+                                                                    <h6 class="fw-bold mb-0 text-muted"><%# Eval("Nombre") %> <%# Eval("Apellido") %></h6>
+                                                                    <span class="badge bg-secondary mt-1">Inactivo</span>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="dropdown">
+                                                                <button class="btn btn-light btn-sm rounded-circle" type="button" data-bs-toggle="dropdown">
+                                                                    <i class="bi bi-three-dots-vertical"></i>
+                                                                </button>
+                                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                                    <li>
+                                                                        <asp:LinkButton ID="lnkAlta" runat="server" CssClass="dropdown-item text-success fw-bold" 
+                                                                            CommandName="DarDeAltaRecepcionista" CommandArgument='<%# Eval("ID") %>'>
+                                                                            <i class="bi bi-check-circle me-2"></i>Reactivar
+                                                                        </asp:LinkButton>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ItemTemplate>
+                                    </asp:Repeater>
+                                </div>
+                            </div>
+                    
                         </div>
                     </div>
 
