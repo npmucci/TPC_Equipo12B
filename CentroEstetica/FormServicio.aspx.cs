@@ -46,11 +46,11 @@ namespace CentroEstetica
                     btnGuardar.Text = "Crear Servicio";
                     pnlControlesEdicion.Visible = false;
 
-                    
+
                     if (Request.QueryString["idEspecialidad"] != null)
                     {
                         ddlEspecialidad.SelectedValue = Request.QueryString["idEspecialidad"];
-                        ddlEspecialidad.Enabled = false; 
+                        ddlEspecialidad.Enabled = false;
                     }
                 }
             }
@@ -60,7 +60,7 @@ namespace CentroEstetica
         {
             try
             {
-                // Solo podemos agregar/editar servicios en especialidades ACTIVAS
+                
                 ddlEspecialidad.DataSource = espNegocio.ListarActivos();
                 ddlEspecialidad.DataValueField = "IDEspecialidad";
                 ddlEspecialidad.DataTextField = "Nombre";
@@ -80,20 +80,20 @@ namespace CentroEstetica
                 Servicio servicio = servNegocio.ObtenerPorId(idEdicion);
                 if (servicio != null)
                 {
-                    
+
                     txtNombre.Text = servicio.Nombre;
                     txtDescripcion.Text = servicio.Descripcion;
-                    txtPrecio.Text = servicio.Precio.ToString("N0"); 
+                    txtPrecio.Text = servicio.Precio.ToString("N0");
                     txtDuracion.Text = servicio.DuracionMinutos.ToString();
                     chkActivo.Checked = servicio.Activo;
 
-                    
+
                     if (ddlEspecialidad.Items.FindByValue(servicio.Especialidad.IDEspecialidad.ToString()) != null)
                     {
                         ddlEspecialidad.SelectedValue = servicio.Especialidad.IDEspecialidad.ToString();
                     }
 
-                    
+
                     tituloPagina.InnerText = "Editar Servicio";
                     btnGuardar.Text = "Guardar Cambios";
                     pnlControlesEdicion.Visible = true;
@@ -129,22 +129,28 @@ namespace CentroEstetica
 
                 if (esModoEdicion)
                 {
-                    // LÓGICA DE MODIFICACIÓN
                     serv.IDServicio = idEdicion;
                     serv.Activo = chkActivo.Checked;
                     servNegocio.Modificar(serv);
                 }
                 else
                 {
-                    // LÓGICA DE CREACIÓN
                     servNegocio.Agregar(serv);
                 }
 
-                Response.Redirect("PanelAdmin.aspx", false);
+                
+                MostrarMensaje("¡Servicio guardado correctamente!", "success");
+
+                btnGuardar.Visible = false;
+                btnVolver.Text = "Volver al Panel";
+                btnVolver.CssClass = "btn btn-success";
+
+                BloquearFormulario();
+
+                
             }
             catch (Exception ex)
             {
-                
                 MostrarMensaje("Error al guardar: " + ex.Message, "danger");
             }
         }
@@ -159,6 +165,16 @@ namespace CentroEstetica
             pnlMensaje.Visible = true;
             pnlMensaje.CssClass = $"alert alert-{tipo}";
             litMensaje.Text = mensaje;
+        }
+
+        private void BloquearFormulario()
+        {
+            ddlEspecialidad.Enabled = false;
+            txtNombre.Enabled = false;
+            txtDescripcion.Enabled = false;
+            txtPrecio.Enabled = false;
+            txtDuracion.Enabled = false;
+            chkActivo.Disabled = true;
         }
     }
 }

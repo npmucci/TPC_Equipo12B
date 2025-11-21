@@ -10,13 +10,13 @@ namespace CentroEstetica
 {
     public partial class GestionProfesional : System.Web.UI.Page
     {
-        
+
         private UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
         private EspecialidadNegocio espNegocio = new EspecialidadNegocio();
         private HorarioAtencionNegocio horarioNegocio = new HorarioAtencionNegocio();
         private TurnoNegocio turnoNegocio = new TurnoNegocio();
 
-        
+
         private int IDProfesional
         {
             get { return ViewState["IDProfesional"] != null ? (int)ViewState["IDProfesional"] : 0; }
@@ -25,7 +25,7 @@ namespace CentroEstetica
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            
+
             if (!Seguridad.EsAdmin(Session["usuario"]))
             {
                 Response.Redirect("Default.aspx");
@@ -38,7 +38,7 @@ namespace CentroEstetica
                 txtEmail.ReadOnly = true;
                 txtEmail.CssClass += " bg-light";
 
-               
+
                 if (Request.QueryString["id"] != null)
                 {
                     IDProfesional = int.Parse(Request.QueryString["id"]);
@@ -56,23 +56,23 @@ namespace CentroEstetica
             Usuario prof = usuarioNegocio.ObtenerPorId(IDProfesional);
             if (prof != null)
             {
-                
+
                 txtNombre.Text = prof.Nombre;
                 txtApellido.Text = prof.Apellido;
                 txtEmail.Text = prof.Mail;
                 txtTelefono.Text = prof.Telefono;
 
-                
+
                 CargarEspecialidades();
 
-               
+
                 CargarHorarios();
             }
         }
 
-       
+
         // LÓGICA DATOS PERSONALES
-        
+
         protected void btnGuardarDatos_Click(object sender, EventArgs e)
         {
             try
@@ -93,27 +93,27 @@ namespace CentroEstetica
             }
         }
 
-       
+
         // LÓGICA ESPECIALIDADES
-        
+
         private void CargarEspecialidades()
         {
-            
+
             List<Especialidad> todas = espNegocio.ListarActivos();
 
-            
+
             List<Especialidad> asignadas = espNegocio.ListarPorProfesional(IDProfesional);
 
-            
+
             cblEspecialidades.DataSource = todas;
             cblEspecialidades.DataTextField = "Nombre";
             cblEspecialidades.DataValueField = "IDEspecialidad";
             cblEspecialidades.DataBind();
 
-           
+
             foreach (ListItem item in cblEspecialidades.Items)
             {
-                
+
                 if (asignadas.Any(x => x.IDEspecialidad.ToString() == item.Value))
                 {
                     item.Selected = true;
@@ -125,7 +125,7 @@ namespace CentroEstetica
         {
             try
             {
-                
+
                 List<Especialidad> asignadasActualmente = espNegocio.ListarPorProfesional(IDProfesional);
 
                 bool huboCambios = false;
@@ -137,44 +137,44 @@ namespace CentroEstetica
                     bool estaMarcadoEnUI = item.Selected;
                     bool estaEnBD = asignadasActualmente.Any(x => x.IDEspecialidad == idEsp);
 
-                    
+
                     if (estaMarcadoEnUI && !estaEnBD)
                     {
                         espNegocio.AsignarEspecialidadAProfesional(IDProfesional, idEsp);
                         huboCambios = true;
                     }
-                    
+
                     else if (!estaMarcadoEnUI && estaEnBD)
                     {
-                        
+
                         if (turnoNegocio.TieneTurnosPendientesPorEspecialidad(IDProfesional, idEsp))
                         {
-                            
+
                             erroresValidacion += $"No se puede quitar '{item.Text}' porque tiene turnos pendientes.<br/>";
-                            item.Selected = true; 
+                            item.Selected = true;
                         }
                         else
                         {
-                           
+
                             espNegocio.DesasignarEspecialidadAProfesional(IDProfesional, idEsp);
                             huboCambios = true;
                         }
                     }
-                    
+
                 }
 
                 if (!string.IsNullOrEmpty(erroresValidacion))
                 {
-                    
+
                     pnlMensaje.Visible = true;
                     pnlMensaje.CssClass = "alert alert-warning alert-dismissible fade show";
                     lblMensaje.Text = "Algunos cambios no se aplicaron:<br/>" + erroresValidacion;
                 }
                 else if (huboCambios)
                 {
-                    msgEspecialidades.Visible = true; 
+                    msgEspecialidades.Visible = true;
 
-                   
+
                 }
             }
             catch (Exception ex)
@@ -185,9 +185,9 @@ namespace CentroEstetica
             }
         }
 
-        
+
         //LÓGICA HORARIOS
-        
+
         private void CargarHorarios()
         {
             List<HorarioAtencion> lista = horarioNegocio.ListarPorProfesional(IDProfesional);
@@ -201,7 +201,7 @@ namespace CentroEstetica
             {
                 lblErrorHorario.Visible = false;
 
-                
+
                 if (string.IsNullOrEmpty(txtHoraInicio.Text) || string.IsNullOrEmpty(txtHoraFin.Text))
                 {
                     lblErrorHorario.Text = "Complete los horarios.";
@@ -218,7 +218,7 @@ namespace CentroEstetica
 
                 horarioNegocio.Agregar(nuevo);
 
-                // Limpiar y recargar
+                
                 txtHoraInicio.Text = "";
                 txtHoraFin.Text = "";
                 CargarHorarios();
@@ -234,13 +234,30 @@ namespace CentroEstetica
         {
             if (e.CommandName == "Eliminar")
             {
-                int idHorario = int.Parse(e.CommandArgument.ToString());
-                horarioNegocio.Eliminar(idHorario);
-                CargarHorarios();
+                try
+                {
+                    
+                    int idHorario = int.Parse(e.CommandArgument.ToString());
+
+                    
+                    horarioNegocio.Eliminar(idHorario);
+
+                   
+                    CargarHorarios();
+
+                    
+                }
+                catch (Exception ex)
+                {
+                    
+                    pnlMensaje.Visible = true;
+                    pnlMensaje.CssClass = "alert alert-danger alert-dismissible fade show shadow-sm";
+                    lblMensaje.Text = "Error al eliminar el horario: " + ex.Message;
+                }
             }
         }
 
-        
+
         protected void btnVolver_Click(object sender, EventArgs e)
         {
             Response.Redirect("PanelAdmin.aspx?view=profesionales");

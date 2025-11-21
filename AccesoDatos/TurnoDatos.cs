@@ -195,15 +195,14 @@ namespace AccesoDatos
                             T.IDEstado, TE.Descripcion AS EstadoNombre,
                             S.Nombre AS ServicioNombre,
                             C.Nombre AS ClienteNombre, C.Apellido AS ClienteApellido
-                        FROM Turno T
-                        INNER JOIN Servicio S ON T.IDServicio = S.IDServicio
-                        INNER JOIN Usuario C ON T.IDUsuarioCliente = C.IDUsuario
-                        INNER JOIN EstadoTurno TE ON T.IDEstado = TE.IDEstado
-                        WHERE T.IDUsuarioProfesional = @idProf 
-                          AND T.IDEstado IN (1, 2) -- 1=Confirmado, 2=Pendiente (según tu script)
-                          -- CORRECCIÓN: Combinamos Fecha y Hora para comparar con el momento exacto
-                          AND (CAST(T.Fecha AS DATETIME) + CAST(T.HoraInicio AS DATETIME)) > GETDATE()
-                        ORDER BY T.Fecha, T.HoraInicio ASC";
+                             FROM Turno T
+                             INNER JOIN Servicio S ON T.IDServicio = S.IDServicio
+                             INNER JOIN Usuario C ON T.IDUsuarioCliente = C.IDUsuario
+                             INNER JOIN EstadoTurno TE ON T.IDEstado = TE.IDEstado
+                             WHERE T.IDUsuarioProfesional = @idProf 
+                             AND T.IDEstado IN (1, 2) -- 1=Confirmado, 2=Pendiente (según tu script)
+                             AND (CAST(T.Fecha AS DATETIME) + CAST(T.HoraInicio AS DATETIME)) > GETDATE()
+                             ORDER BY T.Fecha, T.HoraInicio ASC";
 
                     datos.SetearConsulta(consulta);
                     datos.SetearParametro("@idProf", idProfesional);
@@ -214,19 +213,14 @@ namespace AccesoDatos
                         Turno aux = new Turno();
                         aux.IDTurno = (int)datos.Lector["IDTurno"];
 
-
                         DateTime fecha = (DateTime)datos.Lector["Fecha"];
                         TimeSpan hora = (TimeSpan)datos.Lector["HoraInicio"];
 
                         aux.Fecha = fecha.Add(hora);
-
-
+                        aux.HoraInicio = hora;
                         aux.Estado = (EstadoTurno)(int)datos.Lector["IDEstado"];
-
-
                         aux.Servicio = new Servicio();
                         aux.Servicio.Nombre = (string)datos.Lector["ServicioNombre"];
-
                         aux.Cliente = new Cliente();
                         aux.Cliente.Nombre = (string)datos.Lector["ClienteNombre"];
                         aux.Cliente.Apellido = (string)datos.Lector["ClienteApellido"];
@@ -289,6 +283,26 @@ namespace AccesoDatos
                 return cantidad;
             }
         }
+
+        public int ContarTotalPendientes()
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    
+                    string consulta = "SELECT COUNT(*) FROM Turno WHERE IDEstado = 2";
+
+                    datos.SetearConsulta(consulta);
+                    return (int)datos.EjecutarAccionEscalar();
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
         public decimal ObtenerIngresos(DateTime fechaInicio, DateTime fechaFin, int idProfesional)
         {
             

@@ -74,5 +74,10 @@ namespace Negocio
         {
             return datos.ObtenerIngresos(fechaInicio, fechaFin, idProfesional);
         }
+
+        public int CantidadTurnosPendientesTotal()
+        {
+            return datos.ContarTotalPendientes();
+        }
     }
 }

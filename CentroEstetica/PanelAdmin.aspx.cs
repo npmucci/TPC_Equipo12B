@@ -22,7 +22,7 @@ namespace CentroEstetica
         {
             pnlMensajes.Visible = false;
 
-            // Seguridad: Validamos que sea Admin
+            
             if (!Seguridad.EsAdmin(Session["usuario"]))
             {
                 Response.Redirect("Default.aspx", false);
@@ -33,7 +33,7 @@ namespace CentroEstetica
             {
                 string view = Request.QueryString["view"];
 
-                // Lógica para mantener la pestaña activa según URL
+                
                 switch (view)
                 {
                     case "profesionales":
@@ -51,7 +51,7 @@ namespace CentroEstetica
                     case "agenda":
                         hfTabActivo.Value = "#v-pills-agenda";
                         break;
-                    case "recepcionistas": 
+                    case "recepcionistas":
                         hfTabActivo.Value = "#v-pills-recepcionistas";
                         break;
                     default:
@@ -82,11 +82,11 @@ namespace CentroEstetica
 
             List<Usuario> listaClientes = clienteNegocio.ListarClientes();
 
-            // Vinculamos Clientes Activos
+            
             rptClientesActivos.DataSource = listaClientes.FindAll(x => x.Activo);
             rptClientesActivos.DataBind();
 
-            // Vinculamos Clientes Inactivos
+            
             rptClientesInactivos.DataSource = listaClientes.FindAll(x => !x.Activo);
             rptClientesInactivos.DataBind();
         }
@@ -118,7 +118,7 @@ namespace CentroEstetica
                     break;
             }
 
-            // Recargamos la lista y mantenemos la pestaña abierta
+            
             CargarClientes();
             hfTabActivo.Value = "#v-pills-clientes";
         }
@@ -126,7 +126,7 @@ namespace CentroEstetica
         private void CargarTurnosEnModal(int idCliente)
         {
 
-            Usuario cliente = usuarioNegocio.ObtenerPorId(idCliente); // O usar clienteNegocio.ObtenerPorId(id)
+            Usuario cliente = usuarioNegocio.ObtenerPorId(idCliente); 
             litNombreClienteModal.Text = cliente != null ? $"{cliente.Nombre} {cliente.Apellido}" : "Cliente";
 
 
@@ -213,19 +213,19 @@ namespace CentroEstetica
 
         protected void btnNuevoAdmin_Click(object sender, EventArgs e)
         {
-            
+
             Response.Redirect($"RegistroPage.aspx?rol={(int)Rol.Admin}", false);
         }
 
         private void ActualizarKPIsAdmin()
         {
-            // KPI Profesionales
             List<Usuario> profs = usuarioNegocio.ListarPorRol((int)Rol.Profesional);
             litCantProfesionales.Text = profs.Count(p => p.Activo).ToString();
-
-            // KPI Servicios
+            
             List<Servicio> servs = servNegocio.ListarActivos();
             litCantServicios.Text = servs.Count.ToString();
+
+            litCantTurnos.Text = turnoNegocio.CantidadTurnosPendientesTotal().ToString();
         }
 
         private void CargarProfesionales()
@@ -310,10 +310,10 @@ namespace CentroEstetica
             {
                 Especialidad esp = (Especialidad)e.Item.DataItem;
 
-                
+
                 Repeater rptS = (Repeater)e.Item.FindControl("rptServicios");
 
-               
+
                 System.Web.UI.HtmlControls.HtmlGenericControl pnlMensaje =
                     (System.Web.UI.HtmlControls.HtmlGenericControl)e.Item.FindControl("pnlSinServicios");
 
@@ -321,24 +321,24 @@ namespace CentroEstetica
                 LinkButton btnEdit = (LinkButton)e.Item.FindControl("btnEditarEspecialidad");
                 LinkButton btnState = (LinkButton)e.Item.FindControl("btnCambiarEstadoEspecialidad");
 
-                
+
                 List<Servicio> listaServicios = servNegocio.ListarPorEspecialidadTodos(esp.IDEspecialidad);
 
-               
+
                 rptS.DataSource = listaServicios;
                 rptS.DataBind();
 
-                
+
                 if (listaServicios.Count == 0)
                 {
-                    pnlMensaje.Visible = true; 
+                    pnlMensaje.Visible = true;
                 }
                 else
                 {
                     pnlMensaje.Visible = false;
                 }
 
-                
+
                 btnAdd.CommandArgument = esp.IDEspecialidad.ToString();
                 btnEdit.CommandArgument = esp.IDEspecialidad.ToString();
                 btnState.CommandArgument = esp.IDEspecialidad.ToString();
@@ -432,10 +432,10 @@ namespace CentroEstetica
         }
 
         // LÓGICA DE RECEPCIONISTAS 
-        
+
         private void CargarRecepcionistas()
         {
-            
+
             List<Usuario> lista = usuarioNegocio.ListarPorRol((int)Rol.Recepcionista);
 
             rptRecepcionistasActivos.DataSource = lista.FindAll(x => x.Activo);
@@ -447,7 +447,7 @@ namespace CentroEstetica
 
         protected void btnAgregarRecepcionista_Click(object sender, EventArgs e)
         {
-            
+
             Response.Redirect($"RegistroPage.aspx?rol={(int)Rol.Recepcionista}", false);
         }
 
@@ -458,7 +458,7 @@ namespace CentroEstetica
             switch (e.CommandName)
             {
                 case "EditarRecepcionista":
-                    
+
                     Response.Redirect($"PanelPerfil.aspx?id={id}&adminMode=true", false);
                     break;
 

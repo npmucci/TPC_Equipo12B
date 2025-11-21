@@ -88,5 +88,38 @@ namespace AccesoDatos
                 catch (Exception ex) { throw ex; }
             }
         }
+
+        public HorarioAtencion ObtenerPorId(int idHorario)
+        {
+            HorarioAtencion aux = null;
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    
+                    string consulta = "SELECT IDHorarioAtencion, IDUsuario, DiaSemana, HorarioInicio, HorarioFin, Activo FROM HorarioAtencion WHERE IDHorarioAtencion = @id";
+
+                    datos.SetearConsulta(consulta);
+                    datos.SetearParametro("@id", idHorario);
+                    datos.EjecutarLectura();
+
+                    if (datos.Lector.Read())
+                    {
+                        aux = new HorarioAtencion();
+                        aux.IDHorarioAtencion = (int)datos.Lector["IDHorarioAtencion"];
+                        aux.DiaSemana = (string)datos.Lector["DiaSemana"];
+                        aux.HorarioInicio = (TimeSpan)datos.Lector["HorarioInicio"];
+                        aux.HorarioFin = (TimeSpan)datos.Lector["HorarioFin"];
+                        aux.Activo = (bool)datos.Lector["Activo"];
+
+                        
+                        aux.Profesional = new Profesional();
+                        aux.Profesional.ID = (int)datos.Lector["IDUsuario"];
+                    }
+                    return aux;
+                }
+                catch (Exception ex) { throw ex; }
+            }
+        }
     }
 }

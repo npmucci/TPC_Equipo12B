@@ -77,7 +77,7 @@
                             <div class="col-md-4">
                                 <div class="kpi-card bg-gradient-success">
                                     <h5>Turnos Pendientes</h5>
-                                    <h2>--</h2>
+                                    <h2><asp:Literal ID="litCantTurnos" runat="server" Text="0"></asp:Literal></h2>
                                     <i class="bi bi-calendar-check"></i>
                                 </div>
                             </div>
@@ -277,7 +277,7 @@
                                                                 </li>
                                                                 <li>
                                                                       <a class="dropdown-item" href='GestionProfesional.aspx?id=<%# Eval("ID") %>'>
-                                                                          Modificar Datos
+                                                                          Gestionar Profesional
                                                                       </a>
                                                                 </li>
                                                                 <li><hr class="dropdown-divider"></li>

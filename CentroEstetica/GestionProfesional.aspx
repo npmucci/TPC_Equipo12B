@@ -2,17 +2,17 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style>
-        /* Estilos personalizados para unificar las tarjetas de gestión */
+        
         .gestion-card {
-            background-color: #f8f9fa; /* Fondo gris muy suave para el cuerpo */
-            border: 1px solid #ced4da; /* Borde sutil pero visible */
+            background-color: #f8f9fa; 
+            border: 1px solid #ced4da; 
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
 
         .gestion-card-header {
-            background-color: #343a40; /* Fondo oscuro uniforme para todos los títulos */
+            background-color: #343a40; 
             color: #ffffff;
-            border-bottom: 3px solid #0d6efd; /* Una línea de color (primary) para darle toque moderno */
+            border-bottom: 3px solid #0d6efd; 
             padding: 15px 20px;
             border-radius: calc(0.375rem - 1px) calc(0.375rem - 1px) 0 0;
         }
@@ -33,7 +33,7 @@
             opacity: 0.8;
         }
         
-        /* Pequeño ajuste para que los inputs resalten sobre el fondo gris */
+        
         .gestion-card .form-control, 
         .gestion-card .form-select {
             background-color: #ffffff; 
@@ -52,11 +52,17 @@
                 CssClass="btn btn-outline-secondary btn-sm fw-bold" OnClick="btnVolver_Click" />
         </div>
 
-        <asp:Panel ID="pnlMensaje" runat="server" Visible="false" CssClass="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
-            <i class="bi bi-info-circle-fill me-2"></i>
-            <asp:Label ID="lblMensaje" runat="server"></asp:Label>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </asp:Panel>
+        <asp:UpdatePanel ID="upMensajes" runat="server" UpdateMode="Always">
+            <ContentTemplate>
+                
+                <asp:Panel ID="pnlMensaje" runat="server" Visible="false" CssClass="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <asp:Label ID="lblMensaje" runat="server"></asp:Label>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </asp:Panel>
+        
+            </ContentTemplate>
+        </asp:UpdatePanel>
 
         <div class="card gestion-card rounded-3 mb-5">
             <div class="gestion-card-header">
@@ -120,6 +126,7 @@
                 </div>
             </div>
 
+            
             <div class="col-lg-7 mb-4">
                 <div class="card gestion-card rounded-3 h-100">
                     <div class="gestion-card-header">
@@ -183,7 +190,7 @@
                                                                 CommandName="Eliminar" CommandArgument='<%# Eval("IDHorarioAtencion") %>'
                                                                 CssClass="btn btn-link text-danger p-0" ToolTip="Eliminar Horario"
                                                                 OnClientClick="return confirm('¿Eliminar este rango horario?');">
-                                                                <i class="bi bi-x-circle-fill fs-5"></i>
+                                                                Eliminar
                                                             </asp:LinkButton>
                                                         </td>
                                                     </tr>

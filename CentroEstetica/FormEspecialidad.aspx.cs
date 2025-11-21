@@ -23,7 +23,7 @@ namespace CentroEstetica
                 return;
             }
 
-            
+
             if (Request.QueryString["id"] != null)
             {
                 esModoEdicion = true;
@@ -54,13 +54,13 @@ namespace CentroEstetica
                 Especialidad especialidad = espNegocio.ObtenerPorId(idEdicion);
                 if (especialidad != null)
                 {
-                    
+
                     txtNombre.Text = especialidad.Nombre;
                     txtDescripcion.Text = especialidad.Descripcion;
                     txtFoto.Text = especialidad.Foto;
                     chkActivo.Checked = especialidad.Activo;
 
-                    
+
                     tituloPagina.InnerText = "Editar Especialidad";
                     btnGuardar.Text = "Guardar Cambios";
                     pnlControlesEdicion.Visible = true;
@@ -92,19 +92,27 @@ namespace CentroEstetica
 
                 if (esModoEdicion)
                 {
-                    // LÓGICA DE MODIFICACIÓN
                     esp.IDEspecialidad = idEdicion;
                     esp.Activo = chkActivo.Checked;
                     espNegocio.Modificar(esp);
                 }
                 else
                 {
-                    // LÓGICA DE CREACIÓN              
                     espNegocio.Agregar(esp);
                 }
 
+              
+                MostrarMensaje("¡Especialidad guardada correctamente!", "success");
+
+               
+                btnGuardar.Visible = false; 
+                btnVolver.Text = "Volver al Panel";
+                btnVolver.CssClass = "btn btn-success"; 
+
                 
-                Response.Redirect("PanelAdmin.aspx", false);
+                BloquearFormulario();
+
+               
             }
             catch (Exception ex)
             {
@@ -123,5 +131,15 @@ namespace CentroEstetica
             pnlMensaje.CssClass = $"alert alert-{tipo}";
             litMensaje.Text = mensaje;
         }
+
+        private void BloquearFormulario()
+        {
+            txtNombre.Enabled = false;
+            txtDescripcion.Enabled = false;
+            txtFoto.Enabled = false;
+            chkActivo.Disabled = true;
+        }
     }
+
+
 }
