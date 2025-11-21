@@ -404,15 +404,5 @@ namespace CentroEstetica
         }
     }
 
-    [Serializable]
-    public class ReservaTemporal
-    {
-        public int IDServicio { get; set; }
-        public string NombreServicio { get; set; }
-        public int IDProfesional { get; set; }
-        public string NombreProfesional { get; set; }
-        public DateTime Fecha { get; set; }
-        public TimeSpan Hora { get; set; }
-        public decimal Precio { get; set; }
-    }
+    
 }

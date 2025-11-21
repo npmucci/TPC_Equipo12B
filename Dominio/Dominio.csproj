@@ -46,6 +46,7 @@
     <Compile Include="FormaPago.cs" />
     <Compile Include="ProfesionalUnico.cs" />
     <Compile Include="Recepcionista.cs" />
+    <Compile Include="ReservaTemporal.cs" />
     <Compile Include="TipoPago.cs" />
     <Compile Include="Especialidad.cs" />
     <Compile Include="EstadoTurno.cs" />
