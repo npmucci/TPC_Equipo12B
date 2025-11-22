@@ -286,6 +286,47 @@ BEGIN
 END
 GO
 
+CREATE or Alter PROCEDURE sp_ObtenerTurnoPorID
+    @IDTurno INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    SELECT 
+        T.IDTurno,
+        T.Fecha,
+		T.HoraInicio,
+        P.Nombre AS NombreProfesional,
+        P.Apellido AS ApellidoProfesional,
+        C.Nombre AS NombreCliente,
+        C.Apellido AS ApellidoCliente,
+        C.Dni AS DniCliente,       
+        C.Telefono AS TelefonoCliente, 
+        C.Mail AS EmailCliente,    
+        C.Domicilio AS DomicilioCliente, 
+        S.Nombre AS Servicio,
+        E.IDEstado,
+        Pago.Monto,
+        Pago.FechaPago,
+        TP.IDTipoPago,
+        FP.IDFormaPago
+        
+    FROM Turno T
+    INNER JOIN Usuario P ON T.IDUsuarioProfesional = P.IDUsuario
+    INNER JOIN Usuario C ON T.IDUsuarioCliente = C.IDUsuario
+    INNER JOIN Servicio S ON T.IDServicio = S.IDServicio
+    INNER JOIN EstadoTurno E ON T.IDEstado = E.IDEstado
+
+    LEFT JOIN Pago ON T.IDPago = Pago.IDPago
+    LEFT JOIN TipoPago TP ON Pago.IDTipoPago = TP.IDTipoPago
+    LEFT JOIN FormaPago FP ON Pago.IDFormaPago = FP.IDFormaPago
+
+    WHERE T.IDTurno = @IDTurno
+    
+    
+END
+GO
+
 CREATE OR ALTER PROCEDURE sp_ListarTodosLosTurnos
 AS
 BEGIN

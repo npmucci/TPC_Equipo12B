@@ -79,5 +79,10 @@ namespace Negocio
         {
             return datos.ContarTotalPendientes();
         }
+
+        public Turno BuscarTurnoPorId(int idTurno)
+        {
+            return datos.BuscarTurnoPorId(idTurno);
+        }
     }
 }

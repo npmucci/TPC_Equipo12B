@@ -15,49 +15,22 @@ namespace CentroEstetica
     {
 
         /// <summary>
-        /// Control lnkHoy.
+        /// Control lblBienvenida.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lnkHoy;
+        protected global::System.Web.UI.WebControls.Label lblBienvenida;
 
         /// <summary>
-        /// Control lnkProximos.
+        /// Control lblNombre.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lnkProximos;
-
-        /// <summary>
-        /// Control lnkPasados.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lnkPasados;
-
-        /// <summary>
-        /// Control mvTurnos.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.MultiView mvTurnos;
-
-        /// <summary>
-        /// Control viewHoy.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.View viewHoy;
+        protected global::System.Web.UI.WebControls.Label lblNombre;
 
         /// <summary>
         /// Control lblFechaHoy.
@@ -69,111 +42,93 @@ namespace CentroEstetica
         protected global::System.Web.UI.WebControls.Label lblFechaHoy;
 
         /// <summary>
-        /// Control rptTurnosActuales.
+        /// Control dgvTurnos.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptTurnosActuales;
+        protected global::System.Web.UI.WebControls.GridView dgvTurnos;
 
         /// <summary>
-        /// Control viewProximos.
+        /// Control lblDetalleFecha.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.View viewProximos;
+        protected global::System.Web.UI.WebControls.Label lblDetalleFecha;
 
         /// <summary>
-        /// Control rptTurnosProximos.
+        /// Control lblDetalleHora.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptTurnosProximos;
+        protected global::System.Web.UI.WebControls.Label lblDetalleHora;
 
         /// <summary>
-        /// Control viewPasados.
+        /// Control lblDetalleServicioNombre.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.View viewPasados;
+        protected global::System.Web.UI.WebControls.Label lblDetalleServicioNombre;
 
         /// <summary>
-        /// Control rptTurnosPasados.
+        /// Control lblDetalleEstado.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptTurnosPasados;
+        protected global::System.Web.UI.WebControls.Label lblDetalleEstado;
 
         /// <summary>
-        /// Control ddlPacientes.
+        /// Control lblDetalleClienteNombre.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlPacientes;
+        protected global::System.Web.UI.WebControls.Label lblDetalleClienteNombre;
 
         /// <summary>
-        /// Control ddlProfesionales.
+        /// Control lblDetalleMonto.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlProfesionales;
+        protected global::System.Web.UI.WebControls.Label lblDetalleMonto;
 
         /// <summary>
-        /// Control ddlServicios.
+        /// Control lblDetalleTipoPago.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlServicios;
+        protected global::System.Web.UI.WebControls.Label lblDetalleTipoPago;
 
         /// <summary>
-        /// Control txtFecha.
+        /// Control lblDetalleFormaPago.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtFecha;
+        protected global::System.Web.UI.WebControls.Label lblDetalleFormaPago;
 
         /// <summary>
-        /// Control txtHoraInicio.
+        /// Control lblDetalleFechaPago.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtHoraInicio;
-
-        /// <summary>
-        /// Control ddlFormaPago.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlFormaPago;
-
-        /// <summary>
-        /// Control btnConfirmarTurno.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnConfirmarTurno;
+        protected global::System.Web.UI.WebControls.Label lblDetalleFechaPago;
     }
 }

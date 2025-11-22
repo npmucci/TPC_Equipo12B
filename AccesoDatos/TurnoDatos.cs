@@ -60,6 +60,53 @@ namespace AccesoDatos
             }
             return lista;
         }
+        public Turno BuscarTurnoPorId(int idTurno)
+        {
+            Turno turno = null;
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearProcedimiento("sp_ObtenerTurnoPorID");
+                    datos.SetearParametro("@IDTurno", idTurno);
+                    datos.EjecutarLectura();
+                    if (datos.Lector.Read())
+                    {
+                        turno = new Turno();
+                        turno.IDTurno = (int)datos.Lector["IDTurno"];
+                        turno.Fecha = ((DateTime)datos.Lector["Fecha"]).Date;
+                        turno.HoraInicio = (TimeSpan)datos.Lector["HoraInicio"];
+                        turno.Cliente = new Cliente()
+                        {
+                            Nombre = (string)datos.Lector["NombreCliente"],
+                            Apellido = (string)datos.Lector["ApellidoCliente"]
+                        };
+                        turno.Profesional = new Profesional()
+                        {
+                            Nombre = (string)datos.Lector["NombreProfesional"],
+                            Apellido = (string)datos.Lector["ApellidoProfesional"]
+                        };
+                        turno.Servicio = new Servicio()
+                        {
+                            Nombre = (string)datos.Lector["Servicio"],
+                        };
+                        turno.Pago = new Pago()
+                        {
+                            Monto = (decimal)datos.Lector["Monto"],
+                            FormaDePago = (FormaPago)(int)datos.Lector["IDFormaPago"],
+                            Tipo = (TipoPago)(int)datos.Lector["IDTipoPago"],
+                            FechaPago = ((DateTime)datos.Lector["FechaPago"]).Date
+                        };
+                        turno.Estado = (EstadoTurno)(int)datos.Lector["IDEstado"];
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            return turno;
+        }
         public List<Turno> ListarTurnosCliente(int idCliente)
         {
             List<Turno> lista = new List<Turno>();

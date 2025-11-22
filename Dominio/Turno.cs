@@ -26,6 +26,16 @@ namespace Dominio
             }
         }
 
+        public string ClienteNombreCompleto
+        {
+            get { return Cliente.Nombre + " " + Cliente.Apellido; }
+        }
+
+        public string ProfesionalNombreCompleto
+        {
+            get { return Profesional.Nombre + " " + Profesional.Apellido; }
+        }
+
 
     }
 }
