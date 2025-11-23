@@ -85,17 +85,7 @@ CREATE TABLE HorarioAtencion (
     FOREIGN KEY (IDUsuario) REFERENCES Usuario(IDUsuario) ON DELETE CASCADE
 );
 
--- 8. Pagos 
-CREATE TABLE Pago (
-    IDPago INT IDENTITY(1,1) PRIMARY KEY,
-    FechaPago DATETIME NOT NULL,
-    Monto DECIMAL(10, 2) NOT NULL,
-    IDTipoPago INT NOT NULL, 
-    IDFormaPago INT NOT NULL,
-    FOREIGN KEY (IDTipoPago) REFERENCES TipoPago(IDTipoPago),
-    FOREIGN KEY (IDFormaPago) REFERENCES FormaPago(IDFormaPago)
-);
-
+--8 Turno
 CREATE TABLE Turno (
     IDTurno INT IDENTITY(1,1) PRIMARY KEY,
     Fecha DATE NOT NULL,
@@ -103,11 +93,24 @@ CREATE TABLE Turno (
     IDUsuarioProfesional INT NOT NULL,
     IDUsuarioCliente INT NOT NULL,
     IDServicio INT NOT NULL,
-    IDPago INT NOT NULL, 
     IDEstado INT NOT NULL,
     FOREIGN KEY (IDUsuarioProfesional) REFERENCES Usuario(IDUsuario),
     FOREIGN KEY (IDUsuarioCliente) REFERENCES Usuario(IDUsuario),
     FOREIGN KEY (IDServicio) REFERENCES Servicio(IDServicio),
-    FOREIGN KEY (IDPago) REFERENCES Pago(IDPago),
     FOREIGN KEY (IDEstado) REFERENCES EstadoTurno(IDEstado)
 );
+
+-- 9. Pagos 
+CREATE TABLE Pago (
+    IDPago INT IDENTITY(1,1) PRIMARY KEY,
+	IDTurno INT NOT NULL,
+    Fecha DATETIME NOT NULL DEFAULT GETDATE(),
+	EsDevolucion BIT NOT NULL DEFAULT 0,
+    Monto DECIMAL(10, 2) NOT NULL,
+    IDTipoPago INT NOT NULL, 
+    IDFormaPago INT NOT NULL,
+	FOREIGN KEY (IDTurno) REFERENCES Turno(IDTurno),
+    FOREIGN KEY (IDTipoPago) REFERENCES TipoPago(IDTipoPago),
+    FOREIGN KEY (IDFormaPago) REFERENCES FormaPago(IDFormaPago)
+);
+

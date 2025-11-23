@@ -14,7 +14,8 @@ namespace Dominio
         public Usuario Profesional { get; set; }
         public Usuario Cliente { get; set; }
         public Servicio Servicio { get; set; }
-        public Pago Pago { get; set; }
+        public List<Pago> Pago { get; set; } = new List<Pago>();
+
         public EstadoTurno Estado { get; set; }
 
         //para que me devuela la fecha en formato dd/MM/yyyy

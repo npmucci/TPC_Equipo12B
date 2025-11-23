@@ -56,15 +56,12 @@ namespace CentroEstetica
         {
             try
             {
-                if (e.CommandName == "VerDetalle")
+                if (e.CommandName == "VerPagos")
                 {
                     int idTurno = Convert.ToInt32(e.CommandArgument);
 
-                    TurnoNegocio negocio = new TurnoNegocio();
 
-                    Turno turnoSeleccionado = negocio.BuscarTurnoPorId(idTurno);
-
-                    MostrarDetalleModal(turnoSeleccionado);
+                    MostrarDetalleModal(idTurno);
                 }
             }
 
@@ -73,36 +70,17 @@ namespace CentroEstetica
                 throw (ex);
             }
         }
-        private void MostrarDetalleModal(Turno turno)
+        private void MostrarDetalleModal(int idTurno)
         {
-            if (turno == null)
-            {
-                return;
-            }
+            PagoNegocio pagoNegocio = new PagoNegocio();
+            var lista = pagoNegocio.ListarPagosDelTurno(idTurno);
 
-            lblDetalleFecha.Text = turno.FechaString;
-            lblDetalleHora.Text = turno.HoraInicio.ToString("hh\\:mm");
-            lblDetalleServicioNombre.Text = turno.Servicio != null ? turno.Servicio.Nombre : "N/A";
-            lblDetalleEstado.Text = turno.Estado.ToString();
-            lblDetalleClienteNombre.Text = turno.Cliente != null ? turno.ClienteNombreCompleto : "Cliente no disponible";
+            repPagos.DataSource = lista;
+            repPagos.DataBind();
 
-            if (turno.Pago != null)
-            {
-                lblDetalleMonto.Text = turno.Pago.Monto.ToString("C");
-                lblDetalleTipoPago.Text = turno.Pago.Tipo.ToString();
-                lblDetalleFormaPago.Text = turno.Pago.FormaDePago.ToString();
-                lblDetalleFechaPago.Text = turno.Pago.FechaPago.ToString("dd/MM/yyyy");
-            }
-            else
-            {
-                lblDetalleMonto.Text = "Pendiente / Sin Registrar";
-                lblDetalleTipoPago.Text = "N/A";
-                lblDetalleFormaPago.Text = "N/A";
-                lblDetalleFechaPago.Text = "N/A";
-            }
-
-            string script = "var modal = new bootstrap.Modal(document.getElementById('detalleModal')); modal.show();";
+            string script = "var modal = new bootstrap.Modal(document.getElementById('pagoModal')); modal.show();";
             ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowModal", script, true);
+
 
 
         }

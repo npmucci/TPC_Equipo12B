@@ -259,7 +259,7 @@ END
 GO
 
 --SP PARA TURNOS
-CREATE OR ALTER PROCEDURE sp_ListarTurnosCliente
+CREATE  PROCEDURE sp_ListarTurnosCliente
     @IDCliente INT 
 AS
 BEGIN
@@ -285,49 +285,36 @@ BEGIN
     ORDER BY T.Fecha, T.HoraInicio;
 END
 GO
-
-CREATE or Alter PROCEDURE sp_ObtenerTurnoPorID
+ 
+CREATE  PROCEDURE sp_ObtenerTurnoPorID
     @IDTurno INT
 AS
 BEGIN
     SET NOCOUNT ON;
     
-    SELECT 
+    SELECT
         T.IDTurno,
         T.Fecha,
-		T.HoraInicio,
+        T.HoraInicio,
         P.Nombre AS NombreProfesional,
         P.Apellido AS ApellidoProfesional,
         C.Nombre AS NombreCliente,
         C.Apellido AS ApellidoCliente,
-        C.Dni AS DniCliente,       
-        C.Telefono AS TelefonoCliente, 
-        C.Mail AS EmailCliente,    
-        C.Domicilio AS DomicilioCliente, 
+        C.Telefono AS TelefonoCliente,
+        C.Mail AS EmailCliente,
+        C.Domicilio AS DomicilioCliente,
         S.Nombre AS Servicio,
-        E.IDEstado,
-        Pago.Monto,
-        Pago.FechaPago,
-        TP.IDTipoPago,
-        FP.IDFormaPago
-        
+        T.IDEstado
     FROM Turno T
     INNER JOIN Usuario P ON T.IDUsuarioProfesional = P.IDUsuario
     INNER JOIN Usuario C ON T.IDUsuarioCliente = C.IDUsuario
     INNER JOIN Servicio S ON T.IDServicio = S.IDServicio
     INNER JOIN EstadoTurno E ON T.IDEstado = E.IDEstado
-
-    LEFT JOIN Pago ON T.IDPago = Pago.IDPago
-    LEFT JOIN TipoPago TP ON Pago.IDTipoPago = TP.IDTipoPago
-    LEFT JOIN FormaPago FP ON Pago.IDFormaPago = FP.IDFormaPago
-
-    WHERE T.IDTurno = @IDTurno
-    
-    
+    WHERE T.IDTurno = @IDTurno;
 END
 GO
 
-CREATE OR ALTER PROCEDURE sp_ListarTodosLosTurnos
+CREATE  PROCEDURE sp_ListarTodosLosTurnos
 AS
 BEGIN
     SELECT 
@@ -335,15 +322,11 @@ BEGIN
         T.Fecha,
         T.HoraInicio,
         P.Nombre AS NombreProfesional,
-		P.Apellido AS ApellidoProfesional,
+        P.Apellido AS ApellidoProfesional,
         C.Nombre AS NombreCliente,
-		C.Apellido AS ApellidoCliente,
+        C.Apellido AS ApellidoCliente,
         S.Nombre AS Servicio,
-        E.IDEstado,
-        Pago.Monto,
-		Pago.FechaPago,
-        TP.IDTipoPago,
-        FP.IDFormaPago
+        T.IDEstado
     FROM Turno T
     INNER JOIN Usuario P
         ON T.IDUsuarioProfesional = P.IDUsuario
@@ -353,17 +336,12 @@ BEGIN
         ON T.IDServicio = S.IDServicio
     INNER JOIN EstadoTurno E
         ON T.IDEstado = E.IDEstado
-    INNER JOIN Pago 
-        ON T.IDPago = Pago.IDPago
-    INNER JOIN TipoPago TP
-        ON Pago.IDTipoPago = TP.IDTipoPago
-    INNER JOIN FormaPago FP
-        ON Pago.IDFormaPago = FP.IDFormaPago
     ORDER BY T.Fecha, T.HoraInicio;
 END
 GO
 
-CREATE  PROCEDURE sp_contarTurnos
+
+CREATE PROCEDURE sp_contarTurnos
     @IDProfesional INT,
     @FechaInicio DATE,
     @FechaFin DATE
@@ -375,36 +353,28 @@ BEGIN
         COUNT(T.IDTurno) AS CantidadTurnos
     FROM 
         Turno T
-    INNER JOIN
-        EstadoTurno ET ON T.IDEstado = ET.IDEstado
     WHERE 
-        T.IDUsuarioProfesional = @IDProfesional       
-        AND T.Fecha >= @FechaInicio               
-        AND T.Fecha <= @FechaFin      
+        T.IDUsuarioProfesional = @IDProfesional
+        AND T.Fecha >= @FechaInicio
+        AND T.Fecha <= @FechaFin
         AND T.IDEstado IN (1, 3);  
 END
 GO
 
 --sp para pagos
-
-CREATE  PROCEDURE sp_ObtenerIngresos
-    @IDProfesional INT,
-    @FechaInicio DATE,
-    @FechaFin DATE
+CREATE PROCEDURE sp_ListarPagosPorTurno
+    @IDTurno INT
 AS
 BEGIN
-    SET NOCOUNT ON;
-
     SELECT 
-        ISNULL(SUM(P.Monto), 0.00) AS IngresoTotal
-    FROM 
-        Turno T
-    INNER JOIN 
-        Pago P ON T.IDPago = P.IDPago
-    WHERE 
-        T.IDUsuarioProfesional = @IDProfesional  
-        AND T.Fecha >= @FechaInicio 
-        AND T.Fecha <= @FechaFin      
-        AND T.IDEstado = 5
+        IDPago,
+        IDTurno,
+        Fecha,
+        EsDevolucion,
+        Monto,
+        IDTipoPago,
+        IDFormaPago
+    FROM Pago
+    WHERE IDTurno = @IDTurno
 END
 GO

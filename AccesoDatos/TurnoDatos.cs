@@ -10,56 +10,54 @@ namespace AccesoDatos
 {
     public class TurnoDatos
     {
+        PagoDatos pagoDatos = new PagoDatos();
         public List<Turno> ListarTodos()
         {
+           
             List<Turno> lista = new List<Turno>();
             using (Datos datos = new Datos())
             {
-                try
+                datos.SetearProcedimiento("sp_ListarTodosLosTurnos");
+                datos.EjecutarLectura();
+
+                while (datos.Lector.Read())
                 {
-                    datos.SetearProcedimiento("sp_ListarTodosLosTurnos");
-                    datos.EjecutarLectura();
-                    while (datos.Lector.Read())
+                    Turno aux = new Turno();
+                    aux.IDTurno = (int)datos.Lector["IDTurno"];
+                    aux.Fecha = ((DateTime)datos.Lector["Fecha"]).Date;
+                    aux.HoraInicio = (TimeSpan)datos.Lector["HoraInicio"];
+
+                    aux.Cliente = new Cliente()
                     {
-                        Turno aux = new Turno();
-                        aux.IDTurno = (int)datos.Lector["IDTurno"];
-                        aux.Fecha = ((DateTime)datos.Lector["Fecha"]).Date;
-                        aux.HoraInicio = (TimeSpan)datos.Lector["HoraInicio"];
-                        aux.Cliente = new Cliente()
-                        {
-                            Nombre = (string)datos.Lector["NombreCliente"],
-                            Apellido = (string)datos.Lector["ApellidoCliente"]
-                        };
-                        aux.Profesional = new Profesional()
-                        {
+                        Nombre = (string)datos.Lector["NombreCliente"],
+                        Apellido = (string)datos.Lector["ApellidoCliente"]
+                    };
 
-                            Nombre = (string)datos.Lector["NombreProfesional"],
-                            Apellido = (string)datos.Lector["ApellidoProfesional"]
-                        };
-                        aux.Servicio = new Servicio()
-                        {
-                            Nombre = (string)datos.Lector["Servicio"],
-                        };
+                    aux.Profesional = new Profesional()
+                    {
+                        Nombre = (string)datos.Lector["NombreProfesional"],
+                        Apellido = (string)datos.Lector["ApellidoProfesional"]
+                    };
 
-                        aux.Pago = new Pago()
-                        {
-                            Monto = (decimal)datos.Lector["Monto"],
-                            FormaDePago = (FormaPago)(int)datos.Lector["IDFormaPago"],
-                            Tipo = (TipoPago)(int)datos.Lector["IDTipoPago"],
-                            FechaPago = ((DateTime)datos.Lector["FechaPago"]).Date
-                        };
+                    aux.Servicio = new Servicio()
+                    {
+                        Nombre = (string)datos.Lector["Servicio"]
+                    };
 
-                        aux.Estado = (EstadoTurno)(int)datos.Lector["IDEstado"];
-                        lista.Add(aux);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
+                    aux.Estado = (EstadoTurno)(int)datos.Lector["IDEstado"];
+
+                    // Cargar pagos del turno 
+                    aux.Pago = pagoDatos.ListarPagosDelTurno(aux.IDTurno);
+
+                    lista.Add(aux);
                 }
             }
+
             return lista;
         }
+
+
+
         public Turno BuscarTurnoPorId(int idTurno)
         {
             Turno turno = null;
@@ -90,14 +88,10 @@ namespace AccesoDatos
                         {
                             Nombre = (string)datos.Lector["Servicio"],
                         };
-                        turno.Pago = new Pago()
-                        {
-                            Monto = (decimal)datos.Lector["Monto"],
-                            FormaDePago = (FormaPago)(int)datos.Lector["IDFormaPago"],
-                            Tipo = (TipoPago)(int)datos.Lector["IDTipoPago"],
-                            FechaPago = ((DateTime)datos.Lector["FechaPago"]).Date
-                        };
+                    
                         turno.Estado = (EstadoTurno)(int)datos.Lector["IDEstado"];
+                        // Cargar pagos del turno 
+                        turno.Pago = pagoDatos.ListarPagosDelTurno(turno.IDTurno);
                     }
                 }
                 catch (Exception ex)

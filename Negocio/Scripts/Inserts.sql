@@ -130,33 +130,35 @@ INSERT INTO HorarioAtencion (IDUsuario, DiaSemana, HorarioInicio, HorarioFin, Ac
 (10, 'Lunes', '14:00:00', '21:00:00', 1),(10, 'Miercoles', '14:00:00', '21:00:00', 1),
 (8, 'Jueves', '08:00:00', '16:00:00', 1),(8, 'Viernes', '08:00:00', '16:00:00', 1);
 
--- 7. Pagos 
--- IDs: 1-Seña, 2-Total
-INSERT INTO Pago (FechaPago, Monto, IDTipoPago, IDFormaPago) VALUES
-(DATEADD(day, -1, GETDATE()), 30000, 2,1), -- Pago 1 (Total)
-(DATEADD(day, -1, GETDATE()), 8000, 1,1),   -- Pago 2 (Seña)
-(DATEADD(day, -2, GETDATE()), 28000, 2,2), -- Pago 3 (Total)
-(DATEADD(day, -3, GETDATE()), 15000, 2,1), -- Pago 4 (Total)
-(DATEADD(day, -5, GETDATE()), 45000, 2,2), -- Pago 5 (Total)
-(DATEADD(day, -1, GETDATE()), 10000, 1,2),  -- Pago 6 (Seña)
-(DATEADD(day, -1, GETDATE()), 15000, 1,1),  -- Pago 7 (Seña)
-(DATEADD(day, -1, GETDATE()), 15000, 1,1),  -- Pago 8 (Seña)
-(CONVERT(date, GETDATE()), 10000, 1,2),  -- Pago 9 (Seña)
-(DATEADD(day, -2, GETDATE()), 30000, 1,1);  -- Pago 10 (Seña)
--- IDs: 1 a 10
 
--- 8. Turnos
-INSERT INTO Turno (Fecha, HoraInicio, IDUsuarioProfesional, IDUsuarioCliente, IDServicio, IDPago, IDEstado) VALUES
-(DATEADD(day, 7, GETDATE()), '10:00:00', 4, 14, 3, 6, 1),
-(DATEADD(day, -5, GETDATE()), '11:00:00', 7, 15, 9, 5, 4),
-(DATEADD(day, 3, GETDATE()), '15:00:00', 10, 16, 18, 7, 2),
-(DATEADD(day, 4, GETDATE()), '16:00:00', 9, 17, 20, 2, 1),
-(DATEADD(day, -3, GETDATE()), '09:00:00', 4, 18, 1, 4, 4),
-(DATEADD(day, -1, GETDATE()), '14:00:00', 7, 19, 11, 1, 4),
-(DATEADD(day, 2, GETDATE()), '11:00:00', 8, 20, 19, 8, 3),
-(CONVERT(date, GETDATE()), '17:00:00', 3, 11, 25, 9, 1),
-(DATEADD(day, -2, GETDATE()), '13:00:00', 4, 12, 6, 3, 4),
-(DATEADD(day, 10, GETDATE()), '10:00:00', 7, 16, 13, 10, 1);
+-- 7. Turnos
+INSERT INTO Turno (Fecha, HoraInicio, IDUsuarioProfesional, IDUsuarioCliente, IDServicio, IDEstado) VALUES
+(DATEADD(day, 7, GETDATE()), '10:00:00', 4, 14, 3, 1),
+(DATEADD(day, -5, GETDATE()), '11:00:00', 7, 15, 9, 4),
+(DATEADD(day, 3, GETDATE()), '15:00:00', 10, 16, 18, 2),
+(DATEADD(day, 4, GETDATE()), '16:00:00', 9, 17, 20, 1),
+(DATEADD(day, -3, GETDATE()), '09:00:00', 4, 18, 1, 4),
+(DATEADD(day, -1, GETDATE()), '14:00:00', 7, 19, 11, 4),
+(DATEADD(day, 2, GETDATE()), '11:00:00', 8, 20, 19, 3),
+(CONVERT(date, GETDATE()), '17:00:00', 3, 11, 25, 1),
+(DATEADD(day, -2, GETDATE()), '13:00:00', 4, 12, 6, 4),
+(DATEADD(day, 10, GETDATE()), '10:00:00', 7, 16, 13, 1);
+
+
+
+-- 8. Pagos
+INSERT INTO Pago (IDTurno, Fecha, Monto, IDTipoPago, IDFormaPago)
+VALUES
+(1, DATEADD(day, -1, GETDATE()), 30000, 2, 1),  
+(2, DATEADD(day, -1, GETDATE()), 8000, 1, 1),  
+(3, DATEADD(day, -2, GETDATE()), 28000, 2, 2),  
+(4, DATEADD(day, -3, GETDATE()), 15000, 2, 1), 
+(5, DATEADD(day, -5, GETDATE()), 45000, 2, 2), 
+(6, DATEADD(day, -1, GETDATE()), 10000, 1, 2),  
+(7, DATEADD(day, -1, GETDATE()), 15000, 1, 1), 
+(8, DATEADD(day, -1, GETDATE()), 15000, 1, 1), 
+(9, CONVERT(date, GETDATE()), 10000, 1, 2),     
+(10, DATEADD(day, -2, GETDATE()), 30000, 1, 1); 
 
 -- Reactivamos todas las constraints
 EXEC sp_MSforeachtable 'ALTER TABLE ? WITH CHECK CHECK CONSTRAINT ALL'; 
@@ -168,38 +170,39 @@ go
 
 
 -- insert para probar turnos confrimados
-INSERT INTO Turno (Fecha, HoraInicio, IDUsuarioCliente, IDUsuarioProfesional, IDServicio, IDPago, IDEstado)
-VALUES 
-('2025-11-15', '10:30:00', 12, 8, 20,10, 2); 
+INSERT INTO Turno (Fecha, HoraInicio, IDUsuarioCliente, IDUsuarioProfesional, IDServicio, IDEstado)
+VALUES ('2025-11-15', '10:30:00', 12, 8, 20, 2);
+
+INSERT INTO Turno (Fecha, HoraInicio, IDUsuarioProfesional, IDUsuarioCliente, IDServicio, IDEstado)
+VALUES (DATEADD(day, 1, CAST(GETDATE() AS DATE)), '16:30:00', 5, 14, 3, 1);
+
+INSERT INTO Turno (Fecha, HoraInicio, IDUsuarioProfesional, IDUsuarioCliente, IDServicio, IDEstado)
+VALUES (DATEADD(day, 2, CAST(GETDATE() AS DATE)), '18:00:00', 5, 14, 3, 1);
+
+INSERT INTO Turno (Fecha, HoraInicio, IDUsuarioProfesional, IDUsuarioCliente, IDServicio, IDEstado)
+VALUES (CAST(GETDATE() AS DATE), '12:00:00', 5, 15, 3, 3);
 
 
---insert para probar contar turnos
-INSERT INTO Turno (Fecha, HoraInicio, IDUsuarioProfesional, IDUsuarioCliente, IDServicio, IDPago, IDEstado)
-VALUES (DATEADD(day, 1, CAST(GETDATE() AS DATE)),'15:30:00',5, 14, 3, 6, 1);
-INSERT INTO Turno (Fecha, HoraInicio, IDUsuarioProfesional, IDUsuarioCliente, IDServicio, IDPago, IDEstado)
-VALUES (DATEADD(day, 2, CAST(GETDATE() AS DATE)),'15:30:00',5, 14, 3, 6, 1);
+-- Pago para Turno 11
+INSERT INTO Pago (IDTurno, Fecha, Monto, IDTipoPago, IDFormaPago)
+VALUES ( 11, GETDATE(), 10000, 1, 1);
 
-INSERT INTO Turno (Fecha, HoraInicio,IDUsuarioProfesional,IDUsuarioCliente,IDServicio, IDPago, IDEstado)
-VALUES (CAST(GETDATE() AS DATE), '11:00:00', 5, 15, 3, 7, 3 );
+-- Pago para Turno 12
+INSERT INTO Pago (IDTurno, Fecha, Monto, IDTipoPago, IDFormaPago)
+VALUES (12, GETDATE(), 8000, 1, 1);
 
---insert para ingresos del mes
--- PROFESIONAL ID 5 (Ingreso 1: 05/11/2025)
-INSERT INTO Turno (Fecha, HoraInicio, IDUsuarioProfesional, IDUsuarioCliente, IDServicio, IDEstado, IDPago)
-VALUES 
-(
-    '2025-11-05', -- Fecha en el mes actual, no hoy
-    '11:00:00', 
-    5, 
-    16, -- ID Cliente (Debe existir)
-    4,  -- ID Servicio (Debe existir)
-    5,  -- FINALIZADO (Cuenta)
-    8   -- ID Pago (Debe existir)
-);
+-- Pago para Turno 13
+INSERT INTO Pago (IDTurno, Fecha, Monto, IDTipoPago, IDFormaPago)
+VALUES (13, GETDATE(), 8000, 1, 1);
 
--- PROFESIONAL ID 5 (Ingreso 2: 19/11/2025)
-INSERT INTO Turno (Fecha, HoraInicio, IDUsuarioProfesional, IDUsuarioCliente, IDServicio, IDEstado, IDPago)
-VALUES 
-( '2025-11-19','15:00:00', 5, 17,4, 5,  9 );
+-- Pago para Turno 14
+INSERT INTO Pago (IDTurno, Fecha, Monto, IDTipoPago, IDFormaPago)
+VALUES (14, GETDATE(), 15000, 1, 1);
+
+-- Pago para Turno 14
+INSERT INTO Pago (IDTurno, Fecha,EsDevolucion, Monto, IDTipoPago, IDFormaPago)
+VALUES (14, GETDATE(),1, -15000, 1, 1);
+
 
 
 
