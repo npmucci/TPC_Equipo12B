@@ -97,6 +97,11 @@ namespace Negocio
             return datos.ListarTiposPago();
         }
 
+        public List<Turno> ListarTurnosDelDia(int idProfesional, DateTime fecha)
+        {
+            return datos.ListarPorProfesionalYFecha(idProfesional, fecha);
+        }
+
         public void GuardarTurno(Turno nuevo, Pago pagoInicial)
         {
             datos.Agregar(nuevo, pagoInicial);

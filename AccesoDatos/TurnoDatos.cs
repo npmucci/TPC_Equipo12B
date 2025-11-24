@@ -60,6 +60,58 @@ namespace AccesoDatos
             return lista;
         }
 
+        public List<Turno> ListarPorProfesionalYFecha(int idProf, DateTime fecha)
+        {
+            List<Turno> lista = new List<Turno>();
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearProcedimiento("sp_ListarTurnosPorProfesionalYFecha");
+                    datos.SetearParametro("@IDProfesional", idProf);
+                    datos.SetearParametro("@Fecha", fecha);
+                    datos.EjecutarLectura();
+
+                    while (datos.Lector.Read())
+                    {
+                        Turno aux = new Turno();
+                        aux.IDTurno = (int)datos.Lector["IDTurno"];
+                        aux.Fecha = ((DateTime)datos.Lector["Fecha"]).Date;
+                        aux.HoraInicio = (TimeSpan)datos.Lector["HoraInicio"];
+
+                        
+                        aux.Profesional = new Profesional();
+                        aux.Profesional.ID = (int)datos.Lector["IDUsuarioProfesional"];
+                        aux.Profesional.Nombre = (string)datos.Lector["NombreProfesional"];
+                        aux.Profesional.Apellido = (string)datos.Lector["ApellidoProfesional"];
+
+                        
+                        aux.Servicio = new Servicio();
+                        aux.Servicio.IDServicio = (int)datos.Lector["IDServicio"];
+                        aux.Servicio.Nombre = (string)datos.Lector["Servicio"];
+                        aux.Servicio.DuracionMinutos = (int)datos.Lector["DuracionMinutos"];
+
+                        
+                        aux.Estado = new EstadoTurno();
+                        aux.Estado.IDEstado = (int)datos.Lector["IDEstado"];
+                        aux.Estado.Descripcion = (string)datos.Lector["DescripcionEstado"];
+
+                       
+                        aux.Cliente = new Cliente();
+                        aux.Cliente.ID = (int)datos.Lector["IDUsuarioCliente"];
+                        aux.Cliente.Nombre = (string)datos.Lector["NombreCliente"];
+                        aux.Cliente.Apellido = (string)datos.Lector["ApellidoCliente"];
+
+                        lista.Add(aux);
+                    }
+                    return lista;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
 
 
         public Turno BuscarTurnoPorId(int idTurno)
@@ -469,7 +521,7 @@ namespace AccesoDatos
 
             try
             {
-                // 1. Insertar Turno
+                
                 datosTurno.SetearConsulta("INSERT INTO Turno (Fecha, HoraInicio, IDUsuarioCliente, IDUsuarioProfesional, IDServicio, IDEstado) OUTPUT INSERTED.IDTurno VALUES (@Fecha, @Hora, @Cliente, @Prof, @Serv, @Estado)");
                 datosTurno.SetearParametro("@Fecha", nuevo.Fecha);
                 datosTurno.SetearParametro("@Hora", nuevo.HoraInicio);
@@ -480,7 +532,7 @@ namespace AccesoDatos
 
                 int idTurno = (int)datosTurno.EjecutarAccionEscalar();
 
-                // 2. Insertar Pago (Siempre hay pago ahora, sea seña o total)
+                
                 datosPago.SetearConsulta("INSERT INTO Pago (IDTurno, Fecha, Monto, EsDevolucion, IDTipoPago, IDFormaPago, CodigoTransaccion) VALUES (@IDTurno, @Fecha, @Monto, 0, @Tipo, @Forma, @Cod)");
 
                 datosPago.SetearParametro("@IDTurno", idTurno);

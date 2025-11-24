@@ -29,7 +29,7 @@ namespace CentroEstetica
             lblProfesional.Text = reserva.NombreProfesional;
             lblFechaHora.Text = $"{reserva.Fecha:dd/MM/yyyy} - {reserva.Hora:hh\\:mm} hs";
 
-            // Calculamos Seña por defecto
+            
             CalcularMonto();
         }
 
@@ -69,16 +69,16 @@ namespace CentroEstetica
             {
                 // ES CLIENTE
                 pnlOpcionesAdmin.Visible = false;
-                pnlOpcionesCliente.Visible = true; // Solo ve mensaje "Transferencia"
+                pnlOpcionesCliente.Visible = true; 
 
-                pnlDatosTransferencia.Visible = true; // Siempre ve datos bancarios
-                rfvCodigo.Enabled = true; // OBLIGATORIO para el cliente
+                pnlDatosTransferencia.Visible = true; 
+                rfvCodigo.Enabled = true; 
             }
         }
 
         protected void rblFormaPagoAdmin_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Solo admin cambia esto
+            
             if (rblFormaPagoAdmin.SelectedValue == "Efectivo")
             {
                 pnlDatosTransferencia.Visible = false;
@@ -100,36 +100,33 @@ namespace CentroEstetica
                 Usuario usuarioLogueado = (Usuario)Session["usuario"];
                 bool esAdmin = Seguridad.EsAdmin(usuarioLogueado) || usuarioLogueado.Rol == Dominio.Rol.Recepcionista;
 
-                // 1. Crear Objeto Turno
+                
                 Turno nuevoTurno = new Turno();
                 nuevoTurno.Fecha = reservaTemp.Fecha;
                 nuevoTurno.HoraInicio = reservaTemp.Hora;
 
-                // Si es Admin/Recepcionista y confirma el pago ahí mismo -> Confirmado (1)
-                // Si es Cliente -> Pendiente (2) hasta que revisen la transferencia
+                
                 if (esAdmin)
                     nuevoTurno.Estado = new EstadoTurno { IDEstado = 1 };
                 else
                     nuevoTurno.Estado = new EstadoTurno { IDEstado = 2 };
 
-                nuevoTurno.Cliente = new Cliente { ID = usuarioLogueado.ID }; // OJO: Si el admin reserva para otro, esto debería venir de otro lado. Asumimos auto-reserva por ahora.
+                nuevoTurno.Cliente = new Cliente { ID = usuarioLogueado.ID }; 
                 nuevoTurno.Profesional = new Profesional { ID = reservaTemp.IDProfesional };
                 nuevoTurno.Servicio = new Servicio { IDServicio = reservaTemp.IDServicio };
 
-                // 2. Crear Objeto Pago
+               
                 Pago nuevoPago = new Pago();
                 nuevoPago.Fecha = DateTime.Now;
                 nuevoPago.EsDevolucion = false;
 
-                // Monto
+             
                 decimal total = reservaTemp.Precio;
                 nuevoPago.Monto = (rblTipoMonto.SelectedValue == "Senia") ? (total * 0.5m) : total;
 
-                // Tipo Pago (Seña / Total)
-                // Asumo IDs: 1=Seña, 2=Total
                 nuevoPago.Tipo = new TipoPago { IDTipoPago = (rblTipoMonto.SelectedValue == "Senia" ? 1 : 2) };
 
-                // Forma de Pago y Código
+                
                 if (esAdmin)
                 {
                     if (rblFormaPagoAdmin.SelectedValue == "Efectivo")
@@ -149,16 +146,16 @@ namespace CentroEstetica
                     nuevoPago.CodigoTransaccion = txtCodigoTransaccion.Text; // Obligatorio
                 }
 
-                // 3. Guardar
+                
                 turnoNegocio.GuardarTurno(nuevoTurno, nuevoPago);
 
-                // 4. Enviar Mail (Simulado o Real)
+                
                 if (!esAdmin)
                 {
                     // EmailService.EnviarNotificacionPago(nuevoTurno, nuevoPago);
                 }
 
-                // 5. Fin
+                
                 Session["ReservaEnCurso"] = null;
                 Response.Redirect("PanelPerfil.aspx?reservaExitosa=true");
             }

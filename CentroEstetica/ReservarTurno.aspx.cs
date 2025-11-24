@@ -235,8 +235,7 @@ namespace CentroEstetica
             if (horarioDia == null) return slotsLibres; // No trabaja ese día
 
             // Turnos Ocupados
-            List<Turno> turnosDelDia = turnoNegocio.ListarTurnosActuales()
-                                       .FindAll(t => t.Profesional.ID == idProf && t.Fecha.Date == fecha.Date);
+            List<Turno> turnosDelDia = turnoNegocio.ListarTurnosDelDia(idProf, fecha);
 
             TimeSpan inicioJornada = horarioDia.HorarioInicio;
             TimeSpan finJornada = horarioDia.HorarioFin;
