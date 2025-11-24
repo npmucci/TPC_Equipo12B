@@ -5,39 +5,39 @@ GO
 -- SP USUARIOS
 
 CREATE OR ALTER PROCEDURE ListarUsuariosPorRol
-    @IDRol INT  -- siempre se pasa desde el codigo
+Â  Â  @IDRol INTÂ  -- siempre se pasa desde el codigo
 AS
 BEGIN
-    SET NOCOUNT ON;
+Â  Â  SET NOCOUNT ON;
 
-    SELECT 
-        U.IDUsuario,
-        U.Nombre,
-        U.Apellido,
-        U.Dni,
-        U.Telefono,
-        U.Domicilio,
-        U.Mail,
-        U.Foto,
-        U.Activo,
-        U.IDRol
-    FROM Usuario U
-    WHERE
-        (
-            -- Si pido profesionales, incluyo tambien a ProfesionalUnico
-            (@IDRol = 2 AND U.IDRol IN (2,5))
-        )
-        OR
-        (
-            -- Si pido ProfesionalUnico explicitamente
-            (@IDRol = 5 AND U.IDRol = 5)
-        )
-        OR
-        (
-            -- Si pido cualquier otro rol
-            (@IDRol NOT IN (2,5) AND U.IDRol = @IDRol)
-        )
-    ORDER BY U.Apellido, U.Nombre;
+Â  Â  SELECTÂ 
+Â  Â  Â  Â  U.IDUsuario,
+Â  Â  Â  Â  U.Nombre,
+Â  Â  Â  Â  U.Apellido,
+Â  Â  Â  Â  U.Dni,
+Â  Â  Â  Â  U.Telefono,
+Â  Â  Â  Â  U.Domicilio,
+Â  Â  Â  Â  U.Mail,
+Â  Â  Â  Â  U.Foto,
+Â  Â  Â  Â  U.Activo,
+Â  Â  Â  Â  U.IDRol
+Â  Â  FROM Usuario U
+Â  Â  WHERE
+Â  Â  Â  Â  (
+Â  Â  Â  Â  Â  Â  -- Si pido profesionales, incluyo tambien a ProfesionalUnico
+Â  Â  Â  Â  Â  Â  (@IDRol = 2 AND U.IDRol IN (2,5))
+Â  Â  Â  Â  )
+Â  Â  Â  Â  OR
+Â  Â  Â  Â  (
+Â  Â  Â  Â  Â  Â  -- Si pido ProfesionalUnico explicitamente
+Â  Â  Â  Â  Â  Â  (@IDRol = 5 AND U.IDRol = 5)
+Â  Â  Â  Â  )
+Â  Â  Â  Â  OR
+Â  Â  Â  Â  (
+Â  Â  Â  Â  Â  Â  -- Si pido cualquier otro rol
+Â  Â  Â  Â  Â  Â  (@IDRol NOT IN (2,5) AND U.IDRol = @IDRol)
+Â  Â  Â  Â  )
+Â  Â  ORDER BY U.Apellido, U.Nombre;
 END
 GO
 
@@ -117,144 +117,144 @@ GO
 CREATE or ALTER PROCEDURE ListarEspecialidades
 AS
 BEGIN
-    SELECT IDEspecialidad, Nombre, Descripcion, Foto, Activo
-    FROM Especialidad
-    ORDER BY Nombre;
+Â  Â  SELECT IDEspecialidad, Nombre, Descripcion, Foto, Activo
+Â  Â  FROM Especialidad
+Â  Â  ORDER BY Nombre;
 END
 GO
 
 CREATE OR ALTER PROCEDURE sp_AgregarEspecialidad
-    @Nombre VARCHAR(100),
-    @Descripcion VARCHAR(MAX),
-    @Foto VARCHAR(150)
+Â  Â  @Nombre VARCHAR(100),
+Â  Â  @Descripcion VARCHAR(MAX),
+Â  Â  @Foto VARCHAR(150)
 AS
 BEGIN
-    INSERT INTO Especialidad (Nombre, Descripcion, Foto, Activo)
-    VALUES (@Nombre, @Descripcion, @Foto, 1)
+Â  Â  INSERT INTO Especialidad (Nombre, Descripcion, Foto, Activo)
+Â  Â  VALUES (@Nombre, @Descripcion, @Foto, 1)
 END
 GO
 
 CREATE OR ALTER PROCEDURE sp_ModificarEspecialidad
-    @ID INT,
-    @Nombre VARCHAR(100),
-    @Descripcion VARCHAR(MAX),
-    @Foto VARCHAR(150),
-    @Activo BIT
+Â  Â  @ID INT,
+Â  Â  @Nombre VARCHAR(100),
+Â  Â  @Descripcion VARCHAR(MAX),
+Â  Â  @Foto VARCHAR(150),
+Â  Â  @Activo BIT
 AS
 BEGIN
-    UPDATE Especialidad
-    SET 
-        Nombre = @Nombre,
-        Descripcion = @Descripcion,
-        Foto = @Foto,
-        Activo = @Activo
-    WHERE 
-        IDEspecialidad = @ID
+Â  Â  UPDATE Especialidad
+Â  Â  SETÂ 
+Â  Â  Â  Â  Nombre = @Nombre,
+Â  Â  Â  Â  Descripcion = @Descripcion,
+Â  Â  Â  Â  Foto = @Foto,
+Â  Â  Â  Â  Activo = @Activo
+Â  Â  WHEREÂ 
+Â  Â  Â  Â  IDEspecialidad = @ID
 END
 GO
 
 CREATE OR ALTER PROCEDURE sp_EliminarLogicoEspecialidad
-    @ID INT
+Â  Â  @ID INT
 AS
 BEGIN
-    UPDATE Especialidad
-    SET 
-        Activo = 0
-    WHERE 
-        IDEspecialidad = @ID
+Â  Â  UPDATE Especialidad
+Â  Â  SETÂ 
+Â  Â  Â  Â  Activo = 0
+Â  Â  WHEREÂ 
+Â  Â  Â  Â  IDEspecialidad = @ID
 END
 GO
 
 -- SP SERVICIOS
 
 CREATE OR ALTER PROCEDURE sp_AgregarServicio
-    @IDEspecialidad INT,
-    @Nombre VARCHAR(150),
-    @Descripcion VARCHAR(MAX),
-    @Precio DECIMAL(10, 2),
-    @DuracionMinutos INT
+Â  Â  @IDEspecialidad INT,
+Â  Â  @Nombre VARCHAR(150),
+Â  Â  @Descripcion VARCHAR(MAX),
+Â  Â  @Precio DECIMAL(10, 2),
+Â  Â  @DuracionMinutos INT
 AS
 BEGIN
-    INSERT INTO Servicio (IDEspecialidad, Nombre, Descripcion, Precio, DuracionMinutos, Activo)
-    VALUES (@IDEspecialidad, @Nombre, @Descripcion, @Precio, @DuracionMinutos, 1)
+Â  Â  INSERT INTO Servicio (IDEspecialidad, Nombre, Descripcion, Precio, DuracionMinutos, Activo)
+Â  Â  VALUES (@IDEspecialidad, @Nombre, @Descripcion, @Precio, @DuracionMinutos, 1)
 END
 GO
 
 CREATE OR ALTER PROCEDURE sp_ModificarServicio
-    @IDServicio INT,
-    @IDEspecialidad INT,
-    @Nombre VARCHAR(150),
-    @Descripcion VARCHAR(MAX),
-    @Precio DECIMAL(10, 2),
-    @DuracionMinutos INT,
-    @Activo BIT
+Â  Â  @IDServicio INT,
+Â  Â  @IDEspecialidad INT,
+Â  Â  @Nombre VARCHAR(150),
+Â  Â  @Descripcion VARCHAR(MAX),
+Â  Â  @Precio DECIMAL(10, 2),
+Â  Â  @DuracionMinutos INT,
+Â  Â  @Activo BIT
 AS
 BEGIN
-    UPDATE Servicio
-    SET 
-        IDEspecialidad = @IDEspecialidad,
-        Nombre = @Nombre,
-        Descripcion = @Descripcion,
-        Precio = @Precio,
-        DuracionMinutos = @DuracionMinutos,
-        Activo = @Activo
-    WHERE 
-        IDServicio = @IDServicio
+Â  Â  UPDATE Servicio
+Â  Â  SETÂ 
+Â  Â  Â  Â  IDEspecialidad = @IDEspecialidad,
+Â  Â  Â  Â  Nombre = @Nombre,
+Â  Â  Â  Â  Descripcion = @Descripcion,
+Â  Â  Â  Â  Precio = @Precio,
+Â  Â  Â  Â  DuracionMinutos = @DuracionMinutos,
+Â  Â  Â  Â  Activo = @Activo
+Â  Â  WHEREÂ 
+Â  Â  Â  Â  IDServicio = @IDServicio
 END
 GO
 
 CREATE OR ALTER PROCEDURE sp_EliminarLogicoServicio
-    @IDServicio INT
+Â  Â  @IDServicio INT
 AS
 BEGIN
-    UPDATE Servicio
-    SET 
-        Activo = 0
-    WHERE 
-        IDServicio = @IDServicio
+Â  Â  UPDATE Servicio
+Â  Â  SETÂ 
+Â  Â  Â  Â  Activo = 0
+Â  Â  WHEREÂ 
+Â  Â  Â  Â  IDServicio = @IDServicio
 END
 GO
 
 -- SP HORARIO ATENCION
 
 CREATE PROCEDURE sp_AgregarHorario
-    @IDUsuario INT,
-    @DiaSemana VARCHAR(15),
-    @HorarioInicio TIME,
-    @HorarioFin TIME
+Â  Â  @IDUsuario INT,
+Â  Â  @DiaSemana VARCHAR(15),
+Â  Â  @HorarioInicio TIME,
+Â  Â  @HorarioFin TIME
 AS
 BEGIN
-    INSERT INTO HorarioAtencion (IDUsuario, DiaSemana, HorarioInicio, HorarioFin, Activo)
-    VALUES (@IDUsuario, @DiaSemana, @HorarioInicio, @HorarioFin, 1)
+Â  Â  INSERT INTO HorarioAtencion (IDUsuario, DiaSemana, HorarioInicio, HorarioFin, Activo)
+Â  Â  VALUES (@IDUsuario, @DiaSemana, @HorarioInicio, @HorarioFin, 1)
 END
 GO
 
 CREATE PROCEDURE sp_ModificarHorario
-    @IDHorarioAtencion INT,
-    @DiaSemana VARCHAR(15),
-    @HorarioInicio TIME,
-   @HorarioFin TIME,
-    @Activo BIT
+Â  Â  @IDHorarioAtencion INT,
+Â  Â  @DiaSemana VARCHAR(15),
+Â  Â  @HorarioInicio TIME,
+Â   @HorarioFin TIME,
+Â  Â  @Activo BIT
 AS
 BEGIN
-    UPDATE HorarioAtencion 
-    SET 
-        DiaSemana = @DiaSemana, 
-        HorarioInicio = @HorarioInicio, 
-        HorarioFin = @HorarioFin, 
-        Activo = @Activo 
-    WHERE 
-        IDHorarioAtencion = @IDHorarioAtencion
+Â  Â  UPDATE HorarioAtencionÂ 
+Â  Â  SETÂ 
+Â  Â  Â  Â  DiaSemana = @DiaSemana,Â 
+Â  Â  Â  Â  HorarioInicio = @HorarioInicio,Â 
+Â  Â  Â  Â  HorarioFin = @HorarioFin,Â 
+Â  Â  Â  Â  Activo = @ActivoÂ 
+Â  Â  WHEREÂ 
+Â  Â  Â  Â  IDHorarioAtencion = @IDHorarioAtencion
 END
 GO
 
 CREATE PROCEDURE sp_EliminarHorario
-    @IDHorarioAtencion INT
+Â  Â  @IDHorarioAtencion INT
 AS
 BEGIN
-    -- Borrado físico, NO LOGICO
-    DELETE FROM HorarioAtencion 
-    WHERE IDHorarioAtencion = @IDHorarioAtencion
+Â  Â  -- Borrado fÃ­sico, NO LOGICO
+Â  Â  DELETE FROM HorarioAtencionÂ 
+Â  Â  WHERE IDHorarioAtencion = @IDHorarioAtencion
 END
 GO
 
@@ -364,6 +364,41 @@ BEGIN
         AND T.Fecha >= @FechaInicio
         AND T.Fecha <= @FechaFin
         AND T.IDEstado IN (1, 3);  
+END
+GO
+
+CREATE OR ALTER PROCEDURE sp_ListarTurnosPorProfesionalYFecha
+    @IDProfesional INT,
+    @Fecha DATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        T.IDTurno,
+        T.Fecha,
+        T.HoraInicio,
+        T.IDEstado,
+        E.Descripcion AS DescripcionEstado,
+        T.IDUsuarioProfesional,
+        T.IDUsuarioCliente,
+        T.IDServicio,
+        S.Nombre AS Servicio,
+        S.DuracionMinutos, 
+        P.Nombre AS NombreProfesional,
+        P.Apellido AS ApellidoProfesional,
+        C.Nombre AS NombreCliente,
+        C.Apellido AS ApellidoCliente
+    FROM Turno T
+    INNER JOIN Usuario P ON T.IDUsuarioProfesional = P.IDUsuario
+    INNER JOIN Usuario C ON T.IDUsuarioCliente = C.IDUsuario
+    INNER JOIN Servicio S ON T.IDServicio = S.IDServicio
+    INNER JOIN EstadoTurno E ON T.IDEstado = E.IDEstado
+    WHERE 
+        T.IDUsuarioProfesional = @IDProfesional 
+        AND T.Fecha = @Fecha
+        AND T.IDEstado IN (1, 2) 
+    ORDER BY T.HoraInicio;
 END
 GO
 
