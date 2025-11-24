@@ -1,37 +1,38 @@
 USE ESTETICA_BD
 go
 
-/* --- INSERCIÓN DE DATOS --- */
+/* --- INSERCIÃ“N DE DATOS --- */
 
 -- Deshabilitamos temporalmente las FK
 EXEC sp_MSforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL'
 
--- 1. Catálogos Base (Estados, Roles, Tipos de Pago)
+-- 1. CatÃ¡logos Base (Estados, Roles, Tipos de Pago)
 INSERT INTO EstadoTurno (Descripcion) VALUES
 ('Confirmado'),
 ('Pendiente'),
 ('CanceladoCliente'),
 ('CanceladoProfesional'),
-('Finalizado');
--- IDs: 1-Confirmado, 2- Pendiente de pado, 3-CanceladoCliente, 4-CanceladoProfesional, 5-Finalizado
+('Finalizado')
+('Solicitud de DevoluciÃ³n');
+-- IDs: 1-Confirmado, 2- Pendiente de pado, 3-CanceladoCliente, 4-CanceladoProfesional, 5-Finalizado, 6-Solicitud de DevoluciÃ³n
 
-INSERT INTO Rol (NombreRol) VALUES 
+INSERT INTO Rol (NombreRol) VALUESÂ 
 ('Admin'), ('Profesional'), ('Cliente'), ('Recepcionista'), ('ProfesionalUnico')
 -- IDs: 1-Admin, 2-Profesional, 3-Cliente, 4-Recepcionista, 5- Profesioal-Administrador
 
-INSERT INTO TipoPago (Nombre) VALUES 
-('Seña'), ('Total');
--- IDs: 1-Seña, 2-Total
+INSERT INTO TipoPago (Nombre) VALUESÂ 
+('SeÃ±a'), ('Total');
+-- IDs: 1-SeÃ±a, 2-Total
 
-INSERT INTO FormaPago (Nombre) VALUES 
-('Efectivo'), ('Electrónico');
--- IDs: 1-Paga en Efectivo, 2-Paga de forma electrónica (transferencia-mp-etc).
+INSERT INTO FormaPago (Nombre) VALUESÂ 
+('Efectivo'), ('ElectrÃ³nico');
+-- IDs: 1-Paga en Efectivo, 2-Paga de forma electrÃ³nica (transferencia-mp-etc).
 
 INSERT INTO Especialidad (Nombre, Descripcion, Foto) VALUES
 ('Manicura', 'Servicios de belleza para manos y pies.','https://lafemmebeauty.es/wp-content/uploads/2024/06/Consejos-para-Mantener-Tu-Pedicura-Semipermanente-Perfecta-1.jpeg'),
-('Esteticista', 'Tratamientos faciales, corporales y depilación.', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3Mvo09I7M19WqW-2RbnOT-aw5bo-WOd9PtA&s'),
-('Masajista', 'Masajes terapéuticos y de relajación.', 'https://www.anamanao.com/imagecache/width/uploads/tratamientos/tratamientos-corporales/aromassage-relax.jpg?size=680'),
-('Lashista', 'Servicios de pestañas y cejas.', 'https://inlashacademy.com/wp-content/uploads/2022/04/lashista-1-1360x902.jpg');
+('Esteticista', 'Tratamientos faciales, corporales y depilaciÃ³n.', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3Mvo09I7M19WqW-2RbnOT-aw5bo-WOd9PtA&s'),
+('Masajista', 'Masajes terapÃ©uticos y de relajaciÃ³n.', 'https://www.anamanao.com/imagecache/width/uploads/tratamientos/tratamientos-corporales/aromassage-relax.jpg?size=680'),
+('Lashista', 'Servicios de pestaÃ±as y cejas.', 'https://inlashacademy.com/wp-content/uploads/2022/04/lashista-1-1360x902.jpg');
 -- IDs: 1-Manicura, 2-Esteticista, 3-Masajista, 4-Lashista
 
 -- 2. Servicios (Vinculados a Especialidad)
@@ -44,7 +45,7 @@ INSERT INTO Servicio (IDEspecialidad, Nombre, Precio, DuracionMinutos, Activo) V
 (1, 'Capping', 22000, 75, 1),
 (1, 'Esmaltado comun', 12000, 30, 1),
 (1, 'Soft Gel', 28000, 90, 1),
-(1, 'Diseño de uñas (simple)', 3000, 15, 1);
+(1, 'DiseÃ±o de uÃ±as (simple)', 3000, 15, 1);
 -- Servicios de Esteticista (Especialidad 2)
 INSERT INTO Servicio (IDEspecialidad, Nombre, Precio, DuracionMinutos, Activo) VALUES
 (2, 'Dermaplaning', 35000, 60, 1),
@@ -52,34 +53,34 @@ INSERT INTO Servicio (IDEspecialidad, Nombre, Precio, DuracionMinutos, Activo) V
 (2, 'Hi-FU (Facial)', 80000, 90, 1),
 (2, 'Tratamiento facial con activos', 30000, 50, 1),
 (2, 'Bronceado (Sol Pleno)', 22000, 30, 1),
-(2, 'Depilación laser cuerpo entero', 70000, 120, 1),
-(2, 'Depilación laser pecho', 25000, 30, 1),
-(2, 'Depilación laser espalda', 25000, 30, 1),
+(2, 'DepilaciÃ³n laser cuerpo entero', 70000, 120, 1),
+(2, 'DepilaciÃ³n laser pecho', 25000, 30, 1),
+(2, 'DepilaciÃ³n laser espalda', 25000, 30, 1),
 (2, 'Depilacion rostro', 18000, 20, 1),
-(2, 'Depilación laser una zona (cavado)', 20000, 30, 1);
+(2, 'DepilaciÃ³n laser una zona (cavado)', 20000, 30, 1);
 -- Servicios de Masajista (Especialidad 3)
 INSERT INTO Servicio (IDEspecialidad, Nombre, Precio, DuracionMinutos, Activo) VALUES
 (3, 'Masaje Descontracturante', 40000, 60, 1),
 (3, 'Masaje reducctor', 42000, 60, 1),
 (3, 'Masaje relajante', 40000, 60, 1),
-(3, 'Drenaje Linfático (Manual)', 48000, 50, 1),
+(3, 'Drenaje LinfÃ¡tico (Manual)', 48000, 50, 1),
 (3, 'Reflexologia', 38000, 45, 1);
 -- Servicios de LASHISTA (Especialidad 4)
 INSERT INTO Servicio (IDEspecialidad, Nombre, Precio, DuracionMinutos, Activo) VALUES
 (4, 'Perfilado de cejas', 18000, 30, 1),
 (4, 'Laminado de cejas', 28000, 50, 1),
-(4, 'Lifting de pestañas', 30000, 60, 1);
+(4, 'Lifting de pestaÃ±as', 30000, 60, 1);
 
 
 
--- 3. Usuarios 
+-- 3. UsuariosÂ 
 DECLARE @PassHash VARCHAR(255) = '$2a$10$9A014.JhG379V054ZG4uiOlnBQ25eKTHskhx0lvEh313Qo/wzabSK';
 
 -- Admins (IDRol 1)
 INSERT INTO Usuario (Nombre, Apellido, Dni, Telefono, Mail, ContraseniaHash, IDRol) VALUES
 ('Lucas', 'Berlingeri', '30111222','22233377889', 'lucas.berlingeri@admin.com', @PassHash, 1),
 ('Natalia', 'Mucci', '31222333', '22336677991', 'natalia.mucci@admin.com', @PassHash, 4);
--- IDs: 1, 2, 
+-- IDs: 1, 2,Â 
 
 
 -- Profesionales (IDRol 2)
@@ -92,7 +93,7 @@ INSERT INTO Usuario (Nombre, Apellido, Dni,Telefono, Mail, ContraseniaHash, Foto
 ('Franco', 'Leone', '34222333','1155880033', 'franco.leone@prof.com', @PassHash, 'https://media.istockphoto.com/id/1200677760/es/foto/retrato-de-apuesto-joven-sonriente-con-los-brazos-cruzados.jpg?s=612x612&w=0&k=20&c=RhKR8pxX3y_YVe5CjrRnTcNFEGDryD2FVOcUT_w3m4w=', 2),
 ('Martina', 'Wagner', '36555555','1199887766', 'martina.wagner@prof.com', @PassHash,'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8gi0ZLlmIhYygwOcEO3zEkR2fm8sjSNzA64N5kvyKrkULkrH6EX2uo0_BzXqJOtUb0P0&usqp=CAU', 2),
 
--- Usuario unipersonal (Profesional Único - IDRol 5)
+-- Usuario unipersonal (Profesional Ãšnico - IDRol 5)
 ('Clara', 'Castro', '37222444','1155990033', 'clara.castro@prof.com', @PassHash, 'https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg', 5);
 
 -- IDs: 3 a 10
@@ -100,15 +101,15 @@ INSERT INTO Usuario (Nombre, Apellido, Dni,Telefono, Mail, ContraseniaHash, Foto
 -- Clientes (IDRol 3)
 
 INSERT INTO Usuario (Nombre, Apellido, Dni, Telefono, Domicilio, Mail, ContraseniaHash, IDRol) VALUES
-('Maria', 'Gonzalez', '40111111','1150001111','Av. Rivadavia 1234',  'maria.gonzalez@cliente.com', @PassHash, 3),
-('Juan', 'Rodriguez', '40222222','1150018888','Cerrito 900',  'juan.rodriguez@cliente.com', @PassHash, 3),
+('Maria', 'Gonzalez', '40111111','1150001111','Av. Rivadavia 1234',Â  'maria.gonzalez@cliente.com', @PassHash, 3),
+('Juan', 'Rodriguez', '40222222','1150018888','Cerrito 900',Â  'juan.rodriguez@cliente.com', @PassHash, 3),
 ('Florencia', 'Gomez', '40333333', '1150003333','Av. Corrientes 5678', 'flor.gomez@cliente.com', @PassHash, 3),
 ('Pedro', 'Fernandez', '40444444','1150005555', 'Bolivar 158', 'pedro.fernandez@cliente.com', @PassHash, 3),
-('Camila', 'Lopez', '40555555','1150007777','Florida 550',  'camila.lopez@cliente.com', @PassHash, 3),
-('Martin', 'Diaz', '40666666','1150009999','Peru 345',  'martin.diaz@cliente.com', @PassHash, 3),
-('Lucia', 'Martinez', '40777777','1150013333','Uruguay 300',  'lucia.martinez@cliente.com', @PassHash, 3),
-('Agustin', 'Perez', '40888888','1150015555','Esmeralda 600',  'agustin.perez@cliente.com', @PassHash, 3),
-('Julieta', 'Sanchez', '40999999','1150017777','Carlos Pellegrini 800',  'julieta.sanchez@cliente.com', @PassHash, 3),
+('Camila', 'Lopez', '40555555','1150007777','Florida 550',Â  'camila.lopez@cliente.com', @PassHash, 3),
+('Martin', 'Diaz', '40666666','1150009999','Peru 345',Â  'martin.diaz@cliente.com', @PassHash, 3),
+('Lucia', 'Martinez', '40777777','1150013333','Uruguay 300',Â  'lucia.martinez@cliente.com', @PassHash, 3),
+('Agustin', 'Perez', '40888888','1150015555','Esmeralda 600',Â  'agustin.perez@cliente.com', @PassHash, 3),
+('Julieta', 'Sanchez', '40999999','1150017777','Carlos Pellegrini 800',Â  'julieta.sanchez@cliente.com', @PassHash, 3),
 ('Valeria', 'Acosta', '41222222','1150019999','Libertad 1000', 'valeria.acosta@cliente.com', @PassHash, 3);
 
 --IDs: 11 a 20
@@ -119,10 +120,10 @@ INSERT INTO Usuario (Nombre, Apellido, Dni, Telefono, Domicilio, Mail, Contrasen
 INSERT INTO ProfesionalEspecialidad (IDUsuario, IDEspecialidad) VALUES
 (4, 1), (5, 1), -- Manicuras
 (7, 2), (10, 2), -- Esteticistas
-(8, 3), (3, 3),       -- Masajistas
-(9, 4), (6, 4);       -- Lashistas
+(8, 3), (3, 3),Â  Â  Â  Â -- Masajistas
+(9, 4), (6, 4);Â  Â  Â  Â -- Lashistas
 
--- 6. Horarios de Atención
+-- 6. Horarios de AtenciÃ³n
 INSERT INTO HorarioAtencion (IDUsuario, DiaSemana, HorarioInicio, HorarioFin, Activo) VALUES
 (4, 'Lunes', '09:00:00', '18:00:00', 1),(4, 'Martes', '09:00:00', '18:00:00', 1),
 (4, 'Miercoles', '09:00:00', '14:00:00', 1),(7, 'Miercoles', '10:00:00', '20:00:00', 1),
@@ -161,7 +162,7 @@ VALUES
 (10, DATEADD(day, -2, GETDATE()), 30000, 1, 1); 
 
 -- Reactivamos todas las constraints
-EXEC sp_MSforeachtable 'ALTER TABLE ? WITH CHECK CHECK CONSTRAINT ALL'; 
+EXEC sp_MSforeachtable 'ALTER TABLE ? WITH CHECK CHECK CONSTRAINT ALL';Â 
 go
 
 
