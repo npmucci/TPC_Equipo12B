@@ -37,17 +37,35 @@ namespace CentroEstetica
         {
             ReservaTemporal reserva = (ReservaTemporal)Session["ReservaEnCurso"];
             decimal total = reserva.Precio;
+            decimal precioTotal = reserva.Precio;
+            DateTime fechaHoraTurno = reserva.Fecha.Add(reserva.Hora);
+            double horasRestantes = (fechaHoraTurno - DateTime.Now).TotalHours;
 
-            if (rblTipoMonto.SelectedValue == "Senia")
-                lblMontoAPagar.Text = "$" + (total * 0.5m).ToString("N0");
+            if (horasRestantes < 24)
+            {
+                
+                decimal monto = precioTotal;
+                lblMontoAPagar.Text = "$" + monto.ToString("N0");
+
+                pnlInfoTotal.Visible = true;
+                pnlInfoSenia.Visible = false;
+
+                hfTipoPagoCalculado.Value = "Total";
+            }
             else
-                lblMontoAPagar.Text = "$" + total.ToString("N0");
+            {
+               
+                decimal monto = precioTotal * 0.5m;
+                lblMontoAPagar.Text = "$" + monto.ToString("N0");
+
+                pnlInfoTotal.Visible = false;
+                pnlInfoSenia.Visible = true;
+
+                hfTipoPagoCalculado.Value = "Senia"; 
+            }
         }
 
-        protected void rblTipoMonto_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            CalcularMonto();
-        }
+       
 
         // --- LÓGICA DE ROLES ---
         private void ConfigurarVistaPorRol()
@@ -115,35 +133,43 @@ namespace CentroEstetica
                 nuevoTurno.Profesional = new Profesional { ID = reservaTemp.IDProfesional };
                 nuevoTurno.Servicio = new Servicio { IDServicio = reservaTemp.IDServicio };
 
-               
+
                 Pago nuevoPago = new Pago();
                 nuevoPago.Fecha = DateTime.Now;
                 nuevoPago.EsDevolucion = false;
 
-             
-                decimal total = reservaTemp.Precio;
-                nuevoPago.Monto = (rblTipoMonto.SelectedValue == "Senia") ? (total * 0.5m) : total;
+                decimal precioTotal = reservaTemp.Precio;
+                string tipoPago = hfTipoPagoCalculado.Value; 
 
-                nuevoPago.Tipo = new TipoPago { IDTipoPago = (rblTipoMonto.SelectedValue == "Senia" ? 1 : 2) };
+                if (tipoPago == "Total")
+                {
+                    nuevoPago.Monto = precioTotal;
+                    nuevoPago.Tipo = new TipoPago { IDTipoPago = 2 }; 
+                }
+                else
+                {
+                    nuevoPago.Monto = precioTotal * 0.5m;
+                    nuevoPago.Tipo = new TipoPago { IDTipoPago = 1 }; 
+                }
 
-                
+
                 if (esAdmin)
                 {
                     if (rblFormaPagoAdmin.SelectedValue == "Efectivo")
                     {
-                        nuevoPago.FormaDePago = new FormaPago { IDFormaPago = 1 }; // 1=Efectivo
+                        nuevoPago.FormaDePago = new FormaPago { IDFormaPago = 1 }; 
                         nuevoPago.CodigoTransaccion = null;
                     }
                     else
                     {
-                        nuevoPago.FormaDePago = new FormaPago { IDFormaPago = 2 }; // 2=Transferencia
-                        nuevoPago.CodigoTransaccion = txtCodigoTransaccion.Text; // Opcional
+                        nuevoPago.FormaDePago = new FormaPago { IDFormaPago = 2 }; 
+                        nuevoPago.CodigoTransaccion = txtCodigoTransaccion.Text; 
                     }
                 }
-                else // Cliente
+                else 
                 {
-                    nuevoPago.FormaDePago = new FormaPago { IDFormaPago = 2 }; // Siempre transf.
-                    nuevoPago.CodigoTransaccion = txtCodigoTransaccion.Text; // Obligatorio
+                    nuevoPago.FormaDePago = new FormaPago { IDFormaPago = 2 }; 
+                    nuevoPago.CodigoTransaccion = txtCodigoTransaccion.Text; 
                 }
 
                 
@@ -157,7 +183,28 @@ namespace CentroEstetica
 
                 
                 Session["ReservaEnCurso"] = null;
-                Response.Redirect("PanelPerfil.aspx?reservaExitosa=true");
+                Usuario usuario = (Usuario)Session["usuario"];
+                string urlDestino = "Default.aspx"; 
+
+                switch (usuario.Rol)
+                {
+                    case Rol.Cliente:
+                        urlDestino = "PanelCliente.aspx";
+                        break;
+                    case Rol.Recepcionista:
+                        urlDestino = "PanelRecepcionista.aspx";
+                        break;
+                    case Rol.Admin:
+                    case Rol.ProfesionalUnico:
+                        urlDestino = "PanelAdmin.aspx";
+                        break;
+                    case Rol.Profesional:
+                        urlDestino = "PanelProfesional.aspx";
+                        break;
+                }
+
+                
+                Response.Redirect(urlDestino + "?reservaExitosa=true", false);
             }
             catch (Exception ex)
             {

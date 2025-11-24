@@ -56,15 +56,29 @@
 
                     <h5 class="fw-bold mb-3 border-bottom pb-2">Monto a Pagar</h5>
                     <div class="mb-4">
-                        <asp:RadioButtonList ID="rblTipoMonto" runat="server" AutoPostBack="true" OnSelectedIndexChanged="rblTipoMonto_SelectedIndexChanged" CssClass="w-100">
-                            <asp:ListItem Value="Senia" Selected="True"> Pagar Seña (50%)</asp:ListItem>
-                            <asp:ListItem Value="Total"> Pagar Total (100%)</asp:ListItem>
-                        </asp:RadioButtonList>
+                        
+                        <asp:Panel ID="pnlInfoSenia" runat="server" Visible="false" CssClass="alert alert-warning border-warning d-flex align-items-center">
+                            <i class="bi bi-piggy-bank fs-3 me-3"></i>
+                            <div>
+                                <strong>Pago de Seña (50%)</strong><br />
+                                <small>Abonás la mitad ahora para reservar. El resto se paga en el local.</small>
+                            </div>
+                        </asp:Panel>
+                    
+                        <asp:Panel ID="pnlInfoTotal" runat="server" Visible="false" CssClass="alert alert-info border-info d-flex align-items-center">
+                            <i class="bi bi-lightning-charge fs-3 me-3"></i>
+                            <div>
+                                <strong>Pago Total (100%)</strong><br />
+                                <small>Al reservar con menos de 24hs de antelación, se requiere el pago completo.</small>
+                            </div>
+                        </asp:Panel>
                         
                         <div class="d-flex justify-content-between align-items-center mt-3 bg-light p-3 rounded">
                             <span class="fw-bold">Total a Pagar Ahora:</span>
                             <asp:Label ID="lblMontoAPagar" runat="server" Text="$0" CssClass="total-highlight"></asp:Label>
                         </div>
+                        
+                        <asp:HiddenField ID="hfTipoPagoCalculado" runat="server" />
                     </div>
 
                     <h5 class="fw-bold mb-3 border-bottom pb-2">Forma de Pago</h5>

@@ -25,6 +25,11 @@ namespace CentroEstetica
             if (!IsPostBack)
             {
 
+                if (Request.QueryString["reservaExitosa"] == "true")
+                {
+                    pnlMensajeExito.Visible = true;
+                }
+
                 Profesional profesional = (Profesional)Session["usuario"];
                 lblNombre.Text = "Bienvenida/o " + profesional.Nombre.ToString();
                 MostrarFechaActual();

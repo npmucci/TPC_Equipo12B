@@ -60,13 +60,22 @@ namespace CentroEstetica
         protected global::System.Web.UI.WebControls.Label lblFechaHora;
 
         /// <summary>
-        /// Control rblTipoMonto.
+        /// Control pnlInfoSenia.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButtonList rblTipoMonto;
+        protected global::System.Web.UI.WebControls.Panel pnlInfoSenia;
+
+        /// <summary>
+        /// Control pnlInfoTotal.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlInfoTotal;
 
         /// <summary>
         /// Control lblMontoAPagar.
@@ -76,6 +85,15 @@ namespace CentroEstetica
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblMontoAPagar;
+
+        /// <summary>
+        /// Control hfTipoPagoCalculado.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hfTipoPagoCalculado;
 
         /// <summary>
         /// Control pnlOpcionesAdmin.

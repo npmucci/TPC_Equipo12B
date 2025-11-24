@@ -31,6 +31,11 @@ namespace CentroEstetica
 
             if (!IsPostBack)
             {
+                if (Request.QueryString["reservaExitosa"] == "true")
+                {
+                    MostrarMensaje("¡Reserva creada con éxito! El turno ya figura en el sistema.", "success");
+                }
+
                 string view = Request.QueryString["view"];
 
                 
