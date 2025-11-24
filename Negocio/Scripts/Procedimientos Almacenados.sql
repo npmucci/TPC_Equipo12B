@@ -346,6 +346,32 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROCEDURE sp_ListarTurnosParaDevolucion
+AS
+BEGIN
+    SELECT 
+        T.IDTurno,
+        T.Fecha,
+        T.HoraInicio,
+        T.IDEstado,
+        E.Descripcion AS DescripcionEstado,
+        T.IDUsuarioProfesional, T.IDUsuarioCliente, T.IDServicio, 
+        P.Nombre AS NombreProfesional,
+        P.Apellido AS ApellidoProfesional,
+        C.Nombre AS NombreCliente,
+        C.Apellido AS ApellidoCliente,
+        S.Nombre AS Servicio,
+        S.DuracionMinutos,
+        ISNULL((SELECT SUM(Monto) FROM Pago WHERE IDTurno = T.IDTurno AND EsDevolucion = 0), 0) as TotalPagado
+    FROM Turno T
+    INNER JOIN Usuario C ON T.IDUsuarioCliente = C.IDUsuario
+    INNER JOIN Usuario P ON T.IDUsuarioProfesional = P.IDUsuario
+    INNER JOIN Servicio S ON T.IDServicio = S.IDServicio
+    INNER JOIN EstadoTurno E ON T.IDEstado = E.IDEstado
+    WHERE E.Descripcion = 'Solicitud de Devolución' 
+    ORDER BY T.Fecha ASC;
+END
+GO
 
 CREATE PROCEDURE sp_contarTurnos
     @IDProfesional INT,
