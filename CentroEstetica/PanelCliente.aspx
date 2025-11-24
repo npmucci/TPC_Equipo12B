@@ -18,6 +18,16 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </asp:Panel>
 
+        <asp:Panel ID="pnlMensajeCancelacion" runat="server" Visible="false" CssClass="alert alert-info alert-dismissible fade show shadow-sm mb-4" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="bi bi-info-circle-fill fs-4 me-3"></i>
+                <div>
+                    <asp:Label ID="lblMensajeCancelacion" runat="server"></asp:Label>
+                </div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </asp:Panel>
+
         <div class="row">
             
             <div class="col-lg-3 col-xl-2 mb-4">
@@ -78,10 +88,10 @@
                                             <div class="text-end">
                                                 <span class="badge bg-info text-white mb-2 d-block">Solicitud Pendiente</span>
                                                 
-                                                <asp:Button ID="btnCancelar" runat="server" Text="Cancelar Solicitud" 
-                                                    CssClass="btn btn-outline-secondary btn-sm" 
-                                                    CommandName="Cancelar" CommandArgument='<%# Eval("IDTurno") %>'
-                                                    OnClientClick="return confirm('¿Seguro que querés cancelar esta solicitud?');" />
+                                                 <asp:Button ID="btnCancelar" runat="server" Text="Cancelar Solicitud" 
+                                                         CssClass="btn btn-outline-secondary btn-sm" 
+                                                         CommandName="Cancelar" CommandArgument='<%# Eval("IDTurno") %>'
+                                                         OnClientClick='<%# GenerarMensajeConfirmacion(Eval("Fecha"), Eval("HoraInicio")) %>' />
                                             </div>
                                         </div>
                                     </div>
@@ -115,9 +125,10 @@
                                             <div class="text-end">
                                                 <span class="badge bg-success mb-2 d-block">Confirmado</span>
                                                 <asp:Button ID="btnCancelarConf" runat="server" Text="Cancelar Turno" 
-                                                    CssClass="btn btn-danger btn-sm" 
-                                                    CommandName="Cancelar" CommandArgument='<%# Eval("IDTurno") %>'
-                                                    OnClientClick="return confirm('ATENCIÓN: Estás cancelando un turno confirmado. ¿Continuar?');" />
+                                                  CssClass="btn btn-danger btn-sm" 
+                                                  CommandName="Cancelar" CommandArgument='<%# Eval("IDTurno") %>'
+                                                  
+                                                  OnClientClick='<%# GenerarMensajeConfirmacion(Eval("Fecha"), Eval("HoraInicio")) %>' />
                                             </div>
                                         </div>
                                     </div>

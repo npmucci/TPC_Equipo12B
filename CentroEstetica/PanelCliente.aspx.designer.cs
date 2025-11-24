@@ -24,6 +24,24 @@ namespace CentroEstetica
         protected global::System.Web.UI.WebControls.Panel pnlMensajeExito;
 
         /// <summary>
+        /// Control pnlMensajeCancelacion.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlMensajeCancelacion;
+
+        /// <summary>
+        /// Control lblMensajeCancelacion.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblMensajeCancelacion;
+
+        /// <summary>
         /// Control pnlSinPendientes.
         /// </summary>
         /// <remarks>

@@ -559,5 +559,59 @@ namespace AccesoDatos
             }
         }
 
+        public List<Turno> ListarTurnosParaDevolucion()
+        {
+            List<Turno> lista = new List<Turno>();
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearProcedimiento("sp_ListarTurnosParaDevolucion");
+                    datos.EjecutarLectura();
+
+                    while (datos.Lector.Read())
+                    {
+                        Turno aux = new Turno();
+                        aux.IDTurno = (int)datos.Lector["IDTurno"];
+                        aux.Fecha = ((DateTime)datos.Lector["Fecha"]).Date;
+                        aux.HoraInicio = (TimeSpan)datos.Lector["HoraInicio"];
+
+                        
+                        aux.Cliente = new Cliente
+                        {
+                            ID = (int)datos.Lector["IDUsuarioCliente"],
+                            Nombre = (string)datos.Lector["NombreCliente"],
+                            Apellido = (string)datos.Lector["ApellidoCliente"]
+                        };
+                        aux.Profesional = new Profesional
+                        {
+                            ID = (int)datos.Lector["IDUsuarioProfesional"],
+                            Nombre = (string)datos.Lector["NombreProfesional"],
+                            Apellido = (string)datos.Lector["ApellidoProfesional"]
+                        };
+                        aux.Servicio = new Servicio
+                        {
+                            IDServicio = (int)datos.Lector["IDServicio"],
+                            Nombre = (string)datos.Lector["Servicio"]
+                        };
+                        aux.Estado = new EstadoTurno
+                        {
+                            IDEstado = (int)datos.Lector["IDEstado"],
+                            Descripcion = (string)datos.Lector["DescripcionEstado"]
+                        };
+
+                        
+                        Pago pagoInfo = new Pago();
+                        pagoInfo.Monto = (decimal)datos.Lector["TotalPagado"];
+                        aux.Pago = new List<Pago> { pagoInfo };
+
+                        lista.Add(aux);
+                    }
+                    return lista;
+                }
+                catch (Exception ex) { throw ex; }
+            }
+        }
+
     }
 }
