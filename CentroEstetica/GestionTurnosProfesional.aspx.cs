@@ -23,7 +23,7 @@ namespace CentroEstetica
                 return;
             }
 
-            
+
             if (Request.QueryString["idProf"] == null || !int.TryParse(Request.QueryString["idProf"], out idProfesional))
             {
                 Response.Redirect("PanelAdmin.aspx", false);
@@ -41,7 +41,7 @@ namespace CentroEstetica
         {
             try
             {
-                
+
                 Usuario prof = usuarioNegocio.ObtenerPorId(idProfesional);
                 if (prof != null)
                 {
@@ -58,7 +58,7 @@ namespace CentroEstetica
         {
             try
             {
-                
+
                 List<Turno> turnos = turnoNegocio.ListarTurnosPendientesPorProfesional(idProfesional);
 
                 if (turnos.Count > 0)
@@ -87,11 +87,11 @@ namespace CentroEstetica
                 int idTurno = int.Parse(e.CommandArgument.ToString());
                 try
                 {
-                    
-                    turnoNegocio.CambiarEstado(idTurno, 4); // hay que crear este metodo, y reasignar los id de estados por que el 4 esta como cancelado profesional....
+
+                    turnoNegocio.CambiarEstado(idTurno, 4);
 
                     MostrarMensaje("Turno dado de baja correctamente.", "success");
-                    CargarTurnos(); 
+                    CargarTurnos();
                 }
                 catch (Exception ex)
                 {

@@ -120,18 +120,21 @@ namespace AccesoDatos
                     datos.SetearProcedimiento("sp_ListarTurnosCliente");
                     datos.SetearParametro("@IDCliente", idCliente);
                     datos.EjecutarLectura();
+
                     while (datos.Lector.Read())
                     {
                         Turno aux = new Turno();
                         aux.IDTurno = (int)datos.Lector["IDTurno"];
-                        aux.Fecha = ((DateTime)datos.Lector["Fecha"]).Date; // para que no muestra la hora
+                        aux.Fecha = ((DateTime)datos.Lector["Fecha"]).Date;
                         aux.HoraInicio = (TimeSpan)datos.Lector["HoraInicio"];
+
                         aux.Profesional = new Profesional()
                         {
-
-                            Nombre = (string)datos.Lector["Nombre"],
-                            Apellido = (string)datos.Lector["Apellido"]
+                            Nombre = (string)datos.Lector["NombreProfesional"],
+                            Apellido = (string)datos.Lector["ApellidoProfesional"]
                         };
+
+                        
                         aux.Servicio = new Servicio()
                         {
                             Nombre = (string)datos.Lector["Servicio"],
@@ -140,9 +143,12 @@ namespace AccesoDatos
                         aux.Estado = new EstadoTurno
                         {
                             IDEstado = (int)datos.Lector["IDEstado"],
-                            Descripcion = (string)datos.Lector["DescripcionEstado"]
+                            Descripcion = (string)datos.Lector["EstadoDescripcion"]
                         };
 
+                       
+                        aux.Pago = pagoDatos.ListarPagosDelTurno(aux.IDTurno);
+                        
 
                         lista.Add(aux);
                     }
@@ -454,6 +460,51 @@ namespace AccesoDatos
                 }
             }
             return lista;
+        }
+
+        public void Agregar(Turno nuevo, Pago primerPago)
+        {
+            Datos datosTurno = new Datos();
+            Datos datosPago = new Datos();
+
+            try
+            {
+                // 1. Insertar Turno
+                datosTurno.SetearConsulta("INSERT INTO Turno (Fecha, HoraInicio, IDUsuarioCliente, IDUsuarioProfesional, IDServicio, IDEstado) OUTPUT INSERTED.IDTurno VALUES (@Fecha, @Hora, @Cliente, @Prof, @Serv, @Estado)");
+                datosTurno.SetearParametro("@Fecha", nuevo.Fecha);
+                datosTurno.SetearParametro("@Hora", nuevo.HoraInicio);
+                datosTurno.SetearParametro("@Cliente", nuevo.Cliente.ID);
+                datosTurno.SetearParametro("@Prof", nuevo.Profesional.ID);
+                datosTurno.SetearParametro("@Serv", nuevo.Servicio.IDServicio);
+                datosTurno.SetearParametro("@Estado", nuevo.Estado.IDEstado);
+
+                int idTurno = (int)datosTurno.EjecutarAccionEscalar();
+
+                // 2. Insertar Pago (Siempre hay pago ahora, sea seña o total)
+                datosPago.SetearConsulta("INSERT INTO Pago (IDTurno, Fecha, Monto, EsDevolucion, IDTipoPago, IDFormaPago, CodigoTransaccion) VALUES (@IDTurno, @Fecha, @Monto, 0, @Tipo, @Forma, @Cod)");
+
+                datosPago.SetearParametro("@IDTurno", idTurno);
+                datosPago.SetearParametro("@Fecha", primerPago.Fecha);
+                datosPago.SetearParametro("@Monto", primerPago.Monto);
+                datosPago.SetearParametro("@Tipo", primerPago.Tipo.IDTipoPago);
+                datosPago.SetearParametro("@Forma", primerPago.FormaDePago.IDFormaPago);
+
+                if (string.IsNullOrEmpty(primerPago.CodigoTransaccion))
+                    datosPago.SetearParametro("@Cod", DBNull.Value);
+                else
+                    datosPago.SetearParametro("@Cod", primerPago.CodigoTransaccion);
+
+                datosPago.EjecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datosTurno.CerrarConexion();
+                datosPago.CerrarConexion();
+            }
         }
 
     }

@@ -15,7 +15,8 @@ namespace Dominio
         public decimal Monto { get; set; }
         public TipoPago Tipo { get; set; }
         public FormaPago FormaDePago { get; set; }
-       
+        public string CodigoTransaccion { get; set; }
+
 
 
 

@@ -28,33 +28,31 @@
                     <HeaderTemplate>
                         <div class="list-group">
                     </HeaderTemplate>
-                    <ItemTemplate>
-                        <div class="list-group-item list-group-item-action flex-column align-items-start">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">
-                                    
-                                    <strong><%# Eval("FechaString") %> a las <%# Eval("HoraInicio", "{0:hh\\:mm}") %> hs</strong>
-                                </h5>
-                                
-                                
-                                <span class="badge bg-primary rounded-pill"><%# Eval("Estado") %></span>
-
-                            </div>
-                            <p class="mb-1">
-                                <strong>Servicio:</strong> <%# Eval("Servicio.Nombre") %> <br />
-                                <strong>Cliente:</strong> <%# Eval("Cliente.Nombre") %> <%# Eval("Cliente.Apellido") %>
-                            </p>
-                            <div class="mt-2">
-                                
-                                <asp:Button ID="btnDarDeBaja" runat="server" Text="Dar de Baja Turno"
-                                    CssClass="btn btn-danger btn-sm"
-                                    CommandName="DarDeBaja" CommandArgument='<%# Eval("IDTurno") %>'
-                                    OnClientClick="return confirm('¿Está seguro que desea dar de baja este turno? Esta acción no se puede deshacer.');"
-                                    Visible='<%# (int)Eval("Estado") == (int)Dominio.EstadoTurno.Confirmado || (int)Eval("Estado") == (int)Dominio.EstadoTurno.Pendiente %>'
-                                    />
-                            </div>
+                <ItemTemplate>
+                    <div class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">
+                                <strong><%# Eval("FechaString") %> a las <%# Eval("HoraInicio", "{0:hh\\:mm}") %> hs</strong>
+                            </h5>
+                            
+                            <span class="badge bg-primary rounded-pill"><%# Eval("Estado.Descripcion") %></span>
+                
                         </div>
-                    </ItemTemplate>
+                        <p class="mb-1">
+                            <strong>Servicio:</strong> <%# Eval("Servicio.Nombre") %> <br />
+                            <strong>Cliente:</strong> <%# Eval("Cliente.Nombre") %> <%# Eval("Cliente.Apellido") %>
+                        </p>
+                        <div class="mt-2">
+                            
+                            <asp:Button ID="btnDarDeBaja" runat="server" Text="Dar de Baja Turno"
+                                CssClass="btn btn-danger btn-sm"
+                                CommandName="DarDeBaja" CommandArgument='<%# Eval("IDTurno") %>'
+                                OnClientClick="return confirm('¿Está seguro que desea dar de baja este turno? Esta acción no se puede deshacer.');"
+                                Visible='<%# (int)Eval("Estado.IDEstado") == 1 || (int)Eval("Estado.IDEstado") == 2 %>' 
+                                />
+                                </div>
+                    </div>
+                </ItemTemplate>
                     <FooterTemplate>
                         </div>
                     </FooterTemplate>

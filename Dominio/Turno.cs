@@ -17,6 +17,7 @@ namespace Dominio
         public List<Pago> Pago { get; set; } = new List<Pago>();
 
         public EstadoTurno Estado { get; set; }
+        public DateTime? FechaCancelacion { get; set; } 
 
         //para que me devuela la fecha en formato dd/MM/yyyy
         public string FechaString

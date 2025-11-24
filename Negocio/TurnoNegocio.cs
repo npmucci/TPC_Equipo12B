@@ -54,7 +54,7 @@ namespace Negocio
         {
             return datos.TieneTurnosPendientesPorServicio(idServicio);
         }
-        
+
         public void CambiarEstado(int idTurno, int idEstado)
         {
             datos.CambiarEstado(idTurno, idEstado);
@@ -95,6 +95,11 @@ namespace Negocio
         public List<TipoPago> ListarTiposPago()
         {
             return datos.ListarTiposPago();
+        }
+
+        public void GuardarTurno(Turno nuevo, Pago pagoInicial)
+        {
+            datos.Agregar(nuevo, pagoInicial);
         }
 
     }

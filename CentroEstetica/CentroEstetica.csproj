@@ -80,6 +80,7 @@
     <Content Include="Global.asax" />
     <Content Include="Login.aspx" />
     <Content Include="ModificarTurno.aspx" />
+    <Content Include="PagoTurno.aspx" />
     <Content Include="PanelAdmin.aspx" />
     <Content Include="PanelCliente.aspx" />
     <Content Include="PanelPerfil.aspx" />
@@ -164,6 +165,13 @@
     </Compile>
     <Compile Include="ModificarTurno.aspx.designer.cs">
       <DependentUpon>ModificarTurno.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PagoTurno.aspx.cs">
+      <DependentUpon>PagoTurno.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PagoTurno.aspx.designer.cs">
+      <DependentUpon>PagoTurno.aspx</DependentUpon>
     </Compile>
     <Compile Include="PanelAdmin.aspx.cs">
       <DependentUpon>PanelAdmin.aspx</DependentUpon>
