@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Dominio
 {
-    public enum FormaPago
+    public class FormaPago
     {
-        Efectivo = 1,
-        Electronico = 2
+        public int IDFormaPago { get; set; }
+        public  string Descripcion { get; set; }
     }
 }

@@ -25,7 +25,7 @@
             <asp:BoundField HeaderText="Paciente" DataField="ClienteNombreCompleto" />
             <asp:BoundField HeaderText="Servicio" DataField="Servicio.Nombre" />
             <asp:BoundField HeaderText="Profesional" DataField="ProfesionalNombreCompleto" />
-            <asp:BoundField HeaderText="Estado" DataField="Estado" />
+            <asp:BoundField HeaderText="Estado" DataField="Estado.Descripcion" />
             <asp:TemplateField ItemStyle-HorizontalAlign="Center" HeaderText="">
                 <ItemTemplate>
                     <asp:LinkButton ID="btnVerPagos" runat="server" CommandName="VerPagos" CommandArgument='<%# Eval("IDTurno") %>' ToolTip="Ver Pagos del turno" CssClass="text-primary"> Ver Pagos </asp:LinkButton>

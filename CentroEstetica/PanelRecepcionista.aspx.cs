@@ -63,6 +63,11 @@ namespace CentroEstetica
 
                     MostrarDetalleModal(idTurno);
                 }
+                if (e.CommandName == "Modificar")
+                {
+                    int idTurno = Convert.ToInt32(e.CommandArgument);
+                    Response.Redirect($"ModificarTurno.aspx?IDTurno={idTurno}");
+                }
             }
 
             catch (Exception ex)

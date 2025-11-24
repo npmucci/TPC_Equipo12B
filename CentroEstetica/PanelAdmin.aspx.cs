@@ -133,7 +133,7 @@ namespace CentroEstetica
             List<Turno> turnos = turnoNegocio.ListarTurnosCliente(idCliente);
 
 
-            List<Turno> pendientes = turnos.FindAll(t => t.Estado == EstadoTurno.Pendiente);
+            List<Turno> pendientes = turnos.FindAll(t => t.Estado.Descripcion == "Pendiente");
 
             if (pendientes.Count > 0)
             {

@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Datos.cs" />
     <Compile Include="EspecialidadDatos.cs" />
+    <Compile Include="EstadoDatos.cs" />
     <Compile Include="HorarioAtencionDatos.cs" />
     <Compile Include="PagoDatos.cs" />
     <Compile Include="ProfesionalDatos.cs" />

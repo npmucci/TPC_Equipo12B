@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dominio;
 
-namespace Dominio
+namespace AccesoDatos
 {
-    public class TipoPago
+    public class EstadoDatos
     {
-       public int IDTipoPago { get; set; }
-       public string Descripcion { get; set; } 
-
+        
     }
 }

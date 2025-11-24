@@ -259,23 +259,26 @@ END
 GO
 
 --SP PARA TURNOS
-CREATE  PROCEDURE sp_ListarTurnosCliente
+
+CREATE or ALTER PROCEDURE sp_ListarTurnosCliente
     @IDCliente INT 
 AS
 BEGIN
     SELECT 
-        
-		T.IDTurno,
+        T.IDTurno,
         T.Fecha,
         T.HoraInicio,
         T.IDEstado,
-        P.Nombre,
-        P.Apellido,
-		S.Nombre AS Servicio
+        E.Descripcion AS EstadoDescripcion,
+        P.Nombre AS NombreProfesional,
+        P.Apellido AS ApellidoProfesional,
+        C.Nombre AS NombreCliente,
+        C.Apellido AS ApellidoCliente,
+        S.Nombre AS Servicio
     FROM Turno T
-    INNER JOIN Usuario C   -- C = Cliente para filtrar por el cliente logueado
+    INNER JOIN Usuario C
         ON T.IDUsuarioCliente = C.IDUsuario
-    INNER JOIN Usuario P   -- P = Profesional para traer los datos del profesional
+    INNER JOIN Usuario P
         ON T.IDUsuarioProfesional = P.IDUsuario
     INNER JOIN Servicio S
         ON T.IDServicio = S.IDServicio
@@ -285,8 +288,9 @@ BEGIN
     ORDER BY T.Fecha, T.HoraInicio;
 END
 GO
- 
-CREATE  PROCEDURE sp_ObtenerTurnoPorID
+
+-- 2. Obtener un turno por ID
+CREATE OR ALTER PROCEDURE sp_ObtenerTurnoPorID
     @IDTurno INT
 AS
 BEGIN
@@ -296,6 +300,8 @@ BEGIN
         T.IDTurno,
         T.Fecha,
         T.HoraInicio,
+        T.IDEstado,
+        E.Descripcion AS DescripcionEstado,
         P.Nombre AS NombreProfesional,
         P.Apellido AS ApellidoProfesional,
         C.Nombre AS NombreCliente,
@@ -303,8 +309,7 @@ BEGIN
         C.Telefono AS TelefonoCliente,
         C.Mail AS EmailCliente,
         C.Domicilio AS DomicilioCliente,
-        S.Nombre AS Servicio,
-        T.IDEstado
+        S.Nombre AS Servicio
     FROM Turno T
     INNER JOIN Usuario P ON T.IDUsuarioProfesional = P.IDUsuario
     INNER JOIN Usuario C ON T.IDUsuarioCliente = C.IDUsuario
@@ -314,19 +319,20 @@ BEGIN
 END
 GO
 
-CREATE  PROCEDURE sp_ListarTodosLosTurnos
+CREATE OR ALTER PROCEDURE sp_ListarTodosLosTurnos
 AS
 BEGIN
     SELECT 
         T.IDTurno,
         T.Fecha,
         T.HoraInicio,
+        T.IDEstado,
+        E.Descripcion AS DescripcionEstado,
         P.Nombre AS NombreProfesional,
         P.Apellido AS ApellidoProfesional,
         C.Nombre AS NombreCliente,
         C.Apellido AS ApellidoCliente,
-        S.Nombre AS Servicio,
-        T.IDEstado
+        S.Nombre AS Servicio
     FROM Turno T
     INNER JOIN Usuario P
         ON T.IDUsuarioProfesional = P.IDUsuario
@@ -362,19 +368,38 @@ END
 GO
 
 --sp para pagos
-CREATE PROCEDURE sp_ListarPagosPorTurno
+CREATE OR ALTER PROCEDURE sp_ListarPagosPorTurno
     @IDTurno INT
 AS
 BEGIN
     SELECT 
-        IDPago,
-        IDTurno,
-        Fecha,
-        EsDevolucion,
-        Monto,
-        IDTipoPago,
-        IDFormaPago
-    FROM Pago
-    WHERE IDTurno = @IDTurno
+        p.IDPago,
+        p.IDTurno,
+        p.Fecha,
+        p.EsDevolucion,
+        p.Monto,
+        p.IDTipoPago,
+        tp.Nombre AS TipoPagoDescripcion,
+        p.IDFormaPago,
+        fp.Nombre AS FormaPagoDescripcion
+    FROM Pago p
+    LEFT JOIN TipoPago tp ON p.IDTipoPago = tp.IDTipoPago
+    LEFT JOIN FormaPago fp ON p.IDFormaPago = fp.IDFormaPago
+    WHERE p.IDTurno = @IDTurno
+END
+GO
+CREATE  PROCEDURE sp_AgregarPago
+    @IDTurno INT,
+    @Fecha DATETIME,
+    @EsDevolucion BIT,
+    @Monto DECIMAL(10,2),
+    @IDTipoPago INT,
+    @IDFormaPago INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO Pago (IDTurno, Fecha, EsDevolucion, Monto, IDTipoPago, IDFormaPago)
+    VALUES (@IDTurno, @Fecha, @EsDevolucion, @Monto, @IDTipoPago, @IDFormaPago);
 END
 GO

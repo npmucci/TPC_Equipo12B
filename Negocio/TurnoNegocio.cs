@@ -17,11 +17,11 @@ namespace Negocio
         }
         public List<Turno> ListarTurnosPasados()
         {
-            return ListarTodos().FindAll(turnos => turnos.Estado != EstadoTurno.Confirmado && turnos.Estado != EstadoTurno.Pendiente);
+            return ListarTodos().FindAll(turnos => turnos.Estado.Descripcion != "Confirmado" && turnos.Estado.Descripcion != "Pendiente");
         }
         public List<Turno> ListarTurnosActuales()
         {
-            return ListarTodos().FindAll(turnos => turnos.Estado == EstadoTurno.Confirmado || turnos.Estado == EstadoTurno.Pendiente);
+            return ListarTodos().FindAll(turnos => turnos.Estado.Descripcion == "Confirmado" || turnos.Estado.Descripcion == "Pendiente");
         }
 
         public List<Turno> ListarTurnosCliente(int idCliente)
@@ -31,12 +31,12 @@ namespace Negocio
 
         public List<Turno> ListarTurnosPasadosCliente(int idCliente)
         {
-            return datos.ListarTurnosCliente(idCliente).FindAll(turnos => turnos.Estado != EstadoTurno.Confirmado && turnos.Estado != EstadoTurno.Pendiente);
+            return datos.ListarTurnosCliente(idCliente).FindAll(turnos => turnos.Estado.Descripcion != "Confirmado" && turnos.Estado.Descripcion != "Pendiente");
         }
 
         public List<Turno> ListarTurnosActualesCliente(int idCliente)
         {
-            return datos.ListarTurnosCliente(idCliente).FindAll(turnos => turnos.Estado == EstadoTurno.Confirmado || turnos.Estado == EstadoTurno.Pendiente);
+            return datos.ListarTurnosCliente(idCliente).FindAll(turnos => turnos.Estado.Descripcion == "Confirmado" || turnos.Estado.Descripcion == "Pendiente");
         }
 
         public bool TieneTurnosPendientesPorEspecialidad(int idProfesional, int idEspecialidad)
@@ -69,12 +69,10 @@ namespace Negocio
         {
             return datos.ContarTurnos(fechaInicio, fechaFin, idProfesional);
         }
-
         public decimal ObtenerIngresos(DateTime fechaInicio, DateTime fechaFin, int idProfesional)
         {
             return datos.ObtenerIngresos(fechaInicio, fechaFin, idProfesional);
         }
-
         public int CantidadTurnosPendientesTotal()
         {
             return datos.ContarTotalPendientes();
@@ -84,5 +82,20 @@ namespace Negocio
         {
             return datos.BuscarTurnoPorId(idTurno);
         }
+
+        public List<EstadoTurno> ListarEstados()
+        {
+            return datos.ListarEstados();
+        }
+
+        public List<FormaPago> ListarFormasPago()
+        {
+            return datos.ListarFormasPago();
+        }
+        public List<TipoPago> ListarTiposPago()
+        {
+            return datos.ListarTiposPago();
+        }
+
     }
 }

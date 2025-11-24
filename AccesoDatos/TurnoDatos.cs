@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Dominio;
-using Dominio.Enum;
+
 
 namespace AccesoDatos
 {
@@ -13,7 +13,7 @@ namespace AccesoDatos
         PagoDatos pagoDatos = new PagoDatos();
         public List<Turno> ListarTodos()
         {
-           
+
             List<Turno> lista = new List<Turno>();
             using (Datos datos = new Datos())
             {
@@ -44,7 +44,11 @@ namespace AccesoDatos
                         Nombre = (string)datos.Lector["Servicio"]
                     };
 
-                    aux.Estado = (EstadoTurno)(int)datos.Lector["IDEstado"];
+                    aux.Estado = new EstadoTurno
+                    {
+                        IDEstado = (int)datos.Lector["IDEstado"],
+                        Descripcion = (string)datos.Lector["DescripcionEstado"]
+                    };
 
                     // Cargar pagos del turno 
                     aux.Pago = pagoDatos.ListarPagosDelTurno(aux.IDTurno);
@@ -88,8 +92,12 @@ namespace AccesoDatos
                         {
                             Nombre = (string)datos.Lector["Servicio"],
                         };
-                    
-                        turno.Estado = (EstadoTurno)(int)datos.Lector["IDEstado"];
+
+                        turno.Estado = new EstadoTurno
+                        {
+                            IDEstado = (int)datos.Lector["IDEstado"],
+                            Descripcion = (string)datos.Lector["DescripcionEstado"]
+                        };
                         // Cargar pagos del turno 
                         turno.Pago = pagoDatos.ListarPagosDelTurno(turno.IDTurno);
                     }
@@ -129,7 +137,11 @@ namespace AccesoDatos
                             Nombre = (string)datos.Lector["Servicio"],
                         };
 
-                        aux.Estado = (EstadoTurno)(int)datos.Lector["IDEstado"];
+                        aux.Estado = new EstadoTurno
+                        {
+                            IDEstado = (int)datos.Lector["IDEstado"],
+                            Descripcion = (string)datos.Lector["DescripcionEstado"]
+                        };
 
 
                         lista.Add(aux);
@@ -229,21 +241,15 @@ namespace AccesoDatos
             {
                 try
                 {
-
-                    string consulta = @"
-                        SELECT 
-                            T.IDTurno, T.Fecha, T.HoraInicio,
-                            T.IDEstado, TE.Descripcion AS EstadoNombre,
-                            S.Nombre AS ServicioNombre,
-                            C.Nombre AS ClienteNombre, C.Apellido AS ClienteApellido
-                             FROM Turno T
-                             INNER JOIN Servicio S ON T.IDServicio = S.IDServicio
-                             INNER JOIN Usuario C ON T.IDUsuarioCliente = C.IDUsuario
-                             INNER JOIN EstadoTurno TE ON T.IDEstado = TE.IDEstado
-                             WHERE T.IDUsuarioProfesional = @idProf 
-                             AND T.IDEstado IN (1, 2) -- 1=Confirmado, 2=Pendiente (según tu script)
-                             AND (CAST(T.Fecha AS DATETIME) + CAST(T.HoraInicio AS DATETIME)) > GETDATE()
-                             ORDER BY T.Fecha, T.HoraInicio ASC";
+                    string consulta = @"SELECT T.IDTurno, T.Fecha,  T.HoraInicio,T.IDEstado, TE.Descripcion AS EstadoNombre,S.Nombre AS ServicioNombre, C.Nombre AS ClienteNombre,  C.Apellido AS ClienteApellido
+                FROM Turno T
+                INNER JOIN Servicio S ON T.IDServicio = S.IDServicio
+                INNER JOIN Usuario C ON T.IDUsuarioCliente = C.IDUsuario
+                INNER JOIN EstadoTurno TE ON T.IDEstado = TE.IDEstado
+                WHERE T.IDUsuarioProfesional = @idProf 
+                    AND T.IDEstado IN (1, 2) -- 1=Confirmado, 2=Pendiente 
+                    AND (CAST(T.Fecha AS DATETIME) + CAST(T.HoraInicio AS DATETIME)) > GETDATE()
+                ORDER BY T.Fecha, T.HoraInicio ASC";
 
                     datos.SetearConsulta(consulta);
                     datos.SetearParametro("@idProf", idProfesional);
@@ -259,15 +265,27 @@ namespace AccesoDatos
 
                         aux.Fecha = fecha.Add(hora);
                         aux.HoraInicio = hora;
-                        aux.Estado = (EstadoTurno)(int)datos.Lector["IDEstado"];
-                        aux.Servicio = new Servicio();
-                        aux.Servicio.Nombre = (string)datos.Lector["ServicioNombre"];
-                        aux.Cliente = new Cliente();
-                        aux.Cliente.Nombre = (string)datos.Lector["ClienteNombre"];
-                        aux.Cliente.Apellido = (string)datos.Lector["ClienteApellido"];
+
+                        aux.Estado = new EstadoTurno
+                        {
+                            IDEstado = (int)datos.Lector["IDEstado"],
+                            Descripcion = (string)datos.Lector["EstadoNombre"]
+                        };
+
+                        aux.Servicio = new Servicio
+                        {
+                            Nombre = (string)datos.Lector["ServicioNombre"]
+                        };
+
+                        aux.Cliente = new Cliente
+                        {
+                            Nombre = (string)datos.Lector["ClienteNombre"],
+                            Apellido = (string)datos.Lector["ClienteApellido"]
+                        };
 
                         lista.Add(aux);
                     }
+
                     return lista;
                 }
                 catch (Exception ex)
@@ -331,7 +349,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    
+
                     string consulta = "SELECT COUNT(*) FROM Turno WHERE IDEstado = 2";
 
                     datos.SetearConsulta(consulta);
@@ -343,25 +361,100 @@ namespace AccesoDatos
                 }
             }
         }
-
         public decimal ObtenerIngresos(DateTime fechaInicio, DateTime fechaFin, int idProfesional)
         {
-            
+
             using (Datos datos = new Datos())
             {
-            
-                datos.SetearProcedimiento("sp_ObtenerIngresos");
-                            
-                datos.SetearParametro("@IDProfesional", idProfesional);
-                datos.SetearParametro("@FechaInicio", fechaInicio.Date); 
-                datos.SetearParametro("@FechaFin", fechaFin.Date);       
 
-              
+                datos.SetearProcedimiento("sp_ObtenerIngresos");
+
+                datos.SetearParametro("@IDProfesional", idProfesional);
+                datos.SetearParametro("@FechaInicio", fechaInicio.Date);
+                datos.SetearParametro("@FechaFin", fechaFin.Date);
+
+
                 decimal resultado = datos.EjecutarAccionEscalar();
 
-               
+
                 return resultado;
             }
         }
+        public List<EstadoTurno> ListarEstados()
+        {
+            List<EstadoTurno> lista = new List<EstadoTurno>();
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta("SELECT * FROM EstadoTurno");
+                    datos.EjecutarLectura();
+                    while (datos.Lector.Read())
+                    {
+                        EstadoTurno aux = new EstadoTurno();
+
+                        aux.IDEstado = (int)datos.Lector["IDEstado"];
+                        aux.Descripcion = (string)datos.Lector["Descripcion"];
+                        lista.Add(aux);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            return lista;
+        }
+
+        public List<FormaPago> ListarFormasPago()
+        {
+            List<FormaPago> lista = new List<FormaPago>();
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta("SELECT * FROM FormaPago");
+                    datos.EjecutarLectura();
+                    while (datos.Lector.Read())
+                    {
+                        FormaPago aux = new FormaPago();
+                        aux.IDFormaPago = (int)datos.Lector["IDFormaPago"];
+                        aux.Descripcion = (string)datos.Lector["Nombre"];
+                        lista.Add(aux);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            return lista;
+        }
+
+        public List<TipoPago> ListarTiposPago()
+        {
+            List<TipoPago> lista = new List<TipoPago>();
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta("SELECT * FROM TipoPago");
+                    datos.EjecutarLectura();
+                    while (datos.Lector.Read())
+                    {
+                        TipoPago aux = new TipoPago();
+                        aux.IDTipoPago = (int)datos.Lector["IDTipoPago"];
+                        aux.Descripcion = (string)datos.Lector["Nombre"];
+                        lista.Add(aux);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+            return lista;
+        }
+
     }
 }

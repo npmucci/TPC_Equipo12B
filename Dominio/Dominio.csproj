@@ -43,13 +43,13 @@
   <ItemGroup>
     <Compile Include="Administrador.cs" />
     <Compile Include="Cliente.cs" />
+    <Compile Include="EstadoTurno.cs" />
     <Compile Include="FormaPago.cs" />
     <Compile Include="ProfesionalUnico.cs" />
     <Compile Include="Recepcionista.cs" />
     <Compile Include="ReservaTemporal.cs" />
     <Compile Include="TipoPago.cs" />
     <Compile Include="Especialidad.cs" />
-    <Compile Include="EstadoTurno.cs" />
     <Compile Include="HorarioAtencion.cs" />
     <Compile Include="Pago.cs" />
     <Compile Include="Profesional.cs" />

@@ -1,6 +1,5 @@
 ﻿using AccesoDatos;
 using Dominio;
-using Dominio.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;

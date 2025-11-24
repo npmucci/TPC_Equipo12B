@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Dominio;
-using Dominio.Enum;
+
 
 
 namespace AccesoDatos
@@ -20,22 +20,47 @@ namespace AccesoDatos
 
                 while (datos.Lector.Read())
                 {
-                    Pago pago = new Pago()
+                    Pago aux = new Pago();
+
+                    aux.IDPago = (int)datos.Lector["IDPago"];
+                    aux.IDTurno = idTurno;
+                    aux.Fecha = (DateTime)datos.Lector["Fecha"];
+                    aux.EsDevolucion = (bool)datos.Lector["EsDevolucion"];
+                    aux.Monto = (decimal)datos.Lector["Monto"];
+
+
+                    aux.Tipo = new TipoPago
                     {
-                        IDPago = (int)datos.Lector["IDPago"],
-                        IDTurno = idTurno,
-                        Fecha = (DateTime)datos.Lector["Fecha"],
-                        EsDevolucion = (bool)datos.Lector["EsDevolucion"],
-                        Monto = (decimal)datos.Lector["Monto"],
-                        Tipo = (TipoPago)(int)datos.Lector["IDTipoPago"],
-                        FormaDePago = (FormaPago)(int)datos.Lector["IDFormaPago"]
+                        IDTipoPago = (int)datos.Lector["IDTipoPago"],
+                        Descripcion = (string)datos.Lector["TipoPagoDescripcion"]
+                    };
+                    aux.FormaDePago = new FormaPago
+                    {
+                        IDFormaPago = (int)datos.Lector["IDFormaPago"],
+                        Descripcion = (string)datos.Lector["FormaPagoDescripcion"]
                     };
 
-                    pagos.Add(pago);
+
+                    pagos.Add(aux);
                 }
             }
 
             return pagos;
+        }
+
+        public void AgregarPago(Pago nuevoPago)
+        {
+            using (Datos datos = new Datos())
+            {
+                datos.SetearProcedimiento("sp_AgregarPago");
+                datos.SetearParametro("@IDTurno", nuevoPago.IDTurno);
+                datos.SetearParametro("@Fecha", nuevoPago.Fecha);
+                datos.SetearParametro("@EsDevolucion", nuevoPago.EsDevolucion);
+                datos.SetearParametro("@Monto", nuevoPago.Monto);
+                datos.SetearParametro("@IDTipoPago", nuevoPago.Tipo.IDTipoPago);
+                datos.SetearParametro("@IDFormaPago", nuevoPago.FormaDePago.IDFormaPago);
+                datos.EjecutarAccion();
+            }
         }
     }
 }
