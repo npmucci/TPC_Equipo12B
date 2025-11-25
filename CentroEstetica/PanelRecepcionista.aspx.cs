@@ -14,7 +14,10 @@ namespace CentroEstetica
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!Seguridad.EsRecepcionista(Session["usuario"]))
+           
+            Usuario usuario = (Usuario)Session["usuario"];
+
+            if (usuario == null || (!Seguridad.EsRecepcionista(usuario) && !Seguridad.EsAdmin(usuario)))
             {
                 Response.Redirect("Default.aspx", false);
                 return;
@@ -26,14 +29,22 @@ namespace CentroEstetica
                 {
                     pnlMensajeExito.Visible = true;
                 }
-                Recepcionista recepcionista = (Recepcionista)Session["usuario"];
-                lblNombre.Text = recepcionista.Nombre.ToString();
+
+         
+                lblNombre.Text = usuario.Nombre.ToString();
                 MostrarFechaActual();
+
                 TurnoNegocio negocio = new TurnoNegocio();
+
+                //  Cargar Turnos del Día 
                 List<Turno> listaTurnos = negocio.ListarTodos();
                 listaTurnos = listaTurnos.FindAll(t => t.Fecha.Date == DateTime.Today.Date);
                 dgvTurnos.DataSource = listaTurnos;
                 dgvTurnos.DataBind();
+
+                // Cargar Devoluciones Pendientes
+                //dgvDevoluciones.DataSource = negocio.ListarTurnosParaDevolucion();
+                //dgvDevoluciones.DataBind();
             }
         }
 

@@ -78,5 +78,20 @@ namespace CentroEstetica
                 Response.Redirect("Error.aspx", false);
             }
         }
+
+        protected void btnReservar_Click(object sender, EventArgs e)
+        {
+            
+            if (Seguridad.SesionActiva(Session["usuario"]))
+            {
+               
+                Response.Redirect("ReservarTurno.aspx", false);
+            }
+            else
+            {
+                
+                Response.Redirect("Login.aspx", false);
+            }
+        }
     }
 }

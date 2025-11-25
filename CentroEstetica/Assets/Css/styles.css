@@ -1,11 +1,13 @@
-﻿/* Paleta de colores */
+﻿/* =========================================
+   1. VARIABLES Y CONFIGURACIÓN BASE
+   ========================================= */
 :root {
-    --colorPrincipal: #FCE8E4;
-    --colorPrincipalHover: #D85C7E;
-    --coloroFondoOscuro: #af8d84;
-    --colorFondoOpcional: #f2ecd3;
-    --colorFondoClaro: #F9F9F9;
-    --colorTexto: #1a1a1a;
+    --colorPrincipal: #FCE8E4; /* Rosa muy claro */
+    --colorPrincipalHover: #D85C7E; /* Rosa fuerte */
+    --coloroFondoOscuro: #af8d84; /* Marrón/Rosa viejo */
+    --colorFondoOpcional: #f2ecd3; /* Beige */
+    --colorFondoClaro: #F9F9F9; /* Gris fondo */
+    --colorTexto: #1a1a1a; /* Texto oscuro */
 }
 
 body {
@@ -19,14 +21,17 @@ body {
 
 main {
     width: 100%;
-    margin-top: 100px;
+    margin-top: 100px; 
     margin-bottom: 10px;
-    min-height: calc(100vh - 70px);
+    min-height: calc(100vh - 160px);
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
+/* 
+   2. NAVBAR Y FOOTER
+   */
 .navbar {
     font-family: 'Playfair Display', serif;
     background: var(--coloroFondoOscuro);
@@ -37,65 +42,33 @@ main {
     width: auto;
 }
 
+footer {
+    background: var(--coloroFondoOscuro);
+    text-align: center;
+    line-height: 60px;
+    width: 100%;
+    color: white;
+    margin-top: auto;
+}
+
+/* 
+   3. ESTILOS PÁGINA DEFAULT (HOME)
+   */
+
 h1, h2, h3, h4, h5, h6 {
     font-family: 'Playfair Display', serif;
     color: black;
 }
 
-/* Navbar y secciones */
-.bg-dark-custom {
-    background-color: var(--colorFondoOscuro);
+/* Banner Principal */
+.banner-section {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1); 
 }
 
-.text-primary-custom {
-    color: var(--colorPrincipal);
-}
-
-/* Cards Generales */
-.custom-card {
-    border-radius: 16px;
-    overflow: hidden;
-    background-color: #fff7f5 !important;
-    border: 1px solid #f1dfdc;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-    transition: all 0.3s ease;
-    text-align: center;
-}
-
-    .custom-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    }
-
-    .custom-card img {
-        width: 100%;
-        height: 220px;
-        object-fit: cover;
-        transition: transform 0.4s ease;
-    }
-
-    .custom-card:hover img {
-        transform: scale(1.05);
-    }
-
-    .custom-card .card-body {
-        padding: 1.5rem;
-    }
-
-    .custom-card h3,
-    .custom-card h4,
-    .custom-card h5 {
-        font-family: 'Playfair Display', serif;
-        font-weight: 600;
-        color: var(--colorTexto);
-        margin-bottom: 0.75rem;
-    }
-
-    .custom-card p {
-        color: #6c757d;
-        font-size: 0.95rem;
-    }
-
+/* Botón "Reservar Turno" y otros */
 .btn-custom {
     background-color: var(--colorPrincipal);
     border: none;
@@ -107,13 +80,70 @@ h1, h2, h3, h4, h5, h6 {
     transition: all 0.3s ease;
     display: inline-block;
     text-decoration: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
     .btn-custom:hover {
         background-color: var(--colorPrincipalHover);
         color: #fff !important;
-        transform: scale(1.07);
-        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+        transform: translateY(-3px) scale(1.02); 
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    }
+
+/* Tarjetas (Cards) Interactivas */
+.custom-card {
+    border-radius: 16px !important;
+    overflow: hidden; 
+    background-color: #fff !important;
+    border: 1px solid #f1dfdc;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease-in-out;
+    text-align: center;
+}
+
+    .custom-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    /* Imágenes dentro de las cards */
+    .custom-card img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        transition: transform 0.5s ease; 
+    }
+
+    .custom-card:hover img {
+        transform: scale(1.05); 
+    }
+
+    .custom-card .card-body {
+        padding: 1.5rem;
+    }
+
+    /* Avatares de Profesionales (Círculos) */
+    .custom-card .rounded-circle {
+        border: 4px solid white;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        transition: transform 0.3s ease;
+    }
+
+    .custom-card:hover .rounded-circle {
+        transform: scale(1.1); 
+        border-color: var(--colorPrincipal);
+    }
+
+    .custom-card h3, .custom-card h4, .custom-card h5 {
+        font-family: 'Playfair Display', serif;
+        font-weight: 600;
+        color: var(--colorTexto);
+        margin-bottom: 0.75rem;
+    }
+
+    .custom-card p {
+        color: #6c757d;
+        font-size: 0.95rem;
     }
 
 /* Responsive */
@@ -123,22 +153,23 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
-/* Footer */
-footer {
-    background: var(--coloroFondoOscuro);
-    text-align: center;
-    line-height: 60px;
-    width: 100%;
-    position: relative;
-}
+/* 
+   4. ESTILOS PANELES DE ADMINISTRACIÓN
+   */
 
-/*--- ESTILOS PANEL DE ADMINISTRACIÓN --*/
- 
 /* Layout Dashboard */
 .dashboard-container {
     background-color: var(--colorFondoClaro);
     min-height: 80vh;
     padding: 20px;
+}
+
+.content-area {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    min-height: 600px;
 }
 
 /* Menú Lateral (Sidebar) */
@@ -152,33 +183,26 @@ footer {
     display: flex;
     align-items: center;
     cursor: pointer;
+    background-color: white; /* Fondo base para los botones */
+    border: 1px solid transparent;
 }
 
- .nav-pills .nav-link i {
-    font-size: 1.2rem;
-    margin-right: 10px;
-}
-    
- .nav-pills .nav-link:hover {
-    background-color: var(--colorPrincipal);
-    color: var(--colorPrincipalHover);
-   transform: translateX(5px);
-}
+    .nav-pills .nav-link i {
+        font-size: 1.2rem;
+        margin-right: 10px;
+    }
 
- .nav-pills .nav-link.active {
-    background-color: var(--colorPrincipalHover);
-    color: white;
-    box-shadow: 0 4px 10px rgba(216, 92, 126, 0.4);
- }
+    .nav-pills .nav-link:hover {
+        background-color: var(--colorPrincipal);
+        color: var(--colorPrincipalHover);
+        transform: translateX(5px);
+    }
 
-/* Contenido Principal (Area Blanca) */
-.content-area {
-    background: white;
-    border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-    min-height: 600px;
-}
+    .nav-pills .nav-link.active {
+        background-color: var(--colorPrincipalHover);
+        color: white;
+        box-shadow: 0 4px 10px rgba(216, 92, 126, 0.4);
+    }
 
 /* Tarjetas KPI (Métricas) */
 .kpi-card {
@@ -189,6 +213,7 @@ footer {
     position: relative;
     overflow: hidden;
     transition: transform 0.3s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
     .kpi-card:hover {
@@ -210,7 +235,7 @@ footer {
         transform: rotate(-15deg);
     }
 
-/* Gradientes Dashboard */
+/* Gradientes */
 .bg-gradient-primary {
     background: linear-gradient(45deg, var(--colorPrincipalHover), #A54562);
 }
@@ -223,11 +248,12 @@ footer {
     background: linear-gradient(45deg, var(--coloroFondoOscuro), #8F726A);
 }
 
-/* Tarjetas de Profesionales */
+/* Cards de Profesionales (Admin) */
 .prof-card {
     border: 1px solid #f0f0f0;
     border-radius: 15px;
     transition: all 0.3s;
+    background: white;
 }
 
     .prof-card:hover {
@@ -248,7 +274,13 @@ footer {
     font-size: 1.2rem;
 }
 
-/* Acordeón Servicios */
+.avatar-initials-sm {
+    width: 35px;
+    height: 35px;
+    font-size: 0.9rem;
+}
+
+/* Acordeón */
 .custom-accordion .accordion-button:not(.collapsed) {
     background-color: #f0f8ff;
     color: #0d6efd;
@@ -259,7 +291,9 @@ footer {
     border-color: rgba(13, 110, 253, .25);
 }
 
-/* --- ESTILOS AGENDA PERSONAL --- */
+/* 
+   5. AGENDA PERSONAL Y ESTADÍSTICAS
+   */
 .stat-card {
     background-color: #fff;
     border: 1px solid #e3e6f0;
@@ -275,7 +309,7 @@ footer {
 
 .stat-label {
     font-weight: 700;
-    color: #4e73df;
+    color: var(--colorPrincipalHover); /* Ajustado al tema */
     text-transform: uppercase;
     margin-bottom: 0.5rem;
     font-size: 0.8rem;
@@ -287,13 +321,7 @@ footer {
     color: #5a5c69;
 }
 
-/* Pestañas inter
-
-
-
-
-
-/* Pestañas internas de la Agenda (Hoy/Proximos/Pasados) */
+/* Pestañas internas (Hoy/Proximos/Pasados) */
 .nav-tabs .nav-link {
     color: #6c757d;
     border: none;
@@ -303,39 +331,32 @@ footer {
     cursor: pointer;
 }
 
- .nav-pills .nav-link.active {
-    background-color: var(--colorPrincipal) !important;
-    color: var(--colorPrincipalHover) !important;
-    border-left: 5px solid var(--colorPrincipalHover) !important;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
-}
-
-.nav-pills .nav-link {
-    background-color: white !important; 
-    border-radius: 10px;
-    margin-bottom: 8px; 
-}
-    .nav-pills .nav-link:hover {
-        background-color: var(--colorPrincipal) !important;
-        color: var(--colorPrincipalHover) !important;
-        transform: translateX(5px);
+    .nav-tabs .nav-link:hover {
+        border-color: transparent;
+        color: var(--colorPrincipalHover);
     }
 
+    .nav-tabs .nav-link.active {
+        color: var(--colorPrincipalHover);
+        background-color: transparent;
+        border-bottom: 3px solid var(--colorPrincipalHover);
+    }
+
+/* Utilidades */
 .bg-custom-accent {
-    background-color: var(--colorPrincipal) !important; 
+    background-color: var(--colorPrincipal) !important;
     border-bottom: 2px solid var(--colorPrincipalHover);
 }
 
-    .bg-custom-accent h5
-   {
-      
-        color: var(--colorTexto) !important; 
+    .bg-custom-accent h5 {
+        color: var(--colorTexto) !important;
     }
+
 .lblfecha {
     background-color: var(--colorPrincipalHover) !important;
     color: white !important;
-    border-color: var(--colorPrincipalHover) !important;
     border-radius: 0.375rem !important;
-    display: inline-flex !important; 
+    padding: 5px 10px;
+    display: inline-flex !important;
     align-items: center !important;
 }

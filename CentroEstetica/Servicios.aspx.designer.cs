@@ -24,6 +24,15 @@ namespace CentroEstetica
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl h2Titulo;
 
         /// <summary>
+        /// Control btnReservar.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton btnReservar;
+
+        /// <summary>
         /// Control divServicios.
         /// </summary>
         /// <remarks>

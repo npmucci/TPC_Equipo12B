@@ -1,7 +1,9 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="CentroEstetica.Default" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    
 </asp:Content>
+
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
     <section class="banner-section">
@@ -16,20 +18,18 @@
         </div>
     </section>
 
-    <!-- Features -->
     <div class="container py-5">
         <div class="row g-4 mb-5">
             <div class="col-md-4">
                 <div class="card custom-card h-100 border-0 shadow-sm text-center">
-                    <div class="card-body">
-                        <h3 class="h4 mb-3">Reserva Online</h3>
+                    <div class="card-body d-flex flex-column justify-content-center"> <h3 class="h4 mb-3">Reserva Online</h3>
                         <p class="text-muted">Agenda tu turno de forma rápida y sencilla desde cualquier dispositivo.</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card custom-card h-100 border-0 shadow-sm text-center">
-                    <div class="card-body">
+                    <div class="card-body d-flex flex-column justify-content-center">
                         <h3 class="h4 mb-3">Profesionales Expertos</h3>
                         <p class="text-muted">Equipo altamente capacitado con años de experiencia en el sector.</p>
                     </div>
@@ -37,7 +37,7 @@
             </div>
             <div class="col-md-4">
                 <div class="card custom-card h-100 border-0 shadow-sm text-center">
-                    <div class="card-body">
+                    <div class="card-body d-flex flex-column justify-content-center">
                         <h3 class="h4 mb-3">Tratamientos Premium</h3>
                         <p class="text-muted">Utilizamos productos de primera calidad y técnicas innovadoras.</p>
                     </div>
@@ -46,39 +46,29 @@
         </div>
     </div>
 
-    <!-- Profesionales -->
     <div class="container mt-5">
-        <h2 class="text-center mb-4">Nuestros Profesionales</h2>
-        <div class="row g-4">
+        <h2 class="text-center mb-4 fw-bold text-secondary">Nuestros Profesionales</h2> <div class="row g-4">
 
         <asp:Repeater ID="rptProfesionales" runat="server">
             <ItemTemplate>
                 <div class="col-md-3 col-lg-3 mb-4">
-                    <div class="card service-card custom-card h-100 border-0 shadow-sm text-center">
-        
-                        <img src='<%# Eval("Foto") %>' 
+                    <div class="card service-card custom-card h-100 border-0 shadow-sm text-center pt-3"> <img src='<%# Eval("Foto") %>' 
                              class="card-img-top rounded-circle mx-auto mt-3" 
                              alt='<%# Eval("Nombre") + " " + Eval("Apellido") %>' 
                              style="width: 120px; height: 120px; object-fit: cover;" />
-        
+                        
                         <div class="card-body">
-                            <h5 class="card-title mb-1">
-                                <%# Eval("Nombre") + " " + Eval("Apellido") %>
+                            <h5 class="card-title mb-1 fw-bold"> <%# Eval("Nombre") + " " + Eval("Apellido") %>
                             </h5>
-        
-                           
                         </div>
                     </div>
                 </div>
             </ItemTemplate>
         </asp:Repeater>
 
-
         </div>
 
-
-        <!-- Especialidades -->
-        <h2 class="text-center display-5 mb-5" id="servicios">Nuestras Especialidades</h2>
+        <h2 class="text-center display-5 mb-5 fw-bold text-secondary" id="servicios">Nuestras Especialidades</h2>
 
         <div class="row g-4">
 
@@ -87,15 +77,17 @@
                     <div class="col-md-3 col-lg-3">
                         <div class="card service-card custom-card h-100 border-0 shadow-sm">
 
-                            <img src='<%# Eval("Foto") %>' class="card-img-top" alt='<%# Eval("Nombre") %>'>
+                            <div style="overflow: hidden; border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                                <img src='<%# Eval("Foto") %>' class="card-img-top" alt='<%# Eval("Nombre") %>' style="height: 200px; object-fit: cover;">
+                            </div>
 
-                            <div class="card-body">
+                            <div class="card-body d-flex flex-column">
 
-                                <h3 class="h5 mb-2"><%# Eval("Nombre") %></h3>
+                                <h3 class="h5 mb-2 fw-bold"><%# Eval("Nombre") %></h3>
 
-                                <p class="text-muted mb-3"><%# Eval("Descripcion") %></p>
+                                <p class="text-muted mb-3 flex-grow-1"><%# Eval("Descripcion") %></p>
 
-                                <a href="Servicios.aspx?id=<%# Eval("IDEspecialidad") %>" class="btn-custom btn-lg w-100">Ver Servicios
+                                <a href="Servicios.aspx?id=<%# Eval("IDEspecialidad") %>" class="btn-custom btn-lg w-100 mt-auto">Ver Servicios
                                 </a>
                             </div>
                         </div>
