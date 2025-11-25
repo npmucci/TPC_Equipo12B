@@ -132,20 +132,18 @@ footer {
     position: relative;
 }
 
-
-   /*--- ESTILOS PANEL DE ADMINISTRACIÓN  ---*/
-   
-
+/*--- ESTILOS PANEL DE ADMINISTRACIÓN --*/
+ 
 /* Layout Dashboard */
 .dashboard-container {
-    background-color: #f8f9fa; /* Gris muy claro de Bootstrap */
+    background-color: var(--colorFondoClaro);
     min-height: 80vh;
     padding: 20px;
 }
 
 /* Menú Lateral (Sidebar) */
 .nav-pills .nav-link {
-    color: #6c757d;
+    color: var(--colorTexto);
     font-weight: 500;
     padding: 15px 20px;
     border-radius: 10px;
@@ -156,22 +154,22 @@ footer {
     cursor: pointer;
 }
 
-    .nav-pills .nav-link i {
-        font-size: 1.2rem;
-        margin-right: 10px;
-    }
+ .nav-pills .nav-link i {
+    font-size: 1.2rem;
+    margin-right: 10px;
+}
+    
+ .nav-pills .nav-link:hover {
+    background-color: var(--colorPrincipal);
+    color: var(--colorPrincipalHover);
+   transform: translateX(5px);
+}
 
-    .nav-pills .nav-link:hover {
-        background-color: #e9ecef;
-        color: #0d6efd;
-        transform: translateX(5px);
-    }
-
-    .nav-pills .nav-link.active {
-        background-color: #0d6efd;
-        color: white;
-        box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
-    }
+ .nav-pills .nav-link.active {
+    background-color: var(--colorPrincipalHover);
+    color: white;
+    box-shadow: 0 4px 10px rgba(216, 92, 126, 0.4);
+ }
 
 /* Contenido Principal (Area Blanca) */
 .content-area {
@@ -214,7 +212,7 @@ footer {
 
 /* Gradientes Dashboard */
 .bg-gradient-primary {
-    background: linear-gradient(45deg, #4e73df, #224abe);
+    background: linear-gradient(45deg, var(--colorPrincipalHover), #A54562);
 }
 
 .bg-gradient-success {
@@ -222,7 +220,7 @@ footer {
 }
 
 .bg-gradient-info {
-    background: linear-gradient(45deg, #36b9cc, #258391);
+    background: linear-gradient(45deg, var(--coloroFondoOscuro), #8F726A);
 }
 
 /* Tarjetas de Profesionales */
@@ -289,6 +287,12 @@ footer {
     color: #5a5c69;
 }
 
+/* Pestañas inter
+
+
+
+
+
 /* Pestañas internas de la Agenda (Hoy/Proximos/Pasados) */
 .nav-tabs .nav-link {
     color: #6c757d;
@@ -299,13 +303,39 @@ footer {
     cursor: pointer;
 }
 
-    .nav-tabs .nav-link.active {
-        color: #4e73df;
-        border-bottom: 3px solid #4e73df;
-        background: transparent;
-        font-weight: bold;
+ .nav-pills .nav-link.active {
+    background-color: var(--colorPrincipal) !important;
+    color: var(--colorPrincipalHover) !important;
+    border-left: 5px solid var(--colorPrincipalHover) !important;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.nav-pills .nav-link {
+    background-color: white !important; 
+    border-radius: 10px;
+    margin-bottom: 8px; 
+}
+    .nav-pills .nav-link:hover {
+        background-color: var(--colorPrincipal) !important;
+        color: var(--colorPrincipalHover) !important;
+        transform: translateX(5px);
     }
 
-    .nav-tabs .nav-link:hover {
-        color: #4e73df;
+.bg-custom-accent {
+    background-color: var(--colorPrincipal) !important; 
+    border-bottom: 2px solid var(--colorPrincipalHover);
+}
+
+    .bg-custom-accent h5
+   {
+      
+        color: var(--colorTexto) !important; 
     }
+.lblfecha {
+    background-color: var(--colorPrincipalHover) !important;
+    color: white !important;
+    border-color: var(--colorPrincipalHover) !important;
+    border-radius: 0.375rem !important;
+    display: inline-flex !important; 
+    align-items: center !important;
+}

@@ -15,6 +15,15 @@ namespace CentroEstetica
     {
 
         /// <summary>
+        /// Control lblServicio.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblServicio;
+
+        /// <summary>
         /// Control lblFecha.
         /// </summary>
         /// <remarks>
@@ -31,15 +40,6 @@ namespace CentroEstetica
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblHora;
-
-        /// <summary>
-        /// Control lblServicio.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblServicio;
 
         /// <summary>
         /// Control lblProfesional.
@@ -96,6 +96,15 @@ namespace CentroEstetica
         protected global::System.Web.UI.WebControls.Repeater repPagos;
 
         /// <summary>
+        /// Control pnlRegistrarPago.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlRegistrarPago;
+
+        /// <summary>
         /// Control txtMonto.
         /// </summary>
         /// <remarks>
@@ -130,6 +139,15 @@ namespace CentroEstetica
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnAgregarPago;
+
+        /// <summary>
+        /// Control pnlRegistrarDevolucion.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlRegistrarDevolucion;
 
         /// <summary>
         /// Control txtMontoDevolucion.

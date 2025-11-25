@@ -85,14 +85,14 @@ namespace CentroEstetica
 
             int turnosProximos = negocio.ContarTurnos(inicioSemana, finSemana, idProfesional);
             int turnosHoy = negocio.ContarTurnos(hoy, hoy, idProfesional);
-            decimal ingresosMes = negocio.ObtenerIngresos(primerDiaDelMes, ultimoDiaDelMes, idProfesional);
+          
 
 
             lblTurnosHoy.Text = turnosHoy.ToString();
 
             lblTurnosProximos.Text = turnosProximos.ToString();
 
-            lblIngresosMes.Text = ingresosMes.ToString();
+      
         }
     }
 }

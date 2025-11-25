@@ -419,25 +419,7 @@ namespace AccesoDatos
                 }
             }
         }
-        public decimal ObtenerIngresos(DateTime fechaInicio, DateTime fechaFin, int idProfesional)
-        {
-
-            using (Datos datos = new Datos())
-            {
-
-                datos.SetearProcedimiento("sp_ObtenerIngresos");
-
-                datos.SetearParametro("@IDProfesional", idProfesional);
-                datos.SetearParametro("@FechaInicio", fechaInicio.Date);
-                datos.SetearParametro("@FechaFin", fechaFin.Date);
-
-
-                decimal resultado = datos.EjecutarAccionEscalar();
-
-
-                return resultado;
-            }
-        }
+   
         public List<EstadoTurno> ListarEstados()
         {
             List<EstadoTurno> lista = new List<EstadoTurno>();

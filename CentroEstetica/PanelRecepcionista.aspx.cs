@@ -80,8 +80,8 @@ namespace CentroEstetica
             PagoNegocio pagoNegocio = new PagoNegocio();
             var lista = pagoNegocio.ListarPagosDelTurno(idTurno);
 
-            repPagos.DataSource = lista;
-            repPagos.DataBind();
+            dgvPagos.DataSource = lista;
+            dgvPagos.DataBind();
 
             string script = "var modal = new bootstrap.Modal(document.getElementById('pagoModal')); modal.show();";
             ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowModal", script, true);

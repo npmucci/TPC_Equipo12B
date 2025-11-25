@@ -36,13 +36,7 @@
                     <asp:Label ID="lblTurnosProximos" runat="server" Text="0"></asp:Label></div>
             </div>
         </div>
-        <div class="col-md-3 custom-card mx-3">
-            <div class="stat-card text-center">
-                <p class="stat-label">💰 Ingresos del Mes</p>
-                <div class="stat-value">$<asp:Label ID="lblIngresosMes" runat="server" Text="0"></asp:Label></div>
-            </div>
-        </div>
-    </div>
+       
 <!-- Turnos-->
     <div class="container mt-4">
 

@@ -191,11 +191,11 @@ namespace CentroEstetica
 
             int hoyCount = turnoNegocio.ContarTurnos(hoy, hoy, idProfesional);
             int proxCount = turnoNegocio.ContarTurnos(inicioSemana, finSemana, idProfesional);
-            decimal ingresos = turnoNegocio.ObtenerIngresos(primerDiaMes, ultimoDiaMes, idProfesional);
+         
 
             lblTurnosHoy.Text = hoyCount.ToString();
             lblTurnosProximos.Text = proxCount.ToString();
-            lblIngresosMes.Text = ingresos.ToString("N0");
+        
         }
 
         protected void lnkAgenda_Click(object sender, EventArgs e)

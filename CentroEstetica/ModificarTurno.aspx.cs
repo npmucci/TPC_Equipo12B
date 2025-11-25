@@ -25,7 +25,19 @@ namespace CentroEstetica
                     Response.Redirect("PanelRecepcionista.aspx");
                     return;
                 }
+                PagoNegocio pagoNegocio = new PagoNegocio();
 
+                Turno turno = turnoNegocio.BuscarTurnoPorId(idTurno);
+                if (turno.Estado.Descripcion == "CanceladoCliente" || turno.Estado.Descripcion == "CanceladoProfesional")
+                {
+                    pnlRegistrarPago.Visible = false;
+                    pnlRegistrarDevolucion.Visible = true;
+                }
+                else
+                {
+                    pnlRegistrarPago.Visible = true;
+                    pnlRegistrarDevolucion.Visible = false;
+                }
 
                 CargarDatosTurno();
                 CargarEstados();
@@ -53,6 +65,7 @@ namespace CentroEstetica
                 Response.Redirect("PanelRecepcionista.aspx");
                 return;
             }
+
 
 
             lblFecha.Text = turno.Fecha.ToString("dd/MM/yyyy");
