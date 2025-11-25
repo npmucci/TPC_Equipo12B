@@ -319,7 +319,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE sp_ListarTodosLosTurnos
+CREATE PROCEDURE sp_ListarTodosLosTurnos
 AS
 BEGIN
     SELECT 

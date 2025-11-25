@@ -19,5 +19,6 @@ namespace Dominio
             Turnos = new List<Turno>();
             Rol = Rol.Profesional; // Se setea el rol por defecto
         }
+
     }
 }

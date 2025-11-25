@@ -40,11 +40,16 @@ namespace Negocio
         {
             return datos.ListarPorProfesionalYFecha(idProfesional, fecha);
         }
+
+        public List<Turno> FiltrarTurnos(int idEstado, int idEspecialidad, int idProfesional, int idServicio)
+        {
+            return datos.Filtrar (idEstado, idEspecialidad, idProfesional, idServicio);
+        } 
         #endregion
 
-       
+
         // MÉTODOS PARA EL CLIENTE
-        
+
         #region Métodos Cliente
         public List<Turno> ListarTurnosCliente(int idCliente)
         {

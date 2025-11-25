@@ -12,7 +12,7 @@ INSERT INTO EstadoTurno (Descripcion) VALUES
 ('Pendiente'),
 ('CanceladoCliente'),
 ('CanceladoProfesional'),
-('Finalizado')
+('Finalizado'),
 ('Solicitud de Devolución');
 -- IDs: 1-Confirmado, 2- Pendiente de pado, 3-CanceladoCliente, 4-CanceladoProfesional, 5-Finalizado, 6-Solicitud de Devolución
 

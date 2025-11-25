@@ -8,6 +8,7 @@ namespace Negocio
 {
     public class ProfesionalNegocio
     {
+
         private UsuarioDatos datos;
 
         public ProfesionalNegocio()
