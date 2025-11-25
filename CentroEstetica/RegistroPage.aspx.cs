@@ -17,35 +17,49 @@ namespace CentroEstetica
         {
             if (!IsPostBack)
             {
+                
                 pnlCredenciales.Visible = true;
                 pnlDatos.Visible = false;
-
-
                 pnlMensaje.Visible = false;
 
+                
+                Usuario usuario = (Usuario)Session["usuario"];
+                bool esAdmin = Seguridad.EsAdmin(usuario);
+                bool esRecep = Seguridad.EsRecepcionista(usuario);
 
-                if (Seguridad.EsAdmin(Session["usuario"]))
+                
+                if (esAdmin || esRecep)
                 {
                     pnlAdminControls.Visible = true;
 
+                    CargarRoles();          
+                    CargarEspecialidades(); 
 
-                    CargarRoles();
-                    CargarEspecialidades();
+                    
+                    if (esRecep)
+                    {
+                        
+                        ddlRoles.Items.Clear();
+                        ddlRoles.Items.Add(new ListItem("Cliente", ((int)Rol.Cliente).ToString()));
 
+                        
+                        pnlEspecialidad.Visible = false;
+                    }
 
+                    
                     if (Request.QueryString["rol"] != null)
                     {
                         string idRolDesdeURL = Request.QueryString["rol"];
 
-
                         if (ddlRoles.Items.FindByValue(idRolDesdeURL) != null)
                         {
-
                             ddlRoles.SelectedValue = idRolDesdeURL;
+                            
                             ddlRoles_SelectedIndexChanged(null, null);
                         }
                     }
                 }
+                
                 else
                 {
                     pnlAdminControls.Visible = false;
@@ -98,13 +112,12 @@ namespace CentroEstetica
         {
             try
             {
+                
                 string email = Session["RegistroEmail"] as string;
                 string passwordPlano = Session["RegistroPassword"] as string;
 
-               
                 if (email == null || passwordPlano == null)
                 {
-
                     pnlMensaje.Visible = true;
                     pnlMensaje.CssClass = "alert alert-danger";
                     litMensaje.Text = "<strong>Error de Sesión:</strong> La sesión expiró. Por favor, vuelva a empezar el registro.";
@@ -117,7 +130,7 @@ namespace CentroEstetica
                     pnlMensaje.Visible = true;
                     pnlMensaje.CssClass = "alert alert-danger";
                     litMensaje.Text = "<strong>Error:</strong> El DNI ingresado ya se encuentra registrado en el sistema.";
-                    return; 
+                    return;
                 }
 
                 Rol rolACrear = Rol.Cliente;
@@ -127,48 +140,35 @@ namespace CentroEstetica
                     rolACrear = (Rol)Enum.Parse(typeof(Rol), ddlRoles.SelectedValue);
                 }
 
-                // CREAMOS EL OBJETO BASE 
+                
                 Usuario nuevo;
                 switch (rolACrear)
                 {
-                    case Rol.Admin:
-                        nuevo = new Administrador();
-                        break;
-                    case Rol.Profesional:
-                        nuevo = new Profesional();
-                        break;
-                    case Rol.Recepcionista:
-                        nuevo = new Recepcionista();
-                        break;
-                    case Rol.ProfesionalUnico:
-                        nuevo = new ProfesionalUnico();
-                        break;
-                    case Rol.Cliente:
-                    default:
-                        nuevo = new Cliente();
-                        break;
+                    case Rol.Admin: nuevo = new Administrador(); break;
+                    case Rol.Profesional: nuevo = new Profesional(); break;
+                    case Rol.Recepcionista: nuevo = new Recepcionista(); break;
+                    case Rol.ProfesionalUnico: nuevo = new ProfesionalUnico(); break;
+                    case Rol.Cliente: default: nuevo = new Cliente(); break;
                 }
 
-                // SETEAMOS PROPIEDADES COMUNES
+              
                 nuevo.Nombre = txtNombre.Text.Trim();
                 nuevo.Apellido = txtApellido.Text.Trim();
-                nuevo.Dni = txtDni.Text.Trim();
+                nuevo.Dni = dniIngresado;
                 nuevo.Telefono = txtTelefono.Text.Trim();
                 nuevo.Domicilio = string.IsNullOrWhiteSpace(txtDomicilio.Text) ? null : txtDomicilio.Text.Trim();
                 nuevo.Mail = email;
                 nuevo.Rol = rolACrear;
                 nuevo.Activo = true;
 
-                // REGISTRO EN LA BD
+                
                 int id = negocio.RegistrarUsuario(nuevo, passwordPlano);
 
-                // SI ES PROF. SE INGRESA LA/LAS ESPECIALIDADES 
-                if (rolACrear == Rol.Profesional && id > 0)
+                
+                if ((rolACrear == Rol.Profesional || rolACrear == Rol.ProfesionalUnico) && id > 0)
                 {
-
                     foreach (ListItem item in cblEspecialidades.Items)
                     {
-
                         if (item.Selected)
                         {
                             int idEspecialidad = int.Parse(item.Value);
@@ -176,8 +176,8 @@ namespace CentroEstetica
                         }
                     }
                 }
-
                 
+
                 pnlMensaje.Visible = true;
                 pnlMensaje.CssClass = "alert alert-success h4";
                 litMensaje.Text = $"<strong>¡Registro Exitoso!</strong> El usuario ({rolACrear}) fue creado correctamente. 🎉";
@@ -191,7 +191,6 @@ namespace CentroEstetica
             }
             catch (Exception ex)
             {
-
                 pnlMensaje.Visible = true;
                 pnlMensaje.CssClass = "alert alert-danger";
                 litMensaje.Text = "<strong>¡Ups! Hubo un error:</strong> No se pudo completar el registro. (" + ex.Message + ")";
@@ -223,11 +222,10 @@ namespace CentroEstetica
 
         protected void ddlRoles_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
             Rol rolSeleccionado = (Rol)Enum.Parse(typeof(Rol), ddlRoles.SelectedValue);
 
             
-            if (rolSeleccionado == Rol.Profesional)
+            if (rolSeleccionado == Rol.Profesional || rolSeleccionado == Rol.ProfesionalUnico)
             {
                 pnlEspecialidad.Visible = true;
             }

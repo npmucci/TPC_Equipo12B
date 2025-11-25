@@ -142,38 +142,96 @@
                 <asp:UpdatePanel ID="upReserva" runat="server" UpdateMode="Conditional">
                     <ContentTemplate>
 
-                        <div class="card border-0 shadow-sm mb-4 rounded-4">
-                            <div class="card-header bg-white border-0 pt-4 px-4 rounded-top-4">
-                                <div class="d-flex align-items-center">
-                                    <div class="step-badge me-3">1</div>
-                                    <h5 class="mb-0 fw-bold">Seleccioná el Servicio</h5>
-                                </div>
-                            </div>
-                            <div class="card-body p-4">
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label text-muted small fw-bold">Especialidad</label>
-                                        <asp:DropDownList ID="ddlEspecialidad" runat="server" CssClass="form-select" 
-                                            AutoPostBack="true" OnSelectedIndexChanged="ddlEspecialidad_SelectedIndexChanged">
-                                        </asp:DropDownList>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label text-muted small fw-bold">Servicio</label>
-                                        <asp:DropDownList ID="ddlServicio" runat="server" CssClass="form-select" 
-                                            AutoPostBack="true" OnSelectedIndexChanged="ddlServicio_SelectedIndexChanged" Enabled="false">
-                                            <asp:ListItem Text="Seleccione especialidad primero" Value="0" />
-                                        </asp:DropDownList>
+                        <asp:Panel ID="pnlPaso1_Cliente" runat="server" Visible="false">
+                            <div class="card border-0 shadow-sm mb-4 rounded-4">
+                                <div class="card-header bg-white border-0 pt-4 px-4 rounded-top-4">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <div class="d-flex align-items-center">
+                                            <div class="step-badge me-3">1</div>
+                                            <h5 class="mb-0 fw-bold">Seleccioná al Cliente</h5>
+                                        </div>
+                                        <asp:Button ID="btnNuevoCliente" runat="server" Text="+ Nuevo Cliente" 
+                                            CssClass="btn btn-sm btn-outline-primary fw-bold rounded-pill" 
+                                            OnClick="btnNuevoCliente_Click" CausesValidation="false" />
                                     </div>
                                 </div>
+                                <div class="card-body p-4">
+                                    
+                                    <div class="input-group mb-3">
+                                        <asp:TextBox ID="txtBuscarCliente" runat="server" CssClass="form-control" placeholder="Buscar por Nombre, Apellido o DNI..."></asp:TextBox>
+                                        <asp:Button ID="btnBuscarCliente" runat="server" Text="Buscar" CssClass="btn btn-dark" OnClick="btnBuscarCliente_Click" />
+                                    </div>
+                    
+                                    <asp:GridView ID="gvClientes" runat="server" CssClass="table table-hover align-middle" 
+                                        AutoGenerateColumns="false" GridLines="None" OnRowCommand="gvClientes_RowCommand" ShowHeader="false">
+                                        <Columns>
+                                            <asp:TemplateField>
+                                                <ItemTemplate>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="bg-light text-primary rounded-circle d-flex align-items-center justify-content-center me-3 fw-bold" style="width: 40px; height: 40px;">
+                                                            <%# Eval("Nombre").ToString().Substring(0,1) + Eval("Apellido").ToString().Substring(0,1) %>
+                                                        </div>
+                                                        <div>
+                                                            <h6 class="mb-0 fw-bold"><%# Eval("Nombre") %> <%# Eval("Apellido") %></h6>
+                                                            <small class="text-muted">DNI: <%# Eval("Dni") %> | <%# Eval("Mail") %></small>
+                                                        </div>
+                                                    </div>
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                            <asp:TemplateField ItemStyle-HorizontalAlign="Right">
+                                                <ItemTemplate>
+                                                    <asp:Button ID="btnSeleccionar" runat="server" Text="Seleccionar" 
+                                                        CommandName="Seleccionar" CommandArgument='<%# Eval("ID") %>' 
+                                                        CssClass="btn btn-sm btn-outline-success rounded-pill px-3" />
+                                                </ItemTemplate>
+                                            </asp:TemplateField>
+                                        </Columns>
+                                    </asp:GridView>
+                    
+                                    <asp:Panel ID="pnlClienteSeleccionado" runat="server" Visible="false" CssClass="alert alert-success d-flex align-items-center justify-content-between mt-3">
+                                        <div>
+                                            <i class="bi bi-check-circle-fill me-2"></i> 
+                                            Cliente: <strong><asp:Label ID="lblClienteNombre" runat="server"></asp:Label></strong>
+                                        </div>
+                                        <asp:Button ID="btnCambiarCliente" runat="server" Text="Cambiar" CssClass="btn btn-link btn-sm text-success fw-bold text-decoration-none" OnClick="btnCambiarCliente_Click" />
+                                    </asp:Panel>
+                    
+                                </div>
                             </div>
-                        </div>
-
-                        <asp:Panel ID="pnlProfesional" runat="server" Visible="false"> 
+                        </asp:Panel>
+                    
+                        <asp:Panel ID="pnlPaso2_Servicio" runat="server" Visible="false">
                             <div class="card border-0 shadow-sm mb-4 rounded-4">
                                 <div class="card-header bg-white border-0 pt-4 px-4 rounded-top-4">
                                     <div class="d-flex align-items-center">
-                                        <div class="step-badge me-3">2</div>
-                                        <h5 class="mb-0 fw-bold">Elegí al Profesional</h5>
+                                        <div class="step-badge me-3">2</div> <h5 class="mb-0 fw-bold">Seleccioná el Servicio</h5>
+                                    </div>
+                                </div>
+                                <div class="card-body p-4">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label text-muted small fw-bold">Especialidad</label>
+                                            <asp:DropDownList ID="ddlEspecialidad" runat="server" CssClass="form-select" 
+                                                AutoPostBack="true" OnSelectedIndexChanged="ddlEspecialidad_SelectedIndexChanged">
+                                            </asp:DropDownList>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label text-muted small fw-bold">Servicio</label>
+                                            <asp:DropDownList ID="ddlServicio" runat="server" CssClass="form-select" 
+                                                AutoPostBack="true" OnSelectedIndexChanged="ddlServicio_SelectedIndexChanged" Enabled="false">
+                                                <asp:ListItem Text="Seleccione especialidad primero" Value="0" />
+                                            </asp:DropDownList>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </asp:Panel>
+                    
+                        <asp:Panel ID="pnlPaso3_Profesional" runat="server" Visible="false"> 
+                            <div class="card border-0 shadow-sm mb-4 rounded-4">
+                                <div class="card-header bg-white border-0 pt-4 px-4 rounded-top-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="step-badge me-3">3</div> <h5 class="mb-0 fw-bold">Elegí al Profesional</h5>
                                     </div>
                                 </div>
                                 <div class="card-body p-4">
@@ -186,13 +244,12 @@
                                 </div>
                             </div>
                         </asp:Panel>
-
-                        <asp:Panel ID="pnlFechaHora" runat="server" Visible="false">
+                    
+                        <asp:Panel ID="pnlPaso4_FechaHora" runat="server" Visible="false">
                             <div class="card border-0 shadow-sm mb-4 rounded-4">
                                 <div class="card-header bg-white border-0 pt-4 px-4 rounded-top-4">
                                     <div class="d-flex align-items-center">
-                                        <div class="step-badge me-3">3</div>
-                                        <h5 class="mb-0 fw-bold">Fecha y Hora</h5>
+                                        <div class="step-badge me-3">4</div> <h5 class="mb-0 fw-bold">Fecha y Hora</h5>
                                     </div>
                                 </div>
                                 <div class="card-body p-4">
@@ -206,7 +263,7 @@
                                                     OnSelectionChanged="calFecha_SelectionChanged"
                                                     OnDayRender="calFecha_DayRender"
                                                     OnVisibleMonthChanged="calFecha_VisibleMonthChanged">
-                                                
+                                                    
                                                     <TitleStyle BackColor="White" Font-Bold="True" ForeColor="Black" CssClass="py-2 font-playfair" />
                                                     <NextPrevStyle Font-Bold="True" ForeColor="#D85C7E" />
                                                     <DayHeaderStyle Font-Bold="True" />
@@ -229,7 +286,7 @@
                                                     <i class="bi bi-emoji-frown fs-5 d-block mb-1"></i>
                                                     Sin turnos para esta fecha.
                                                 </div>
-
+                    
                                                 <div class="d-flex flex-wrap gap-2 justify-content-center">
                                                     <asp:Repeater ID="rptHorarios" runat="server" OnItemCommand="rptHorarios_ItemCommand">
                                                         <ItemTemplate>
@@ -247,11 +304,15 @@
                                 </div>
                             </div>
                         </asp:Panel>
-
+                    
                         <asp:HiddenField ID="hfHoraSeleccionada" runat="server" />
-
+                        
+                        <asp:HiddenField ID="hfIdClienteSeleccionado" runat="server" />
+                    
                     </ContentTemplate>
+
                 </asp:UpdatePanel>
+
             </div>
 
             <div class="col-lg-4">

@@ -72,7 +72,7 @@ namespace Negocio
                 cuerpo.Append("<small>Tu comprobante está sujeto a verificación por administración.</small>");
                 cuerpo.Append("</div>");
             }
-            else if (pago.FormaDePago != null && pago.FormaDePago.Descripcion.ToLower().Contains("efectivo"))
+            else if (pago.FormaDePago != null && (pago.FormaDePago.IDFormaPago == 1 || (pago.FormaDePago.Descripcion != null && pago.FormaDePago.Descripcion.ToLower().Contains("efectivo"))))
             {
                 cuerpo.Append("<p><em>Pago registrado en efectivo en el local.</em></p>");
             }

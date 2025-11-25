@@ -59,6 +59,9 @@ namespace CentroEstetica
                     case "recepcionistas":
                         hfTabActivo.Value = "#v-pills-recepcionistas";
                         break;
+                    case "admins": 
+                        hfTabActivo.Value = "#v-pills-admins";
+                        break;
                     default:
                         hfTabActivo.Value = "#v-pills-dashboard";
                         break;
@@ -77,6 +80,7 @@ namespace CentroEstetica
             CargarClientes();
             CargarRecepcionistas();
             CargarAgendaPersonal();
+            CargarAdministradores();
         }
 
 
@@ -480,6 +484,52 @@ namespace CentroEstetica
 
             CargarRecepcionistas();
             hfTabActivo.Value = "#v-pills-recepcionistas";
+        }
+
+        //  LÓGICA DE ADMINISTRADORES
+
+        private void CargarAdministradores()
+        {
+            
+            List<Usuario> todos = usuarioNegocio.ListarTodos();
+
+            List<Usuario> admins = todos.FindAll(u => u.Rol == Rol.Admin || u.Rol == Rol.ProfesionalUnico);
+
+            rptAdmins.DataSource = admins;
+            rptAdmins.DataBind();
+        }
+
+        protected void rptAdmins_ItemCommand(object source, RepeaterCommandEventArgs e)
+        {
+            int id = int.Parse(e.CommandArgument.ToString());
+
+            switch (e.CommandName)
+            {
+                case "EditarAdmin":
+                    Response.Redirect($"PanelPerfil.aspx?id={id}&adminMode=true", false);
+                    break;
+
+                case "BajaAdmin":
+                    
+                    Usuario logueado = (Usuario)Session["usuario"];
+                    if (logueado.ID == id)
+                    {
+                        MostrarMensaje("No puedes darte de baja a ti mismo.", "danger");
+                        return;
+                    }
+
+                    usuarioNegocio.CambiarEstado(id, false);
+                    MostrarMensaje("Administrador dado de baja.", "warning");
+                    break;
+
+                case "AltaAdmin":
+                    usuarioNegocio.CambiarEstado(id, true);
+                    MostrarMensaje("Administrador reactivado.", "success");
+                    break;
+            }
+
+            CargarAdministradores();
+            hfTabActivo.Value = "#v-pills-admins";
         }
     }
 }

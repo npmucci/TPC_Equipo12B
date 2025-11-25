@@ -22,6 +22,10 @@ namespace CentroEstetica
 
             if (!IsPostBack)
             {
+                if (Request.QueryString["reservaExitosa"] == "true")
+                {
+                    pnlMensajeExito.Visible = true;
+                }
                 Recepcionista recepcionista = (Recepcionista)Session["usuario"];
                 lblNombre.Text = recepcionista.Nombre.ToString();
                 MostrarFechaActual();

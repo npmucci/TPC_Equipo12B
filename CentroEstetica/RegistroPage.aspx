@@ -17,7 +17,7 @@
 
                 <div class="mb-3">
                     <label for="txtMail" class="form-label"><strong>Email:</strong></label>
-                    <asp:TextBox ID="txtMail" runat="server" CssClass="form-control"></asp:TextBox>
+                    <asp:TextBox ID="txtMail" runat="server" CssClass="form-control" autocomplete="off"></asp:TextBox>
                     <asp:RequiredFieldValidator ID="rfvMail" runat="server" ControlToValidate="txtMail"
                         ErrorMessage="El email es obligatorio." CssClass="text-danger small" Display="Dynamic" />
                     <asp:RegularExpressionValidator ID="revMail" runat="server" ControlToValidate="txtMail"
@@ -27,7 +27,7 @@
 
                 <div class="mb-3">
                     <label for="txtContraseña" class="form-label"><strong>Contraseña:</strong></label>
-                    <asp:TextBox ID="txtContraseña" runat="server" CssClass="form-control" TextMode="Password"></asp:TextBox>
+                    <asp:TextBox ID="txtContraseña" runat="server" CssClass="form-control" TextMode="Password" autocomplete="new-password"></asp:TextBox>
                     <asp:RequiredFieldValidator ID="rfvContraseña" runat="server" ControlToValidate="txtContraseña"
                         ErrorMessage="La contraseña es obligatoria." CssClass="text-danger small" Display="Dynamic" />
                     <asp:RegularExpressionValidator ID="revContraseniaLargo" runat="server" ControlToValidate="txtContraseña"
@@ -37,7 +37,7 @@
 
                 <div class="mb-3">
                     <label for="txtRepetirContraseña" class="form-label"><strong>Repetir Contraseña:</strong></label>
-                    <asp:TextBox ID="txtRepetirContraseña" runat="server" CssClass="form-control" TextMode="Password"></asp:TextBox>
+                    <asp:TextBox ID="txtRepetirContraseña" runat="server" CssClass="form-control" TextMode="Password" autocomplete="new-password"></asp:TextBox>
                     <asp:CompareValidator ID="cvContraseña" runat="server" ControlToValidate="txtRepetirContraseña"
                         ControlToCompare="txtContraseña" ErrorMessage="Las contraseñas no coinciden."
                         CssClass="text-danger small" Display="Dynamic" />
@@ -78,21 +78,21 @@
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label for="txtNombre" class="form-label"><strong>Nombre:</strong></label>
-                        <asp:TextBox ID="txtNombre" runat="server" CssClass="form-control"></asp:TextBox>
+                        <asp:TextBox ID="txtNombre" runat="server" CssClass="form-control" autocomplete="off"></asp:TextBox>
                         <asp:RequiredFieldValidator ID="rfvNombre" runat="server" ControlToValidate="txtNombre"
                             ErrorMessage="El nombre es obligatorio." CssClass="text-danger small" Display="Dynamic" />
                     </div>
 
                     <div class="col-md-6">
                         <label for="txtApellido" class="form-label"><strong>Apellido:</strong></label>
-                        <asp:TextBox ID="txtApellido" runat="server" CssClass="form-control"></asp:TextBox>
+                        <asp:TextBox ID="txtApellido" runat="server" CssClass="form-control" autocomplete="off"></asp:TextBox>
                         <asp:RequiredFieldValidator ID="rfvApellido" runat="server" ControlToValidate="txtApellido"
                             ErrorMessage="El apellido es obligatorio." CssClass="text-danger small" Display="Dynamic" />
                     </div>
 
                     <div class="col-md-6">
                         <label for="txtDni" class="form-label"><strong>DNI:</strong></label>
-                        <asp:TextBox ID="txtDni" runat="server" CssClass="form-control"></asp:TextBox>
+                        <asp:TextBox ID="txtDni" runat="server" CssClass="form-control" autocomplete="off"></asp:TextBox>
                         <asp:RequiredFieldValidator ID="rfvDni" runat="server" ControlToValidate="txtDni"
                             ErrorMessage="El DNI es obligatorio." CssClass="text-danger small" Display="Dynamic" />
                         <asp:RegularExpressionValidator ID="revDni" runat="server" ControlToValidate="txtDni"

@@ -18,32 +18,37 @@
                     <h5 class="text-muted text-uppercase mb-3 ms-2 small fw-bold">Menú Principal</h5>
                     
                     <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+    
                         <button class="nav-link active" id="v-pills-dashboard-tab" data-bs-toggle="pill" data-bs-target="#v-pills-dashboard" type="button" role="tab">
                             <i class="bi bi-speedometer2"></i> Resumen
                         </button>
                         
-                        
+                        <a class="nav-link" href="PanelRecepcionista.aspx">
+                            <i class="bi bi-calendar2-check"></i> Panel Recepción
+                        </a>
+                    
                         <button class="nav-link" id="btnTabAgenda" runat="server" visible="false" data-bs-toggle="pill" data-bs-target="#v-pills-agenda" type="button" role="tab">
                             <i class="bi bi-calendar-heart"></i> Mi Agenda
                         </button>
-
+                    
                         <button class="nav-link" id="v-pills-profesionales-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profesionales" type="button" role="tab">
                             <i class="bi bi-people"></i> Profesionales
                         </button>
-
+                    
                         <button class="nav-link" id="v-pills-clientes-tab" data-bs-toggle="pill" data-bs-target="#v-pills-clientes" type="button" role="tab">
                             <i class="bi bi-person-hearts"></i> Clientes
                         </button>
-
+                    
                         <button class="nav-link" id="v-pills-recepcionistas-tab" data-bs-toggle="pill" data-bs-target="#v-pills-recepcionistas" type="button" role="tab">
                             <i class="bi bi-headset"></i> Recepción
                         </button>
-
+                    
                         <button class="nav-link" id="v-pills-servicios-tab" data-bs-toggle="pill" data-bs-target="#v-pills-servicios" type="button" role="tab">
                             <i class="bi bi-grid"></i> Catálogo
                         </button>
-                        <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab">
-                            <i class="bi bi-gear"></i> Configuración
+                        
+                        <button class="nav-link" id="v-pills-admins-tab" data-bs-toggle="pill" data-bs-target="#v-pills-admins" type="button" role="tab">
+                            <i class="bi bi-shield-lock"></i> Administradores
                         </button>
                     </div>
                 </div>
@@ -584,49 +589,76 @@
                         </div>
                     </div>
 
-                    <!-- 5. CONFIGURACIÓN -->
-                    <div class="tab-pane fade" id="v-pills-settings" role="tabpanel">
-    
-                        <h4 class="fw-bold mb-4">Configuración del Sistema</h4>
+                    <!-- 5. ADMINS -->
+                    <div class="tab-pane fade" id="v-pills-admins" role="tabpanel">
                         
-                        <div class="card border-0 shadow-sm rounded-4 mb-4">
-                            <div class="card-header bg-white border-0 pt-4 px-4">
-                                 <h5 class="fw-bold text-secondary"><i class="bi bi-shop me-2"></i>Datos del Centro</h5>
-                            </div>
-                            <div class="card-body p-4">
-                                <div class="row g-3">
-                                    <div class="col-12">
-                                        <label class="form-label fw-bold text-muted small">Nombre del Centro</label>
-                                        <input type="text" class="form-control" value="Centro de Estética" disabled>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold text-muted small">Email de Notificaciones</label>
-                                        <input type="email" class="form-control" value="admin@sistema.com" disabled>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold text-muted small">Porcentaje de Seña (%)</label>
-                                        <input type="number" class="form-control" value="50" disabled>
-                                    </div>
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="fw-bold mb-0">Gestión de Administradores</h4>
+                            <asp:Button ID="btnNuevoAdmin" runat="server" Text="+ Nuevo Admin" 
+                                CssClass="btn btn-dark rounded-pill px-4" OnClick="btnNuevoAdmin_Click" />
+                        </div>
+                    
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle mb-0">
+                                        <thead class="bg-light">
+                                            <tr>
+                                                <th class="ps-4">Nombre</th>
+                                                <th>Email</th>
+                                                <th>Rol</th>
+                                                <th>Estado</th>
+                                                <th class="text-end pe-4">Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <asp:Repeater ID="rptAdmins" runat="server" OnItemCommand="rptAdmins_ItemCommand">
+                                                <ItemTemplate>
+                                                    <tr>
+                                                        <td class="ps-4 fw-bold">
+                                                            <%# Eval("Nombre") %> <%# Eval("Apellido") %>
+                                                        </td>
+                                                        <td><%# Eval("Mail") %></td>
+                                                        <td>
+                                                            <span class='badge rounded-pill <%# Eval("Rol").ToString() == "ProfesionalUnico" ? "bg-info text-dark" : "bg-dark" %>'>
+                                                                <%# Eval("Rol").ToString() == "ProfesionalUnico" ? "Prof. y Admin" : "Admin" %>
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <%# (bool)Eval("Activo") ? "<span class='text-success fw-bold'>Activo</span>" : "<span class='text-danger'>Baja</span>" %>
+                                                        </td>
+                                                        <td class="text-end pe-4">
+                                                            <div class="btn-group">
+                                                                <asp:LinkButton ID="lnkEditar" runat="server" CssClass="btn btn-sm btn-light border" 
+                                                                    CommandName="EditarAdmin" CommandArgument='<%# Eval("ID") %>' ToolTip="Editar">
+                                                                    <i class="bi bi-pencil"></i>
+                                                                </asp:LinkButton>
+                                                                
+                                                                <asp:LinkButton ID="lnkBaja" runat="server" CssClass="btn btn-sm btn-light border text-danger" 
+                                                                    CommandName="BajaAdmin" CommandArgument='<%# Eval("ID") %>' ToolTip="Dar de baja"
+                                                                    OnClientClick="return confirm('¿Quitar permisos de administrador?');" 
+                                                                    Visible='<%# (bool)Eval("Activo") %>'>
+                                                                    <i class="bi bi-trash"></i>
+                                                                </asp:LinkButton>
+                                                                
+                                                                <asp:LinkButton ID="lnkAlta" runat="server" CssClass="btn btn-sm btn-light border text-success" 
+                                                                    CommandName="AltaAdmin" CommandArgument='<%# Eval("ID") %>' ToolTip="Reactivar"
+                                                                    Visible='<%# !(bool)Eval("Activo") %>'>
+                                                                    <i class="bi bi-check-lg"></i>
+                                                                </asp:LinkButton>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </ItemTemplate>
+                                            </asp:Repeater>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
-                    
-                        <div class="card border-0 shadow-sm rounded-4 border-start border-4 border-dark">
-                            <div class="card-body p-4">
-                                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
-                                    <div>
-                                        <h5 class="fw-bold text-dark mb-1"><i class="bi bi-shield-lock-fill me-2"></i>Gestión de Administradores</h5>
-                                        <p class="text-muted small mb-0">Registrar nuevos usuarios con acceso total al sistema.</p>
-                                    </div>
-                                    
-                                    <asp:Button ID="btnNuevoAdmin" runat="server" Text="+ Nuevo Administrador" 
-                                        CssClass="btn btn-dark px-4 rounded-pill fw-bold" OnClick="btnNuevoAdmin_Click" />
-                                </div>
-                            </div>
-                        </div>
-                    
                     </div>
-                    <!-- 6. RECEPCIONISTAS (NUEVA SECCIÓN) -->
+
+                    <!-- 6. RECEPCIONISTAS  -->
                     <div class="tab-pane fade" id="v-pills-recepcionistas" role="tabpanel">
                         
                         <div class="d-flex justify-content-between align-items-center mb-4">

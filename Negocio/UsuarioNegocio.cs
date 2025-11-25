@@ -103,6 +103,10 @@ namespace Negocio
         {
             return datos.ListarPorRol(idRol);
         }
+        public List<Usuario> ListarTodos()
+        {
+            return datos.ListarTodosActivos();
+        }
 
         public void CambiarEstado(int idUsuario, bool estado)
         {

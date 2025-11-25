@@ -6,6 +6,13 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <asp:HiddenField ID="hfTabActivo" runat="server" Value="#v-pills-agenda" />
 
+    <div class="container mt-3">
+        <asp:Panel ID="pnlMensajeExito" runat="server" Visible="false" CssClass="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> 
+            <strong>¡Listo!</strong> La reserva se ha registrado y confirmado correctamente.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </asp:Panel>
+    </div>
     <div class="container-fluid dashboard-container">
         <div class="row">
 
