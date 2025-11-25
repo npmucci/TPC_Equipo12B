@@ -16,6 +16,7 @@ namespace CentroEstetica
         private HorarioAtencionNegocio horarioNegocio = new HorarioAtencionNegocio();
         private TurnoNegocio turnoNegocio = new TurnoNegocio();
         private ClienteNegocio clienteNegocio = new ClienteNegocio();
+        private UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
 
         private HashSet<DateTime> FechasDisponiblesCache
         {
@@ -65,9 +66,9 @@ namespace CentroEstetica
             }
             catch (Exception) { }
         }
-        
 
-        // Paso 1: Seleccion Cliente (Staff)
+
+        // Paso 1: Seleccion Cliente (recepcion)
         protected void btnBuscarCliente_Click(object sender, EventArgs e)
         {
             string termino = txtBuscarCliente.Text.Trim().ToLower();
@@ -75,8 +76,10 @@ namespace CentroEstetica
 
             try
             {
-                List<Usuario> clientes = clienteNegocio.ListarClientes();
-                List<Usuario> resultados = clientes.FindAll(x =>
+                
+                List<Usuario> todos = usuarioNegocio.ListarTodos();
+
+                List<Usuario> resultados = todos.FindAll(x =>
                     x.Nombre.ToLower().Contains(termino) ||
                     x.Apellido.ToLower().Contains(termino) ||
                     x.Dni.Contains(termino)
@@ -96,16 +99,21 @@ namespace CentroEstetica
                 int idCliente = int.Parse(e.CommandArgument.ToString());
                 hfIdClienteSeleccionado.Value = idCliente.ToString();
 
-                Usuario cliente = clienteNegocio.ObtenerClientePorId(idCliente);
-                lblClienteNombre.Text = $"{cliente.Nombre} {cliente.Apellido} ({cliente.Dni})";
+                UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
+                Usuario cliente = usuarioNegocio.ObtenerPorId(idCliente);
+             
+                if (cliente != null)
+                {
+                    lblClienteNombre.Text = $"{cliente.Nombre} {cliente.Apellido} ({cliente.Dni})";
 
-                txtBuscarCliente.Visible = false;
-                btnBuscarCliente.Visible = false;
-                gvClientes.Visible = false;
-                pnlClienteSeleccionado.Visible = true;
+                    txtBuscarCliente.Visible = false;
+                    btnBuscarCliente.Visible = false;
+                    gvClientes.Visible = false;
+                    pnlClienteSeleccionado.Visible = true;
 
-                pnlPaso2_Servicio.Visible = true;
-                upReserva.Update();
+                    pnlPaso2_Servicio.Visible = true;
+                    upReserva.Update();
+                }
             }
         }
 

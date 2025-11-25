@@ -8,7 +8,11 @@
         <div class="container text-center">
             <h1 class="display-2 fw-bold mb-4">Tu Belleza, Nuestra Pasión</h1>
             <p class="lead mb-4">Descubre una experiencia única de bienestar y cuidado personal con nuestros tratamientos especializados</p>
-            <a href="login.aspx" class="btn-custom">Reservar Turno</a>
+
+            <asp:LinkButton ID="btnReservarTurno" runat="server" CssClass="btn-custom" OnClick="btnReservarTurno_Click">
+                Reservar Turno
+            </asp:LinkButton>
+
         </div>
     </section>
 
@@ -47,27 +51,27 @@
         <h2 class="text-center mb-4">Nuestros Profesionales</h2>
         <div class="row g-4">
 
-<asp:Repeater ID="rptProfesionales" runat="server">
-    <ItemTemplate>
-        <div class="col-md-3 col-lg-3 mb-4">
-            <div class="card service-card custom-card h-100 border-0 shadow-sm text-center">
-
-                <img src='<%# Eval("Foto") %>' 
-                     class="card-img-top rounded-circle mx-auto mt-3" 
-                     alt='<%# Eval("Nombre") + " " + Eval("Apellido") %>' 
-                     style="width: 120px; height: 120px; object-fit: cover;" />
-
-                <div class="card-body">
-                    <h5 class="card-title mb-1">
-                        <%# Eval("Nombre") + " " + Eval("Apellido") %>
-                    </h5>
-
-                   
+        <asp:Repeater ID="rptProfesionales" runat="server">
+            <ItemTemplate>
+                <div class="col-md-3 col-lg-3 mb-4">
+                    <div class="card service-card custom-card h-100 border-0 shadow-sm text-center">
+        
+                        <img src='<%# Eval("Foto") %>' 
+                             class="card-img-top rounded-circle mx-auto mt-3" 
+                             alt='<%# Eval("Nombre") + " " + Eval("Apellido") %>' 
+                             style="width: 120px; height: 120px; object-fit: cover;" />
+        
+                        <div class="card-body">
+                            <h5 class="card-title mb-1">
+                                <%# Eval("Nombre") + " " + Eval("Apellido") %>
+                            </h5>
+        
+                           
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </ItemTemplate>
-</asp:Repeater>
+            </ItemTemplate>
+        </asp:Repeater>
 
 
         </div>

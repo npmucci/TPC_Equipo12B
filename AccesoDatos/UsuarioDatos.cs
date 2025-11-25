@@ -251,6 +251,49 @@ namespace AccesoDatos
             }
             return lista;
         }
+        public List<Usuario> ListarTodosActivos()
+        {
+            List<Usuario> lista = new List<Usuario>();
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    
+                    string consulta = "SELECT * FROM Usuario WHERE Activo = 1";
+                    datos.SetearConsulta(consulta);
+                    datos.EjecutarLectura();
+
+                    while (datos.Lector.Read())
+                    {
+                        
+                        Usuario aux;
+                        Rol rol = (Rol)datos.Lector["IDRol"];
+
+                        switch (rol)
+                        {
+                            case Rol.Admin: aux = new Administrador(); break;
+                            case Rol.Profesional: aux = new Profesional(); break;
+                            case Rol.Recepcionista: aux = new Recepcionista(); break;
+                            case Rol.ProfesionalUnico: aux = new ProfesionalUnico(); break;
+                            case Rol.Cliente: default: aux = new Cliente(); break;
+                        }
+
+                        aux.ID = (int)datos.Lector["IDUsuario"];
+                        aux.Nombre = (string)datos.Lector["Nombre"];
+                        aux.Apellido = (string)datos.Lector["Apellido"];
+                        aux.Dni = (string)datos.Lector["Dni"];
+                        aux.Mail = (string)datos.Lector["Mail"];
+                        aux.Telefono = (string)datos.Lector["Telefono"];
+                        aux.Rol = rol;
+                        aux.Activo = (bool)datos.Lector["Activo"];
+
+                        lista.Add(aux);
+                    }
+                    return lista;
+                }
+                catch (Exception ex) { throw ex; }
+            }
+        }
 
         public void Modificar(Usuario usuario)
         {

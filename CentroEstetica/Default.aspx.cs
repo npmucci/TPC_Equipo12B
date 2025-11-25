@@ -13,33 +13,42 @@ namespace CentroEstetica
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
             if (!IsPostBack)
             {
                 try
                 {
-
+                    
                     EspecialidadNegocio negocio = new EspecialidadNegocio();
-
                     List<Especialidad> listaEspecialidades = negocio.ListarActivos();
                     rptEspecialidades.DataSource = listaEspecialidades;
-
                     rptEspecialidades.DataBind();
 
+                    
                     ProfesionalNegocio profesionalNegocio = new ProfesionalNegocio();
-
-                    
                     List<Usuario> listaProfesionales = profesionalNegocio.ListarProfesionalesActivos();
-                    
-
                     rptProfesionales.DataSource = listaProfesionales;
                     rptProfesionales.DataBind();
                 }
                 catch (Exception ex)
                 {
-
                     throw ex;
                 }
+            }
+        }
+
+        
+        protected void btnReservarTurno_Click(object sender, EventArgs e)
+        {
+            
+            if (Seguridad.SesionActiva(Session["usuario"]))
+            {
+                
+                Response.Redirect("ReservarTurno.aspx", false);
+            }
+            else
+            {
+                
+                Response.Redirect("Login.aspx", false);
             }
         }
     }
