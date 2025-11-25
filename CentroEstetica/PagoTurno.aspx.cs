@@ -114,79 +114,98 @@ namespace CentroEstetica
 
             try
             {
+                
                 ReservaTemporal reservaTemp = (ReservaTemporal)Session["ReservaEnCurso"];
                 Usuario usuarioLogueado = (Usuario)Session["usuario"];
                 bool esAdmin = Seguridad.EsAdmin(usuarioLogueado) || usuarioLogueado.Rol == Dominio.Rol.Recepcionista;
 
-                
                 Turno nuevoTurno = new Turno();
                 nuevoTurno.Fecha = reservaTemp.Fecha;
                 nuevoTurno.HoraInicio = reservaTemp.Hora;
 
-                
                 if (esAdmin)
-                    nuevoTurno.Estado = new EstadoTurno { IDEstado = 1 };
+                    nuevoTurno.Estado = new EstadoTurno { IDEstado = 1 }; 
                 else
-                    nuevoTurno.Estado = new EstadoTurno { IDEstado = 2 };
+                    nuevoTurno.Estado = new EstadoTurno { IDEstado = 2 }; 
 
-                nuevoTurno.Cliente = new Cliente { ID = usuarioLogueado.ID }; 
+                nuevoTurno.Cliente = new Cliente { ID = usuarioLogueado.ID };
                 nuevoTurno.Profesional = new Profesional { ID = reservaTemp.IDProfesional };
                 nuevoTurno.Servicio = new Servicio { IDServicio = reservaTemp.IDServicio };
 
-
+                
                 Pago nuevoPago = new Pago();
                 nuevoPago.Fecha = DateTime.Now;
                 nuevoPago.EsDevolucion = false;
 
+                
                 decimal precioTotal = reservaTemp.Precio;
-                string tipoPago = hfTipoPagoCalculado.Value; 
+                string tipoPago = hfTipoPagoCalculado.Value;
 
                 if (tipoPago == "Total")
                 {
                     nuevoPago.Monto = precioTotal;
-                    nuevoPago.Tipo = new TipoPago { IDTipoPago = 2 }; 
+                    nuevoPago.Tipo = new TipoPago { IDTipoPago = 2 };
                 }
                 else
                 {
                     nuevoPago.Monto = precioTotal * 0.5m;
-                    nuevoPago.Tipo = new TipoPago { IDTipoPago = 1 }; 
+                    nuevoPago.Tipo = new TipoPago { IDTipoPago = 1 };
                 }
 
-
+                
                 if (esAdmin)
                 {
                     if (rblFormaPagoAdmin.SelectedValue == "Efectivo")
                     {
-                        nuevoPago.FormaDePago = new FormaPago { IDFormaPago = 1 }; 
+                        nuevoPago.FormaDePago = new FormaPago { IDFormaPago = 1 };
                         nuevoPago.CodigoTransaccion = null;
                     }
                     else
                     {
-                        nuevoPago.FormaDePago = new FormaPago { IDFormaPago = 2 }; 
-                        nuevoPago.CodigoTransaccion = txtCodigoTransaccion.Text; 
+                        nuevoPago.FormaDePago = new FormaPago { IDFormaPago = 2 };
+                        nuevoPago.CodigoTransaccion = txtCodigoTransaccion.Text;
                     }
                 }
                 else 
                 {
                     nuevoPago.FormaDePago = new FormaPago { IDFormaPago = 2 }; 
-                    nuevoPago.CodigoTransaccion = txtCodigoTransaccion.Text; 
+                    nuevoPago.CodigoTransaccion = txtCodigoTransaccion.Text;
                 }
 
                 
                 turnoNegocio.GuardarTurno(nuevoTurno, nuevoPago);
 
                 
-                if (!esAdmin)
+                try
                 {
-                    // EmailService.EnviarNotificacionPago(nuevoTurno, nuevoPago);
+                    
+                    nuevoTurno.Servicio.Nombre = reservaTemp.NombreServicio;
+                    nuevoTurno.Profesional.Nombre = reservaTemp.NombreProfesional;
+                    nuevoTurno.Profesional.Apellido = "";
+                    nuevoTurno.Estado.Descripcion = (esAdmin) ? "Confirmado" : "Pendiente";
+
+                    
+                    EmailService.EnviarConfirmacionReserva(nuevoTurno, nuevoPago, usuarioLogueado.Mail);
+
+                    
+                    if (!esAdmin && !string.IsNullOrEmpty(nuevoPago.CodigoTransaccion))
+                    {
+                        
+                        nuevoTurno.Cliente.Nombre = usuarioLogueado.Nombre;
+                        nuevoTurno.Cliente.Apellido = usuarioLogueado.Apellido;
+
+                        EmailService.EnviarAvisoPagoRecepcionista(nuevoTurno, nuevoPago);
+                    }
+                }
+                catch (Exception)
+                {
+                    
                 }
 
-                
                 Session["ReservaEnCurso"] = null;
-                Usuario usuario = (Usuario)Session["usuario"];
-                string urlDestino = "Default.aspx"; 
+                string urlDestino = "Default.aspx";
 
-                switch (usuario.Rol)
+                switch (usuarioLogueado.Rol)
                 {
                     case Rol.Cliente:
                         urlDestino = "PanelCliente.aspx";
@@ -203,12 +222,11 @@ namespace CentroEstetica
                         break;
                 }
 
-                
                 Response.Redirect(urlDestino + "?reservaExitosa=true", false);
             }
             catch (Exception ex)
             {
-                litMensaje.Text = ex.Message;
+                litMensaje.Text = "Hubo un error al procesar la reserva: " + ex.Message;
                 pnlMensaje.Visible = true;
             }
         }

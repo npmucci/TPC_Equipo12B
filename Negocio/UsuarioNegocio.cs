@@ -89,7 +89,10 @@ namespace Negocio
                 throw ex;
             }
         }
-
+        public bool VerificarDNI(string dni)
+        {
+            return datos.ExisteDNI(dni);
+        }
         public bool VerificarEmail(string email)
         {
 
@@ -116,6 +119,27 @@ namespace Negocio
             {
                 throw ex;
             }
+        }
+
+        public void RecuperarAcceso(string email)
+        {
+            
+            Usuario usuario = datos.ObtenerUsuarioPorEmail(email);
+
+            if (usuario == null)
+            {
+                throw new Exception("El correo electrónico ingresado no se encuentra registrado en nuestro sistema.");
+            }
+
+            string nuevaPass = "123456"; // Opción fija
+           // string nuevaPass = new Random().Next(100000, 999999).ToString(); // Opcion aleatoria numérica
+
+            
+            string hashNuevo = BCrypt.Net.BCrypt.HashPassword(nuevaPass);
+     
+            datos.ActualizarPassword(usuario.ID, hashNuevo);
+
+            EmailService.EnviarNuevaContrasenia(email, nuevaPass);
         }
     }
 }

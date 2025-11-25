@@ -14,9 +14,14 @@
                 <label for="txtPassword" class="form-label">Contraseña</label>
                 <asp:TextBox ID="txtPassword" runat="server" CssClass="form-control" TextMode="Password" placeholder="Ingrese su contraseña"></asp:TextBox>
             </div>
+            
+            <div class="text-end mb-3">
+                <a href="RecuperarPassword.aspx" class="small text-muted text-decoration-none">¿Olvidaste tu contraseña?</a>
+            </div>
+
             <div class="d-grid">
                 
-                <asp:Button ID="btnIngresar" runat="server" Text="Ingresar" CssClass="btn btn-primary" OnClick="btnIngresar_Click" />
+                <asp:Button ID="btnIngresar" runat="server" Text="Ingresar" CssClass="btn btn-dark btn-lg fw-bold" OnClick="btnIngresar_Click" />
             
             </div>
 
@@ -24,7 +29,8 @@
 
 
             <p class="text-center text-muted mt-3">
-                ¿No tenés cuenta? <a href="Registro.aspx" class="text-primary-custom text-decoration-none">Registrate</a>
+                ¿No tenés cuenta? 
+                <a href="RegistroPage.aspx" class="link-dark fw-bold text-decoration-underline">Registrate</a>
             </p>
         
     </div>
