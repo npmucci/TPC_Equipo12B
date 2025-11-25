@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClienteNegocio.cs" />
+    <Compile Include="EmailService.cs" />
     <Compile Include="EspecialidadNegocio.cs" />
     <Compile Include="HorarioAtencionNegocio.cs" />
     <Compile Include="PagoNegocio.cs" />

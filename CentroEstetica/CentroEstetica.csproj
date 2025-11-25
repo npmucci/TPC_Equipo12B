@@ -87,6 +87,7 @@
     <Content Include="PanelProfesional.aspx" />
     <Content Include="PanelRecepcionista.aspx" />
     <Content Include="PanelTurnos.aspx" />
+    <Content Include="RecuperarPassword.aspx" />
     <Content Include="RegistroPage.aspx" />
     <Content Include="ReservarTurno.aspx" />
     <Content Include="Servicios.aspx" />
@@ -216,6 +217,13 @@
       <DependentUpon>PanelTurnos.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RecuperarPassword.aspx.cs">
+      <DependentUpon>RecuperarPassword.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="RecuperarPassword.aspx.designer.cs">
+      <DependentUpon>RecuperarPassword.aspx</DependentUpon>
+    </Compile>
     <Compile Include="RegistroPage.aspx.cs">
       <DependentUpon>RegistroPage.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

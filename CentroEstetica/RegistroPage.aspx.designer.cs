@@ -87,6 +87,15 @@ namespace CentroEstetica
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvContraseña;
 
         /// <summary>
+        /// Control revContraseniaLargo.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator revContraseniaLargo;
+
+        /// <summary>
         /// Control txtRepetirContraseña.
         /// </summary>
         /// <remarks>
@@ -213,6 +222,15 @@ namespace CentroEstetica
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvDni;
 
         /// <summary>
+        /// Control revDni.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator revDni;
+
+        /// <summary>
         /// Control txtTelefono.
         /// </summary>
         /// <remarks>
@@ -229,15 +247,6 @@ namespace CentroEstetica
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvTelefono;
-
-        /// <summary>
-        /// Control revTelefono.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.RegularExpressionValidator revTelefono;
 
         /// <summary>
         /// Control txtDomicilio.

@@ -110,7 +110,16 @@ namespace CentroEstetica
                     litMensaje.Text = "<strong>Error de Sesión:</strong> La sesión expiró. Por favor, vuelva a empezar el registro.";
                     return;
                 }
-                
+
+                string dniIngresado = txtDni.Text.Trim();
+                if (negocio.VerificarDNI(dniIngresado))
+                {
+                    pnlMensaje.Visible = true;
+                    pnlMensaje.CssClass = "alert alert-danger";
+                    litMensaje.Text = "<strong>Error:</strong> El DNI ingresado ya se encuentra registrado en el sistema.";
+                    return; 
+                }
+
                 Rol rolACrear = Rol.Cliente;
 
                 if (pnlAdminControls.Visible)

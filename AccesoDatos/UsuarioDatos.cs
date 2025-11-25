@@ -293,6 +293,30 @@ namespace AccesoDatos
             }
         }
 
+        public bool ExisteDNI(string dni)
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    datos.SetearConsulta("SELECT COUNT(*) FROM Usuario WHERE Dni = @Dni");
+                    datos.SetearParametro("@Dni", dni);
+                    datos.EjecutarLectura();
+
+                    if (datos.Lector.Read())
+                    {
+                        int count = (int)datos.Lector[0];
+                        return count > 0;
+                    }
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
+
         public void CambiarEstado(int idUsuario, bool activo)
         {
             using (Datos datos = new Datos())
