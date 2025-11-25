@@ -285,6 +285,15 @@ namespace CentroEstetica
         protected global::System.Web.UI.WebControls.Button btnNuevoAdmin;
 
         /// <summary>
+        /// Control rptAdmins.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater rptAdmins;
+
+        /// <summary>
         /// Control btnAgregarRecepcionista.
         /// </summary>
         /// <remarks>
