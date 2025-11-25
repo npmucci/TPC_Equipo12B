@@ -15,5 +15,6 @@ namespace Dominio
         public DateTime Fecha { get; set; }
         public TimeSpan Hora { get; set; }
         public decimal Precio { get; set; }
+        public int IDCliente { get; set; }
     }
 }

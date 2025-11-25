@@ -17,35 +17,49 @@ namespace CentroEstetica
         {
             if (!IsPostBack)
             {
+                
                 pnlCredenciales.Visible = true;
                 pnlDatos.Visible = false;
-
-
                 pnlMensaje.Visible = false;
 
+                
+                Usuario usuario = (Usuario)Session["usuario"];
+                bool esAdmin = Seguridad.EsAdmin(usuario);
+                bool esRecep = Seguridad.EsRecepcionista(usuario);
 
-                if (Seguridad.EsAdmin(Session["usuario"]))
+                
+                if (esAdmin || esRecep)
                 {
                     pnlAdminControls.Visible = true;
 
+                    CargarRoles();          
+                    CargarEspecialidades(); 
 
-                    CargarRoles();
-                    CargarEspecialidades();
+                    
+                    if (esRecep)
+                    {
+                        
+                        ddlRoles.Items.Clear();
+                        ddlRoles.Items.Add(new ListItem("Cliente", ((int)Rol.Cliente).ToString()));
 
+                        
+                        pnlEspecialidad.Visible = false;
+                    }
 
+                    
                     if (Request.QueryString["rol"] != null)
                     {
                         string idRolDesdeURL = Request.QueryString["rol"];
 
-
                         if (ddlRoles.Items.FindByValue(idRolDesdeURL) != null)
                         {
-
                             ddlRoles.SelectedValue = idRolDesdeURL;
+                            
                             ddlRoles_SelectedIndexChanged(null, null);
                         }
                     }
                 }
+                
                 else
                 {
                     pnlAdminControls.Visible = false;

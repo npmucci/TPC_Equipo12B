@@ -81,7 +81,7 @@ namespace CentroEstetica
                 // Por defecto Transferencia seleccionado
                 rblFormaPagoAdmin.SelectedValue = "Transferencia";
                 pnlDatosTransferencia.Visible = true;
-                rfvCodigo.Enabled = false; // Para ellos el código es opcional
+                rfvCodigo.Enabled = true;
             }
             else
             {
@@ -100,10 +100,12 @@ namespace CentroEstetica
             if (rblFormaPagoAdmin.SelectedValue == "Efectivo")
             {
                 pnlDatosTransferencia.Visible = false;
+                rfvCodigo.Enabled = false;
             }
             else
             {
                 pnlDatosTransferencia.Visible = true;
+                rfvCodigo.Enabled = true;
             }
         }
 
@@ -126,9 +128,9 @@ namespace CentroEstetica
                 if (esAdmin)
                     nuevoTurno.Estado = new EstadoTurno { IDEstado = 1 }; 
                 else
-                    nuevoTurno.Estado = new EstadoTurno { IDEstado = 2 }; 
+                    nuevoTurno.Estado = new EstadoTurno { IDEstado = 2 };
 
-                nuevoTurno.Cliente = new Cliente { ID = usuarioLogueado.ID };
+                nuevoTurno.Cliente = new Cliente { ID = reservaTemp.IDCliente };
                 nuevoTurno.Profesional = new Profesional { ID = reservaTemp.IDProfesional };
                 nuevoTurno.Servicio = new Servicio { IDServicio = reservaTemp.IDServicio };
 
@@ -184,10 +186,13 @@ namespace CentroEstetica
                     nuevoTurno.Profesional.Apellido = "";
                     nuevoTurno.Estado.Descripcion = (esAdmin) ? "Confirmado" : "Pendiente";
 
-                    
-                    EmailService.EnviarConfirmacionReserva(nuevoTurno, nuevoPago, usuarioLogueado.Mail);
+                    UsuarioNegocio uNegocio = new UsuarioNegocio();
+                    Usuario clienteReal = uNegocio.ObtenerPorId(reservaTemp.IDCliente);
 
+                    EmailService.EnviarConfirmacionReserva(nuevoTurno, nuevoPago, clienteReal.Mail);
                     
+
+
                     if (!esAdmin && !string.IsNullOrEmpty(nuevoPago.CodigoTransaccion))
                     {
                         
