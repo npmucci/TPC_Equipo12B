@@ -17,7 +17,7 @@
 
     <asp:UpdatePanel ID="upPerfil" runat="server">
         <ContentTemplate>
-
+            
             <div class="container">
                 <div class="card shadow-lg border-0 rounded-4 mx-auto" style="max-width: 700px;">
                     <div class="card-body p-4">
@@ -26,33 +26,43 @@
 
                             <div class="col-md-6">
                                 <label for="txtNombre" class="form-label fw-bold">Nombre</label>
-                                <asp:TextBox ID="txtNombre" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
-                                <asp:RequiredFieldValidator ID="rfvNombre" runat="server" ControlToValidate="txtNombre" CssClass="text-danger small" ErrorMessage="El nombre es obligatorio." Display="Dynamic" />
+                                <asp:TextBox ID="txtNombre" runat="server" CssClass="form-control" ReadOnly="true" MaxLength="100"></asp:TextBox>
+                                <div class="mt-1">
+                                    <asp:RequiredFieldValidator ID="rfvNombre" runat="server" ControlToValidate="txtNombre" CssClass="text-danger small" ErrorMessage="El nombre es obligatorio." Display="Dynamic" />
+                                    <asp:RegularExpressionValidator ID="revNombre" runat="server" ControlToValidate="txtNombre" CssClass="text-danger small" ErrorMessage="Solo letras y espacios." ValidationExpression="^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$" Display="Dynamic" />
+                                </div>
                             </div>
 
                             <div class="col-md-6">
                                 <label for="txtApellido" class="form-label fw-bold">Apellido</label>
-                                <asp:TextBox ID="txtApellido" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
-                                <asp:RequiredFieldValidator ID="rfvApellido" runat="server" ControlToValidate="txtApellido" CssClass="text-danger small" ErrorMessage="El apellido es obligatorio." Display="Dynamic" />
+                                <asp:TextBox ID="txtApellido" runat="server" CssClass="form-control" ReadOnly="true" MaxLength="100"></asp:TextBox>
+                                <div class="mt-1">
+                                    <asp:RequiredFieldValidator ID="rfvApellido" runat="server" ControlToValidate="txtApellido" CssClass="text-danger small" ErrorMessage="El apellido es obligatorio." Display="Dynamic" />
+                                    <asp:RegularExpressionValidator ID="revApellido" runat="server" ControlToValidate="txtApellido" CssClass="text-danger small" ErrorMessage="Solo letras y espacios." ValidationExpression="^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$" Display="Dynamic" />
+                                </div>
                             </div>
 
                             <div class="col-md-12">
                                 <label for="txtMail" class="form-label fw-bold">Email</label>
-                                <asp:TextBox ID="txtMail" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
-                                <asp:RequiredFieldValidator ID="rfvMail" runat="server" ControlToValidate="txtMail" CssClass="text-danger small" ErrorMessage="El email es obligatorio." Display="Dynamic" />
-                                <asp:RegularExpressionValidator ID="revMail" runat="server" ControlToValidate="txtMail" CssClass="text-danger small" ErrorMessage="Formato de email no válido." ValidationExpression="^[\w\.-]+@[\w\.-]+\.\w+$" Display="Dynamic" />
+                                <asp:TextBox ID="txtMail" runat="server" CssClass="form-control" ReadOnly="true" MaxLength="250"></asp:TextBox>
+                                <div class="mt-1">
+                                    <asp:RequiredFieldValidator ID="rfvMail" runat="server" ControlToValidate="txtMail" CssClass="text-danger small" ErrorMessage="El email es obligatorio." Display="Dynamic" />
+                                    <asp:RegularExpressionValidator ID="revMail" runat="server" ControlToValidate="txtMail" CssClass="text-danger small" ErrorMessage="Formato de email no válido." ValidationExpression="^[\w\.-]+@[\w\.-]+\.\w+$" Display="Dynamic" />
+                                </div>
                             </div>
 
                             <div class="col-md-6">
                                 <label for="txtTelefono" class="form-label fw-bold">Teléfono</label>
-                                <asp:TextBox ID="txtTelefono" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
-                                <asp:RequiredFieldValidator ID="rfvTelefono" runat="server" ControlToValidate="txtTelefono" CssClass="text-danger small" ErrorMessage="El teléfono es obligatorio." Display="Dynamic" />
-                                <asp:RegularExpressionValidator ID="revTelefono" runat="server" ControlToValidate="txtTelefono" CssClass="text-danger small" ErrorMessage="Debe contener 10 números." ValidationExpression="^\d{10}$" Display="Dynamic" />
+                                <asp:TextBox ID="txtTelefono" runat="server" CssClass="form-control" ReadOnly="true" MaxLength="19"></asp:TextBox>
+                                <div class="mt-1">
+                                    <asp:RequiredFieldValidator ID="rfvTelefono" runat="server" ControlToValidate="txtTelefono" CssClass="text-danger small" ErrorMessage="El teléfono es obligatorio." Display="Dynamic" />
+                                    <asp:RegularExpressionValidator ID="revTelefono" runat="server" ControlToValidate="txtTelefono" CssClass="text-danger small" ErrorMessage="Formato inválido." ValidationExpression="^[0-9\-\+\s]+$" Display="Dynamic" />
+                                </div>
                             </div>
 
                             <div class="col-md-6">
                                 <label for="txtDomicilio" class="form-label fw-bold">Domicilio</label>
-                                <asp:TextBox ID="txtDomicilio" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
+                                <asp:TextBox ID="txtDomicilio" runat="server" CssClass="form-control" ReadOnly="true" MaxLength="250"></asp:TextBox>
                             </div>
 
                         </div>

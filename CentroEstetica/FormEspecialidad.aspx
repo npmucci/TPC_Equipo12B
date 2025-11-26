@@ -12,26 +12,47 @@
                     <asp:Literal ID="litMensaje" runat="server"></asp:Literal>
                 </asp:Panel>
 
-                <div class="card shadow-sm mb-4">
+                <div class="card shadow-sm mb-4 border-0 rounded-4">
                     <div class="card-body p-4">
                         
-                        <h2 class="h4 mb-4" runat="server" id="tituloPagina">Nueva Especialidad</h2>
+                        <h2 class="h4 mb-4 fw-bold" runat="server" id="tituloPagina" style="font-family: 'Playfair Display', serif;">Nueva Especialidad</h2>
 
                         <div class="mb-3">
-                            <label for="txtNombre" class="form-label"><strong>Nombre:</strong></label>
-                            <asp:TextBox ID="txtNombre" runat="server" CssClass="form-control"></asp:TextBox>
-                            <asp:RequiredFieldValidator ID="rfvNombre" runat="server" ControlToValidate="txtNombre"
-                                ErrorMessage="El nombre es obligatorio." CssClass="text-danger" Display="Dynamic" />
+                            <label for="txtNombre" class="form-label fw-bold text-secondary small">Nombre</label>
+                            <asp:TextBox ID="txtNombre" runat="server" CssClass="form-control" MaxLength="100"></asp:TextBox>
+                            
+                            <div class="mt-1">
+                                <asp:RequiredFieldValidator ID="rfvNombre" runat="server" ControlToValidate="txtNombre"
+                                    ErrorMessage="El nombre es obligatorio." CssClass="text-danger small" Display="Dynamic" 
+                                    ValidationGroup="Especialidad" />
+                                
+                                <asp:RegularExpressionValidator ID="revNombre" runat="server" ControlToValidate="txtNombre"
+                                    ErrorMessage="Solo letras y espacios." CssClass="text-danger small" Display="Dynamic" 
+                                    ValidationGroup="Especialidad" ValidationExpression="^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$" />
+                            </div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="txtDescripcion" class="form-label"><strong>Descripción:</strong></label>
-                            <asp:TextBox ID="txtDescripcion" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="4"></asp:TextBox>
+                            <label for="txtDescripcion" class="form-label fw-bold text-secondary small">Descripción</label>
+                            <asp:TextBox ID="txtDescripcion" runat="server" CssClass="form-control" TextMode="MultiLine" Rows="4" MaxLength="500"></asp:TextBox>
+                            
+                            <div class="mt-1">
+                                <asp:RegularExpressionValidator ID="revDescripcion" runat="server" ControlToValidate="txtDescripcion"
+                                    ErrorMessage="Máximo 500 caracteres." CssClass="text-danger small" Display="Dynamic" 
+                                    ValidationGroup="Especialidad" ValidationExpression="^[\s\S]{0,500}$" />
+                            </div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="txtFoto" class="form-label"><strong>URL de Foto:</strong></label>
-                            <asp:TextBox ID="txtFoto" runat="server" CssClass="form-control" TextMode="Url"></asp:TextBox>
+                            <label for="txtFoto" class="form-label fw-bold text-secondary small">URL de Foto</label>
+                            <asp:TextBox ID="txtFoto" runat="server" CssClass="form-control" MaxLength="255"></asp:TextBox>
+                            
+                            <div class="mt-1">
+                                <asp:RegularExpressionValidator ID="revFoto" runat="server" ControlToValidate="txtFoto"
+                                    ErrorMessage="Formato de URL inválido (debe empezar con http:// o https://)." 
+                                    CssClass="text-danger small" Display="Dynamic" ValidationGroup="Especialidad" 
+                                    ValidationExpression="^(http|https)://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?$" />
+                            </div>
                         </div>
 
                         <asp:Panel ID="pnlControlesEdicion" runat="server" Visible="false">
@@ -44,8 +65,11 @@
                         </asp:Panel>
 
                         <div class="d-flex gap-2 mt-4">
-                            <asp:Button ID="btnGuardar" runat="server" Text="Crear Especialidad" CssClass="btn btn-primary" OnClick="btnGuardar_Click" />
-                            <asp:Button ID="btnVolver" runat="server" Text="Volver" CssClass="btn btn-secondary" OnClick="btnVolver_Click" CausesValidation="false" />
+                            <asp:Button ID="btnGuardar" runat="server" Text="Crear Especialidad" CssClass="btn btn-primary px-4" 
+                                OnClick="btnGuardar_Click" ValidationGroup="Especialidad" />
+                            
+                            <asp:Button ID="btnVolver" runat="server" Text="Volver" CssClass="btn btn-secondary px-4" 
+                                OnClick="btnVolver_Click" CausesValidation="false" />
                         </div>
 
                     </div>

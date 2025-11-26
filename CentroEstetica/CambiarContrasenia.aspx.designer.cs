@@ -51,6 +51,15 @@ namespace CentroEstetica
         protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvPassNueva;
 
         /// <summary>
+        /// Control revPassNuevaFuerte.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator revPassNuevaFuerte;
+
+        /// <summary>
         /// Control txtPassConfirmar.
         /// </summary>
         /// <remarks>

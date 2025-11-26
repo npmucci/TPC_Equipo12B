@@ -58,12 +58,23 @@ namespace Negocio
 
         public List<Turno> ListarTurnosPasadosCliente(int idCliente)
         {
-            return datos.ListarTurnosCliente(idCliente).FindAll(turnos => turnos.Estado.Descripcion != "Confirmado" && turnos.Estado.Descripcion != "Pendiente");
+           
+            List<Turno> todos = datos.ListarTurnosCliente(idCliente);
+
+            return todos.FindAll(t =>
+                t.Fecha.Date < DateTime.Today ||
+                (t.Estado.IDEstado != 1 && t.Estado.IDEstado != 2)
+            );
         }
 
         public List<Turno> ListarTurnosActualesCliente(int idCliente)
         {
-            return datos.ListarTurnosCliente(idCliente).FindAll(turnos => turnos.Estado.Descripcion == "Confirmado" || turnos.Estado.Descripcion == "Pendiente");
+            List<Turno> todos = datos.ListarTurnosCliente(idCliente);
+
+            return todos.FindAll(t =>
+                t.Fecha.Date >= DateTime.Today &&
+                (t.Estado.IDEstado == 1 || t.Estado.IDEstado == 2)
+            );
         }
 
         public bool ClienteTieneTurnosPendientes(int idCliente)

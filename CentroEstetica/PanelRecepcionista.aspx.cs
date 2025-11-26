@@ -403,7 +403,7 @@ namespace CentroEstetica
                 pagoNegocio.AgregarPago(devolucion);
 
                 
-                turnoNegocio.CambiarEstado(idTurno, 5);
+                turnoNegocio.CambiarEstado(idTurno, 4);
 
                 
                 Usuario cliente = usuarioNegocio.ObtenerPorId(idCliente);

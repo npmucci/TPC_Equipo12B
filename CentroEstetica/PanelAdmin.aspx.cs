@@ -412,18 +412,53 @@ namespace CentroEstetica
         protected void rptServicios_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
             int id = int.Parse(e.CommandArgument.ToString());
+
             switch (e.CommandName)
             {
-                case "EditarServicio": Response.Redirect($"FormServicio.aspx?id={id}", false); break;
-                case "DarDeBajaServicio":
-                    try { servNegocio.EliminarLogico(id); MostrarMensaje("Servicio desactivado.", "success"); }
-                    catch (Exception ex) { MostrarMensaje("Error: " + ex.Message, "danger"); }
+                case "EditarServicio":
+                    
+                    if (turnoNegocio.ServicioTieneTurnosPendientes(id))
+                    {
+                        MostrarMensaje("⚠️ No se puede modificar este servicio porque tiene turnos pendientes o confirmados a futuro.", "danger");
+                        return; 
+                    }
+
+                    
+                    Response.Redirect($"FormServicio.aspx?id={id}", false);
                     break;
+
+                case "DarDeBajaServicio":
+                    
+                    if (turnoNegocio.ServicioTieneTurnosPendientes(id))
+                    {
+                        MostrarMensaje("⚠️ No se puede desactivar: Tiene turnos pendientes.", "danger");
+                        return;
+                    }
+
+                    try
+                    {
+                        servNegocio.EliminarLogico(id);
+                        MostrarMensaje("Servicio desactivado correctamente.", "success");
+                    }
+                    catch (Exception ex)
+                    {
+                        MostrarMensaje("Error: " + ex.Message, "danger");
+                    }
+                    break;
+
                 case "DarDeAltaServicio":
-                    try { servNegocio.ActivarLogico(id); MostrarMensaje("Servicio activado.", "success"); }
-                    catch (Exception ex) { MostrarMensaje("Error: " + ex.Message, "danger"); }
+                    try
+                    {
+                        servNegocio.ActivarLogico(id);
+                        MostrarMensaje("Servicio activado correctamente.", "success");
+                    }
+                    catch (Exception ex)
+                    {
+                        MostrarMensaje("Error: " + ex.Message, "danger");
+                    }
                     break;
             }
+
             CargarDashboardCompleto();
             hfTabActivo.Value = "#v-pills-servicios";
         }

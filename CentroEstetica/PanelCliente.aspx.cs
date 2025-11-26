@@ -41,24 +41,26 @@ namespace CentroEstetica
 
            
             List<Turno> pendientes = todosLosTurnos.FindAll(t =>
-                t.Estado.Descripcion == "Pendiente" &&
+                t.Estado.IDEstado == 2 && // 2 = Pendiente
                 (t.Fecha > DateTime.Today || (t.Fecha == DateTime.Today && t.HoraInicio > DateTime.Now.TimeOfDay))
             );
 
+            
             List<Turno> confirmados = todosLosTurnos.FindAll(t =>
-                t.Estado.Descripcion == "Confirmado" &&
+                t.Estado.IDEstado == 1 && // 1 = Confirmado
                 (t.Fecha > DateTime.Today || (t.Fecha == DateTime.Today && t.HoraInicio > DateTime.Now.TimeOfDay))
             );
 
-            
+           
             List<Turno> pasados = todosLosTurnos.FindAll(t =>
-                t.Estado.Descripcion == "Finalizado" ||
-                t.Estado.Descripcion == "Cancelado" ||
-                t.Fecha < DateTime.Today ||
-                (t.Fecha == DateTime.Today && t.HoraInicio <= DateTime.Now.TimeOfDay)
+                
+                (t.Fecha < DateTime.Today || (t.Fecha == DateTime.Today && t.HoraInicio <= DateTime.Now.TimeOfDay))
+                ||
+                
+                (t.Estado.IDEstado != 1 && t.Estado.IDEstado != 2)
             );
 
-            
+           
             rptPendientes.DataSource = pendientes;
             rptPendientes.DataBind();
 

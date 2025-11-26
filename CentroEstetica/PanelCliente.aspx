@@ -149,7 +149,10 @@
                                                 <h6 class="fw-bold mb-0 text-secondary"><%# Eval("Servicio.Nombre") %></h6>
                                                 <small class="text-muted"><%# Eval("FechaString") %> - <%# Eval("HoraInicio", "{0:hh\\:mm}") %> hs</small>
                                             </div>
-                                            <span class='badge rounded-pill <%# (string)Eval("Estado.Descripcion") == "Cancelado" ? "bg-danger" : "bg-secondary" %>'>
+                                            <span class='badge rounded-pill 
+                                                <%# Eval("Estado.Descripcion").ToString().Contains("Cancelado") ? "bg-danger" : 
+                                                    Eval("Estado.Descripcion").ToString() == "Finalizado" ? "bg-secondary" : 
+                                                    Eval("Estado.Descripcion").ToString().Contains("Devolución") ? "bg-warning text-dark" : "bg-dark" %>'>
                                                 <%# Eval("Estado.Descripcion") %>
                                             </span>
                                         </div>

@@ -70,30 +70,70 @@
             </div>
             <div class="card-body p-4">
                 <div class="row g-3">
+                    
                     <div class="col-md-4">
                         <label class="form-label fw-bold text-secondary small">Nombre</label>
-                        <asp:TextBox ID="txtNombre" runat="server" CssClass="form-control"></asp:TextBox>
+                        <asp:TextBox ID="txtNombre" runat="server" CssClass="form-control" MaxLength="50"></asp:TextBox>
+                        
+                        <div class="mt-1">
+                            <asp:RequiredFieldValidator ID="rfvNombre" runat="server" ControlToValidate="txtNombre"
+                                ErrorMessage="Requerido." CssClass="text-danger small" Display="Dynamic" ValidationGroup="Guardar" />
+                            
+                            <asp:RegularExpressionValidator ID="revNombre" runat="server" ControlToValidate="txtNombre"
+                                ErrorMessage="Solo letras." CssClass="text-danger small" Display="Dynamic" 
+                                ValidationGroup="Guardar" ValidationExpression="^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$" />
+                        </div>
                     </div>
+        
                     <div class="col-md-4">
                         <label class="form-label fw-bold text-secondary small">Apellido</label>
-                        <asp:TextBox ID="txtApellido" runat="server" CssClass="form-control"></asp:TextBox>
+                        <asp:TextBox ID="txtApellido" runat="server" CssClass="form-control" MaxLength="50"></asp:TextBox>
+                        
+                        <div class="mt-1">
+                            <asp:RequiredFieldValidator ID="rfvApellido" runat="server" ControlToValidate="txtApellido"
+                                ErrorMessage="Requerido." CssClass="text-danger small" Display="Dynamic" ValidationGroup="Guardar" />
+                            
+                            <asp:RegularExpressionValidator ID="revApellido" runat="server" ControlToValidate="txtApellido"
+                                ErrorMessage="Solo letras." CssClass="text-danger small" Display="Dynamic" 
+                                ValidationGroup="Guardar" ValidationExpression="^[a-zA-ZñÑáéíóúÁÉÍÓÚ\s]+$" />
+                        </div>
                     </div>
+        
                     <div class="col-md-4">
                         <label class="form-label fw-bold text-secondary small">Email</label>
-                        <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control"></asp:TextBox>
+                        <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control" TextMode="Email" MaxLength="100"></asp:TextBox>
+                        
+                        <div class="mt-1">
+                            <asp:RequiredFieldValidator ID="rfvEmail" runat="server" ControlToValidate="txtEmail"
+                                ErrorMessage="Requerido." CssClass="text-danger small" Display="Dynamic" ValidationGroup="Guardar" />
+                            
+                            <asp:RegularExpressionValidator ID="revEmail" runat="server" ControlToValidate="txtEmail"
+                                ErrorMessage="Email inválido." CssClass="text-danger small" Display="Dynamic" 
+                                ValidationGroup="Guardar" ValidationExpression="^[\w\.-]+@[\w\.-]+\.\w+$" />
+                        </div>
                     </div>
+        
                     <div class="col-md-4">
                         <label class="form-label fw-bold text-secondary small">Teléfono</label>
-                        <asp:TextBox ID="txtTelefono" runat="server" CssClass="form-control"></asp:TextBox>
+                        <asp:TextBox ID="txtTelefono" runat="server" CssClass="form-control" MaxLength="20"></asp:TextBox>
+                        
+                        <div class="mt-1">
+                            <asp:RequiredFieldValidator ID="rfvTelefono" runat="server" ControlToValidate="txtTelefono"
+                                ErrorMessage="Requerido." CssClass="text-danger small" Display="Dynamic" ValidationGroup="Guardar" />
+                                
+                            <asp:RegularExpressionValidator ID="revTelefono" runat="server" ControlToValidate="txtTelefono"
+                                ErrorMessage="Solo números/guiones." CssClass="text-danger small" Display="Dynamic" 
+                                ValidationGroup="Guardar" ValidationExpression="^[0-9\-\+\s]+$" />
+                        </div>
                     </div>
+        
                     <div class="col-md-12 text-end mt-3">
                         <asp:Button ID="btnGuardarDatos" runat="server" Text="Guardar Cambios Personales" 
-                            CssClass="btn btn-primary px-4" OnClick="btnGuardarDatos_Click" />
+                            CssClass="btn btn-primary px-4" OnClick="btnGuardarDatos_Click" ValidationGroup="Guardar" />
                     </div>
                 </div>
             </div>
         </div>
-
         <div class="row">
             
             <div class="col-lg-5 mb-4">
