@@ -173,7 +173,10 @@ namespace AccesoDatos
                     datos.SetearParametro("@DuracionMinutos", nuevo.DuracionMinutos);
                     datos.EjecutarAccion();
                 }
-                catch (Exception ex) { throw ex; }
+                catch (Exception ex) { 
+                    
+                    throw new Exception("Error al agregar el servicio: " + ex.Message);
+                }
             }
         }
 
@@ -193,7 +196,10 @@ namespace AccesoDatos
                     datos.SetearParametro("@Activo", mod.Activo);
                     datos.EjecutarAccion();
                 }
-                catch (Exception ex) { throw ex; }
+                catch (Exception ex) { 
+                    
+                    throw new Exception("Error al modificar el servicio: " + ex.Message);
+                }
             }
         }
 
@@ -207,7 +213,10 @@ namespace AccesoDatos
                     datos.SetearParametro("@IDServicio", id);
                     datos.EjecutarAccion();
                 }
-                catch (Exception ex) { throw ex; }
+                catch (Exception ex) { 
+                    
+                    throw new Exception("Error al eliminar el servicio: " + ex.Message);
+                }
             }
         }
 
@@ -222,7 +231,10 @@ namespace AccesoDatos
                     datos.SetearParametro("@IDServicio", id);
                     datos.EjecutarAccion();
                 }
-                catch (Exception ex) { throw ex; }
+                catch (Exception ex) { 
+                    
+                    throw new Exception("Error al activar el servicio: " + ex.Message);
+                }
             }
         }
     }

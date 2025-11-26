@@ -10,12 +10,12 @@ namespace AccesoDatos
 {
     public class EspecialidadDatos
     {
-       
+
         public List<Especialidad> Listar()
         {
             List<Especialidad> lista = new List<Especialidad>();
 
-            
+
             using (Datos datos = new Datos())
             {
                 try
@@ -42,9 +42,9 @@ namespace AccesoDatos
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw new Exception("Error al listar las especialidades: " + ex.Message);
                 }
-               
+
             }
 
             return lista;
@@ -63,7 +63,7 @@ namespace AccesoDatos
                     datos.SetearParametro("@id", id);
                     datos.EjecutarLectura();
 
-                    if (datos.Lector.Read()) 
+                    if (datos.Lector.Read())
                     {
                         aux = new Especialidad();
                         aux.IDEspecialidad = (int)datos.Lector["IDEspecialidad"];
@@ -78,10 +78,10 @@ namespace AccesoDatos
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw new Exception("Error al obtener la especialidad por ID: " + ex.Message);
                 }
             }
-            return aux; // Devuelve el objeto o null si no lo encuentra
+            return aux;
         }
 
 
@@ -103,7 +103,7 @@ namespace AccesoDatos
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw new Exception("Error al agregar la especialidad: " + ex.Message);
                 }
             }
         }
@@ -125,7 +125,7 @@ namespace AccesoDatos
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw new Exception("Error al modificar la especialidad: " + ex.Message);
                 }
             }
         }
@@ -142,7 +142,7 @@ namespace AccesoDatos
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw new Exception("Error al eliminar la especialidad: " + ex.Message);
                 }
             }
         }
@@ -153,7 +153,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    
+
                     string consulta = "UPDATE Especialidad SET Activo = 1 WHERE IDEspecialidad = @ID";
                     datos.SetearConsulta(consulta);
                     datos.SetearParametro("@ID", id);
@@ -161,7 +161,7 @@ namespace AccesoDatos
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw new Exception("Error al activar la especialidad: " + ex.Message);
                 }
             }
         }
@@ -180,32 +180,31 @@ namespace AccesoDatos
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw new Exception("Error al asignar la especialidad al profesional: " + ex.Message);
                 }
             }
         }
 
         public void EliminarEspecialidadDeProfesional(int idUsuario, int idEspecialidad)
         {
-            Datos datos = new Datos();
-            try
+            using (Datos datos = new Datos())
             {
+                try
+                {
 
-                string consulta = "DELETE FROM ProfesionalEspecialidad WHERE IDUsuario = @idUsuario AND IDEspecialidad = @idEsp";
+                    string consulta = "DELETE FROM ProfesionalEspecialidad WHERE IDUsuario = @idUsuario AND IDEspecialidad = @idEsp";
 
-                datos.SetearConsulta(consulta);
-                datos.SetearParametro("@idUsuario", idUsuario);
-                datos.SetearParametro("@idEsp", idEspecialidad);
+                    datos.SetearConsulta(consulta);
+                    datos.SetearParametro("@idUsuario", idUsuario);
+                    datos.SetearParametro("@idEsp", idEspecialidad);
 
-                datos.EjecutarAccion();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                datos.CerrarConexion();
+                    datos.EjecutarAccion();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al eliminar la especialidad del profesional: " + ex.Message);
+                }
+
             }
         }
 
@@ -237,7 +236,7 @@ namespace AccesoDatos
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw new Exception("Error al listar las especialidades del profesional: " + ex.Message);
                 }
             }
         }
