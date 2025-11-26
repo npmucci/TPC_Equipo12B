@@ -69,21 +69,13 @@ namespace CentroEstetica
         protected global::System.Web.UI.WebControls.Label lblMensajeError;
 
         /// <summary>
-<<<<<<< HEAD
         /// Control lnkHistorial.
-=======
-        /// Control lnkHistorialTurnos.
->>>>>>> e681c9c9bf51a4b7f7e9d26434ee0083ce17dd86
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-<<<<<<< HEAD
         protected global::System.Web.UI.WebControls.HyperLink lnkHistorial;
-=======
-        protected global::System.Web.UI.WebControls.HyperLink lnkHistorialTurnos;
->>>>>>> e681c9c9bf51a4b7f7e9d26434ee0083ce17dd86
 
         /// <summary>
         /// Control lnkReservarTurnos.

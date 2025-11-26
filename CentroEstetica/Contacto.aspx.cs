@@ -49,7 +49,8 @@ namespace CentroEstetica
                 }
                 catch (Exception ex)
                 {
-                    MostrarMensaje("Error al enviar: " + ex.Message, "danger");
+                    Session.Add("error", ex);
+                    Response.Redirect("Error.aspx");
                 }
             }
         }

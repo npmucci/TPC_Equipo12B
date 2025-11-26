@@ -25,6 +25,16 @@ namespace CentroEstetica
             {
                 liEspecialidades.Visible = false;
             }
+            if (paginaActual == "error.aspx")
+            {
+                liEspecialidades.Visible = false;
+                liReservarTurno.Visible = false;
+                liMisTurnos.Visible = false;
+                liAdministracion.Visible = false;
+                li1MiAgenda.Visible = false; 
+                liContacto.Visible = false;              
+                return;
+            }
 
             // Lógica de Sesión
             if (Seguridad.SesionActiva(Session["usuario"]))
