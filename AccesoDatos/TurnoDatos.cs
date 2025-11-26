@@ -43,7 +43,8 @@ namespace AccesoDatos
 
                     aux.Servicio = new Servicio()
                     {
-                        Nombre = (string)datos.Lector["Servicio"]
+                        Nombre = (string)datos.Lector["Servicio"],
+                        Precio = (decimal)datos.Lector["PrecioServicio"]
                     };
 
                     aux.Estado = new EstadoTurno
@@ -149,6 +150,7 @@ namespace AccesoDatos
                         turno.Servicio = new Servicio()
                         {
                             Nombre = (string)datos.Lector["Servicio"],
+                            Precio = (decimal)datos.Lector["PrecioServicio"]
                         };
 
                         turno.Estado = new EstadoTurno
@@ -569,7 +571,9 @@ namespace AccesoDatos
                         {
                             ID = (int)datos.Lector["IDUsuarioCliente"],
                             Nombre = (string)datos.Lector["NombreCliente"],
-                            Apellido = (string)datos.Lector["ApellidoCliente"]
+                            Apellido = (string)datos.Lector["ApellidoCliente"],
+                            Telefono = (string)datos.Lector["TelefonoCliente"],
+                            Mail = (string)datos.Lector["EmailCliente"]
                         };
                         aux.Profesional = new Profesional
                         {

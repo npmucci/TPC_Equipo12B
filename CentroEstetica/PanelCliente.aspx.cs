@@ -97,7 +97,7 @@ namespace CentroEstetica
                 else
                 {
                     
-                    mensaje = "Estás cancelando con la anticipación requerida (>24hs).\\n\\n" +
+                    mensaje = "Estás cancelando con mas de 24hs de anticipación.\\n\\n" +
                               "Se generará una solicitud de devolución por el monto abonado.\\n\\n" +
                               "¿Confirmar cancelación?";
                 }

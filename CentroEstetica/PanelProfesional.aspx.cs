@@ -31,8 +31,7 @@ namespace CentroEstetica
                 CargarEstadisticas(profesional.ID);
                 CargarTurnos();
             }
-           
-        }
+
         private void MostrarFechaActual()
         {
 
