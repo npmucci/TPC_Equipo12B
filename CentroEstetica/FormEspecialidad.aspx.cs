@@ -73,8 +73,8 @@ namespace CentroEstetica
             }
             catch (Exception ex)
             {
-                MostrarMensaje("Error al cargar datos: " + ex.Message, "danger");
-                btnGuardar.Enabled = false;
+                Session.Add("error", ex);
+                Response.Redirect("Error.aspx");
             }
         }
 
@@ -116,7 +116,8 @@ namespace CentroEstetica
             }
             catch (Exception ex)
             {
-                MostrarMensaje("Error al guardar: " + ex.Message, "danger");
+                Session.Add("error", ex);
+                Response.Redirect("Error.aspx");
             }
         }
 

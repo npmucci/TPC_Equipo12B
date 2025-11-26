@@ -215,10 +215,13 @@ h1, h2, h3, h4, h5, h6 {
     transition: transform 0.3s;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
+.bg-personalizado {
+    background-color: var(--colorPrincipal) !important;
+}
 
-    .kpi-card:hover {
-        transform: translateY(-5px);
-    }
+.kpi-card:hover {
+    transform: translateY(-5px);
+}
 
     .kpi-card h2 {
         font-size: 2.5rem;

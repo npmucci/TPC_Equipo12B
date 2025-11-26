@@ -21,7 +21,7 @@
 
             <div class="d-grid">
                 
-                <asp:Button ID="btnIngresar" runat="server" Text="Ingresar" CssClass="btn btn-dark btn-lg fw-bold" OnClick="btnIngresar_Click" />
+                <asp:Button ID="btnIngresar" runat="server" Text="Ingresar" CssClass=" btn-custom btn-lg fw-bold" OnClick="btnIngresar_Click" />
             
             </div>
 

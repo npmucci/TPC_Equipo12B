@@ -89,7 +89,8 @@ namespace CentroEstetica
             }
             catch (Exception ex)
             {
-                MostrarMensaje("Error al guardar datos: " + ex.Message);
+                Session.Add("error", ex);
+                Response.Redirect("Error.aspx");
             }
         }
 
@@ -179,9 +180,8 @@ namespace CentroEstetica
             }
             catch (Exception ex)
             {
-                pnlMensaje.Visible = true;
-                pnlMensaje.CssClass = "alert alert-danger alert-dismissible fade show";
-                lblMensaje.Text = "Error al actualizar especialidades: " + ex.Message;
+                Session.Add("error", ex);
+                Response.Redirect("Error.aspx");
             }
         }
 

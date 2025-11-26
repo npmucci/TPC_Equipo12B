@@ -81,8 +81,8 @@ namespace CentroEstetica
             }
             catch (Exception ex)
             {
-                lblErrorPass.Text = "Ocurrió un error inesperado al actualizar: " + ex.Message;
-                lblErrorPass.Visible = true;
+                Session.Add("error", ex);
+                Response.Redirect("Error.aspx");
 
 
             }

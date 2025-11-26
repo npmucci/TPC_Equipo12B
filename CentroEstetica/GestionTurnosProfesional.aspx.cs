@@ -47,7 +47,10 @@ namespace CentroEstetica
                     litNombreProfesional.Text = $"{prof.Nombre} {prof.Apellido}";
                 }
             }
-            catch (Exception) { }
+            catch (Exception ex) {
+                Session.Add("error", ex);
+                Response.Redirect("Error.aspx");
+            }
         }
 
         private void CargarTurnos()
@@ -160,7 +163,11 @@ namespace CentroEstetica
                         $"El turno fue cancelado por motivos administrativos. Se ha registrado la devolución de ${montoDevolucion:N0} mediante {detallePago}."
                     );
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    Session.Add("error", ex);
+                    Response.Redirect("Error.aspx");
+                }
 
                 
                 pnlProcesoCancelacion.Visible = false; 
@@ -169,7 +176,8 @@ namespace CentroEstetica
             }
             catch (Exception ex)
             {
-                MostrarMensaje("Error al procesar cancelación: " + ex.Message, "danger");
+                Session.Add("error", ex);
+                Response.Redirect("Error.aspx");
             }
         }
 
