@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Dominio;
@@ -17,50 +18,57 @@ namespace AccesoDatos
             List<Turno> lista = new List<Turno>();
             using (Datos datos = new Datos())
             {
-                datos.SetearProcedimiento("sp_ListarTodosLosTurnos");
-                datos.EjecutarLectura();
-
-                while (datos.Lector.Read())
+                try
                 {
-                    Turno aux = new Turno();
-                    aux.IDTurno = (int)datos.Lector["IDTurno"];
-                    aux.Fecha = ((DateTime)datos.Lector["Fecha"]).Date;
-                    aux.HoraInicio = (TimeSpan)datos.Lector["HoraInicio"];
+                    datos.SetearProcedimiento("sp_ListarTodosLosTurnos");
+                    datos.EjecutarLectura();
 
-                    aux.Cliente = new Cliente()
+                    while (datos.Lector.Read())
                     {
-                        ID = (int)datos.Lector["IDUsuarioCliente"],
-                        Nombre = (string)datos.Lector["NombreCliente"],
-                        Apellido = (string)datos.Lector["ApellidoCliente"]
-                    };
+                        Turno aux = new Turno();
+                        aux.IDTurno = (int)datos.Lector["IDTurno"];
+                        aux.Fecha = ((DateTime)datos.Lector["Fecha"]).Date;
+                        aux.HoraInicio = (TimeSpan)datos.Lector["HoraInicio"];
 
-                    aux.Profesional = new Profesional()
-                    {
-                        ID = (int)datos.Lector["IDUsuarioProfesional"],
-                        Nombre = (string)datos.Lector["NombreProfesional"],
-                        Apellido = (string)datos.Lector["ApellidoProfesional"]
-                    };
+                        aux.Cliente = new Cliente()
+                        {
+                            ID = (int)datos.Lector["IDUsuarioCliente"],
+                            Nombre = (string)datos.Lector["NombreCliente"],
+                            Apellido = (string)datos.Lector["ApellidoCliente"]
+                        };
 
-                    aux.Servicio = new Servicio()
-                    {
-                        Nombre = (string)datos.Lector["Servicio"],
-                        Precio = (decimal)datos.Lector["PrecioServicio"]
-                    };
+                        aux.Profesional = new Profesional()
+                        {
+                            ID = (int)datos.Lector["IDUsuarioProfesional"],
+                            Nombre = (string)datos.Lector["NombreProfesional"],
+                            Apellido = (string)datos.Lector["ApellidoProfesional"]
+                        };
 
-                    aux.Estado = new EstadoTurno
-                    {
-                        IDEstado = (int)datos.Lector["IDEstado"],
-                        Descripcion = (string)datos.Lector["DescripcionEstado"]
-                    };
+                        aux.Servicio = new Servicio()
+                        {
+                            Nombre = (string)datos.Lector["Servicio"],
+                            Precio = (decimal)datos.Lector["PrecioServicio"]
+                        };
 
-                    // Cargar pagos del turno 
-                    aux.Pago = pagoDatos.ListarPagosDelTurno(aux.IDTurno);
+                        aux.Estado = new EstadoTurno
+                        {
+                            IDEstado = (int)datos.Lector["IDEstado"],
+                            Descripcion = (string)datos.Lector["DescripcionEstado"]
+                        };
 
-                    lista.Add(aux);
+                        // Cargar pagos del turno 
+                        aux.Pago = pagoDatos.ListarPagosDelTurno(aux.IDTurno);
+
+                        lista.Add(aux);
+                    }
                 }
-            }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al intentar listar todos los turnos desde la base de datos.", ex);
+                }
 
-            return lista;
+                return lista;
+            }
         }
 
         public List<Turno> ListarPorProfesionalYFecha(int idProf, DateTime fechaInicio, DateTime fechaFin)
@@ -112,7 +120,7 @@ namespace AccesoDatos
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw new Exception ( " Error al intentar listar los turnos por profesional y fecha desde la base de datos.", ex);
                 }
             }
         }
@@ -162,9 +170,9 @@ namespace AccesoDatos
                         turno.Pago = pagoDatos.ListarPagosDelTurno(turno.IDTurno);
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    throw ex;
+                    throw new Exception($"Error al intentar buscar el turno con ID: {idTurno}.");
                 }
             }
             return turno;
@@ -215,7 +223,7 @@ namespace AccesoDatos
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw new Exception("Error al intentar listar los turnos del cliente desde la base de datos.", ex);
                 }
             }
 
@@ -248,7 +256,7 @@ namespace AccesoDatos
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw new Exception("Error al verificar turnos pendientes por profesional.", ex);
                 }
             }
         }
@@ -275,7 +283,7 @@ namespace AccesoDatos
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw new Exception("Error al verificar turnos pendientes por servicio.", ex);
                 }
             }
         }
@@ -295,7 +303,7 @@ namespace AccesoDatos
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw new Exception("Error al cambiar el estado del turno.", ex);
                 }
             }
         }
@@ -356,7 +364,7 @@ namespace AccesoDatos
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw new Exception("Error al listar turnos pendientes por profesional.", ex);
                 }
             }
         }
@@ -386,7 +394,7 @@ namespace AccesoDatos
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw new Exception("Error al verificar turnos pendientes por especialidad.", ex);
                 }
             }
         }
@@ -395,17 +403,20 @@ namespace AccesoDatos
             int cantidad = 0;
             using (Datos datos = new Datos())
             {
+                try
+                {
+                    datos.SetearProcedimiento("sp_contarTurnos");
+                    datos.SetearParametro("@IDProfesional", idProfesional);
+                    datos.SetearParametro("@FechaInicio", fechaInicio.Date);
+                    datos.SetearParametro("@FechaFin", fechaFin.Date);
 
-                datos.SetearProcedimiento("sp_contarTurnos");
-                datos.SetearParametro("@IDProfesional", idProfesional);
-                datos.SetearParametro("@FechaInicio", fechaInicio.Date);
-                datos.SetearParametro("@FechaFin", fechaFin.Date);
-
-                cantidad = datos.EjecutarAccionEscalar();
-
-
-
-                return cantidad;
+                    cantidad = datos.EjecutarAccionEscalar();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al contar los turnos en la base de datos.", ex);
+                }
+                 return cantidad;
             }
         }
 
@@ -423,7 +434,7 @@ namespace AccesoDatos
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw new Exception("Error al contar los turnos pendientes en la base de datos.", ex);
                 }
             }
         }
@@ -448,7 +459,7 @@ namespace AccesoDatos
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw new Exception("Error al listar los estados de turno desde la base de datos.", ex);
                 }
             }
             return lista;
@@ -473,7 +484,7 @@ namespace AccesoDatos
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw new Exception("Error al listar las formas de pago desde la base de datos.", ex);
                 }
             }
             return lista;
@@ -498,7 +509,7 @@ namespace AccesoDatos
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw new Exception("Error al listar los tipos de pago desde la base de datos.", ex);
                 }
             }
             return lista;
@@ -540,7 +551,7 @@ namespace AccesoDatos
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("Error al agregar un nuevo turno y su pago en la base de datos.", ex);
             }
             finally
             {
@@ -601,7 +612,10 @@ namespace AccesoDatos
                     }
                     return lista;
                 }
-                catch (Exception ex) { throw ex; }
+                catch (Exception ex) 
+                { 
+                    throw new Exception("Error al listar los turnos para devolución desde la base de datos.", ex);
+                }
             }
         }
 
@@ -663,10 +677,7 @@ namespace AccesoDatos
 
                     if (idUsuario != 0)
                         datos.SetearParametro("@IDUsuario", idUsuario);
-
-
-
-                    datos.EjecutarLectura();
+                        datos.EjecutarLectura();
                     while (datos.Lector.Read())
                     {
                         lista.Add(new Turno
@@ -718,7 +729,7 @@ namespace AccesoDatos
             {
                 try
                 {
-                    
+
                     string consulta = @"
                     SELECT COUNT(*) 
                     FROM Turno 
@@ -734,7 +745,7 @@ namespace AccesoDatos
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw new Exception("Error al verificar turnos pendientes por cliente.", ex);
                 }
             }
         }

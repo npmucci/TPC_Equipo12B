@@ -29,15 +29,16 @@ namespace AccesoDatos
                         aux.DiaSemana = (string)datos.Lector["DiaSemana"];
                         aux.HorarioInicio = (TimeSpan)datos.Lector["HorarioInicio"];
                         aux.HorarioFin = (TimeSpan)datos.Lector["HorarioFin"];
-                        aux.Activo = (bool)datos.Lector["Activo"];
-
-                        // no es necesario rellenar el objeto 'Profesional' porque ya estamos en el contexto de ese profesional
+                        aux.Activo = (bool)datos.Lector["Activo"];                      
 
                         lista.Add(aux);
                     }
                     return lista;
                 }
-                catch (Exception ex) { throw ex; }
+                catch (Exception ex) { 
+                    
+                    throw new Exception("Error al listar los horarios de atención: " + ex.Message, ex);
+                }
             }
         }
         public void Agregar(HorarioAtencion nuevo)
@@ -53,7 +54,10 @@ namespace AccesoDatos
                     datos.SetearParametro("@HorarioFin", nuevo.HorarioFin);
                     datos.EjecutarAccion();
                 }
-                catch (Exception ex) { throw ex; }
+                catch (Exception ex) { 
+                    
+                    throw new Exception("Error al agregar el horario de atención: " + ex.Message, ex);
+                }
             }
         }
 
@@ -85,7 +89,11 @@ namespace AccesoDatos
                     datos.SetearParametro("@IDHorarioAtencion", id);
                     datos.EjecutarAccion();
                 }
-                catch (Exception ex) { throw ex; }
+                catch (Exception ex) { 
+                    
+                    throw new Exception("Error al eliminar el horario de atención: " + ex.Message, ex);
+
+                }
             }
         }
 
@@ -118,7 +126,9 @@ namespace AccesoDatos
                     }
                     return aux;
                 }
-                catch (Exception ex) { throw ex; }
+                catch (Exception ex) { 
+                    throw new Exception("Error al obtener el horario de atención por ID: " + ex.Message, ex);
+                }
             }
         }
     }
