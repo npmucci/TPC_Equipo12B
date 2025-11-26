@@ -167,7 +167,7 @@ namespace CentroEstetica
             }
         }
 
-       
+
         protected void dgvAgendaPagada_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             try
@@ -181,10 +181,13 @@ namespace CentroEstetica
                 else if (e.CommandName == "FinalizarTurno")
                 {
                     
-                    turnoNegocio.CambiarEstado(idTurno, 4);
+                    turnoNegocio.CambiarEstado(idTurno, 5);
+
+                    
+                    hfTabAgendaActivo.Value = "#tab-listo";
 
                     CargarTablas();
-                    MostrarExito("¡El turno ha sido marcado como Finalizado!");
+                    MostrarExito("¡El turno ha sido marcado como Finalizado correctamente!");
                 }
             }
             catch (Exception ex)
@@ -193,7 +196,6 @@ namespace CentroEstetica
             }
         }
 
-       
 
         protected void btnConfirmarCobro_Click(object sender, EventArgs e)
         {
