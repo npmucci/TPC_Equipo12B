@@ -301,9 +301,9 @@ BEGIN
         T.Fecha,
         T.HoraInicio,
         T.IDEstado,
-        T.IDUsuarioCliente,     
-        T.IDUsuarioProfesional,  
-        T.IDServicio,            
+        T.IDUsuarioCliente,      
+        T.IDUsuarioProfesional,   
+        T.IDServicio,             
         E.Descripcion AS DescripcionEstado,
         P.Nombre AS NombreProfesional,
         P.Apellido AS ApellidoProfesional,
@@ -312,7 +312,8 @@ BEGIN
         C.Telefono AS TelefonoCliente,
         C.Mail AS EmailCliente,
         C.Domicilio AS DomicilioCliente,
-        S.Nombre AS Servicio
+        S.Nombre AS Servicio,
+        S.Precio AS PrecioServicio 
     FROM Turno T
     INNER JOIN Usuario P ON T.IDUsuarioProfesional = P.IDUsuario
     INNER JOIN Usuario C ON T.IDUsuarioCliente = C.IDUsuario
@@ -322,7 +323,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE sp_ListarTodosLosTurnos
+CREATE OR ALTER PROCEDURE sp_ListarTodosLosTurnos
 AS
 BEGIN
     SELECT 
@@ -335,16 +336,13 @@ BEGIN
         P.Apellido AS ApellidoProfesional,
         C.Nombre AS NombreCliente,
         C.Apellido AS ApellidoCliente,
-        S.Nombre AS Servicio
+        S.Nombre AS Servicio,
+        S.Precio AS PrecioServicio 
     FROM Turno T
-    INNER JOIN Usuario P
-        ON T.IDUsuarioProfesional = P.IDUsuario
-    INNER JOIN Usuario C
-        ON T.IDUsuarioCliente = C.IDUsuario
-    INNER JOIN Servicio S
-        ON T.IDServicio = S.IDServicio
-    INNER JOIN EstadoTurno E
-        ON T.IDEstado = E.IDEstado
+    INNER JOIN Usuario P ON T.IDUsuarioProfesional = P.IDUsuario
+    INNER JOIN Usuario C ON T.IDUsuarioCliente = C.IDUsuario
+    INNER JOIN Servicio S ON T.IDServicio = S.IDServicio
+    INNER JOIN EstadoTurno E ON T.IDEstado = E.IDEstado
     ORDER BY T.Fecha, T.HoraInicio;
 END
 GO
@@ -358,11 +356,15 @@ BEGIN
         T.HoraInicio,
         T.IDEstado,
         E.Descripcion AS DescripcionEstado,
-        T.IDUsuarioProfesional, T.IDUsuarioCliente, T.IDServicio, 
+        T.IDUsuarioProfesional, 
+        T.IDUsuarioCliente, 
+        T.IDServicio, 
         P.Nombre AS NombreProfesional,
         P.Apellido AS ApellidoProfesional,
         C.Nombre AS NombreCliente,
         C.Apellido AS ApellidoCliente,
+        C.Telefono AS TelefonoCliente,
+        C.Mail AS EmailCliente,
         S.Nombre AS Servicio,
         S.DuracionMinutos,
         ISNULL((SELECT SUM(Monto) FROM Pago WHERE IDTurno = T.IDTurno AND EsDevolucion = 0), 0) as TotalPagado
@@ -398,7 +400,8 @@ GO
 
 CREATE OR ALTER PROCEDURE sp_ListarTurnosPorProfesionalYFecha
     @IDProfesional INT,
-    @Fecha DATE
+    @FechaInicio DATE,
+	@FechaFin DATE
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -425,7 +428,7 @@ BEGIN
     INNER JOIN EstadoTurno E ON T.IDEstado = E.IDEstado
     WHERE 
         T.IDUsuarioProfesional = @IDProfesional 
-        AND T.Fecha = @Fecha
+        AND T.Fecha BETWEEN @FechaInicio AND @FechaFin
         AND T.IDEstado IN (1, 2) 
     ORDER BY T.HoraInicio;
 END
