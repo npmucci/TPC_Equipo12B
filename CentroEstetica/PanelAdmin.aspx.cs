@@ -166,24 +166,7 @@ namespace CentroEstetica
 
 
 
-        private void CargarAgendaPersonal()
-        {
-            if (Session["usuario"] != null)
-            {
-                Usuario u = (Usuario)Session["usuario"];
-                if (u.Rol == Rol.ProfesionalUnico)
-                {
-                    btnTabAgenda.Visible = true;
-                    lblNombre.Text = "Bienvenida/o, " + u.Nombre;
-                    lblFechaHoy.Text = DateTime.Now.ToString("dddd, dd 'de' MMMM", System.Globalization.CultureInfo.CreateSpecificCulture("es-ES"));
-                    CalcularEstadisticasPersonales(u.ID);
-                }
-                else
-                {
-                    btnTabAgenda.Visible = false;
-                }
-            }
-        }
+      
 
         private void CalcularEstadisticasPersonales(int idProfesional)
         {
@@ -206,7 +189,7 @@ namespace CentroEstetica
         {
             lnkHoy.CssClass = "nav-link";
             lnkProximos.CssClass = "nav-link";
-            lnkPasados.CssClass = "nav-link";
+            
 
             LinkButton clickedLink = (LinkButton)sender;
             clickedLink.CssClass = "nav-link active";
@@ -215,7 +198,7 @@ namespace CentroEstetica
             {
                 case "lnkHoy": mvTurnos.ActiveViewIndex = 0; break;
                 case "lnkProximos": mvTurnos.ActiveViewIndex = 1; break;
-                case "lnkPasados": mvTurnos.ActiveViewIndex = 2; break;
+                
             }
             hfTabActivo.Value = "#v-pills-agenda";
         }
@@ -530,6 +513,42 @@ namespace CentroEstetica
 
             CargarAdministradores();
             hfTabActivo.Value = "#v-pills-admins";
+        }
+
+        private void CargarAgendaPersonal()
+        {
+            if (Session["usuario"] != null)
+            {
+                Usuario u = (Usuario)Session["usuario"];
+
+                if (u.Rol == Rol.ProfesionalUnico)
+                {
+                    btnTabAgenda.Visible = true;
+                    lblNombre.Text = "Bienvenida/o, " + u.Nombre;
+                    lblFechaHoy.Text = DateTime.Now.ToString("dddd, dd 'de' MMMM", System.Globalization.CultureInfo.CreateSpecificCulture("es-ES"));
+
+                    DateTime hoy = DateTime.Today;
+                    DateTime inicioSemana = hoy.AddDays(1);
+                    DateTime finSemana = hoy.AddDays(7);
+
+                    List<Turno> misTurnosHoy = turnoNegocio.ListarTurnosDelDia(u.ID, hoy, hoy);
+                    dgvMiAgendaAdmin.DataSource = misTurnosHoy;
+                    dgvMiAgendaAdmin.DataBind();
+
+                    List<Turno> turnosProximos = turnoNegocio.ListarTurnosDelDia(u.ID, inicioSemana, finSemana);
+                    dgvMiAgendaProximos.DataSource = turnosProximos;
+                    dgvMiAgendaProximos.DataBind();
+
+                    lblTurnosHoy.Text = misTurnosHoy.Count.ToString();
+                    lblTurnosProximos.Text = turnosProximos.Count.ToString();
+
+
+                }
+                else
+                {
+                    btnTabAgenda.Visible = false;
+                }
+            }
         }
     }
 }

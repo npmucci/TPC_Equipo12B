@@ -123,15 +123,6 @@ namespace CentroEstetica
         protected global::System.Web.UI.WebControls.Label lblTurnosProximos;
 
         /// <summary>
-        /// Control lblIngresosMes.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblIngresosMes;
-
-        /// <summary>
         /// Control lnkHoy.
         /// </summary>
         /// <remarks>
@@ -148,15 +139,6 @@ namespace CentroEstetica
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton lnkProximos;
-
-        /// <summary>
-        /// Control lnkPasados.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton lnkPasados;
 
         /// <summary>
         /// Control mvTurnos.
@@ -177,6 +159,15 @@ namespace CentroEstetica
         protected global::System.Web.UI.WebControls.View viewHoy;
 
         /// <summary>
+        /// Control dgvMiAgendaAdmin.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView dgvMiAgendaAdmin;
+
+        /// <summary>
         /// Control viewProximos.
         /// </summary>
         /// <remarks>
@@ -186,13 +177,13 @@ namespace CentroEstetica
         protected global::System.Web.UI.WebControls.View viewProximos;
 
         /// <summary>
-        /// Control viewPasados.
+        /// Control dgvMiAgendaProximos.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.View viewPasados;
+        protected global::System.Web.UI.WebControls.GridView dgvMiAgendaProximos;
 
         /// <summary>
         /// Control btnAgregarProfesional.

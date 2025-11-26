@@ -171,17 +171,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4 mb-3">
-                                <div class="stat-card border-left-info h-100">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <div>
-                                            <p class="stat-label text-info">Ingresos del Mes</p>
-                                            <div class="stat-value text-success">$<asp:Label ID="lblIngresosMes" runat="server" Text="0"></asp:Label></div>
-                                        </div>
-                                        <i class="bi bi-currency-dollar fs-1 text-gray-300 opacity-25"></i>
-                                    </div>
-                                </div>
-                            </div>
+                            
                         </div>
 
                         <!-- CONTENEDOR DE TURNOS AGENDA -->
@@ -198,11 +188,6 @@
                                             <i class="bi bi-calendar-week me-2"></i>Próximos
                                         </asp:LinkButton>
                                     </li>
-                                    <li class="nav-item">
-                                        <asp:LinkButton ID="lnkPasados" runat="server" CssClass="nav-link" OnClick="lnkAgenda_Click">
-                                            <i class="bi bi-archive me-2"></i>Pasados
-                                        </asp:LinkButton>
-                                    </li>
                                 </ul>
                             </div>
                             
@@ -211,27 +196,58 @@
 
                                     <asp:View ID="viewHoy" runat="server">
                                         <h5 class="mb-3 fw-bold text-secondary">Turnos del Día</h5>
-                                        <div class="alert alert-light border text-center py-5">
-                                            <i class="bi bi-inbox fs-1 text-muted d-block mb-2"></i>
-                                            <p class="mb-0 text-muted">Aquí se mostrará el listado de turnos del día.</p>
+                                        
+                                        <div class="table-responsive">
+                                            <asp:GridView ID="dgvMiAgendaAdmin" runat="server" AutoGenerateColumns="false" 
+                                                CssClass="table table-hover align-middle mb-0" EmptyDataText="No tienes turnos programados para hoy.">
+                                                <Columns>
+                                                    <asp:BoundField HeaderText="Hora" DataField="HoraInicio" />
+                                                    <asp:TemplateField HeaderText="Paciente">
+                                                        <ItemTemplate>
+                                                            <%# Eval("Cliente.Nombre") + " " + Eval("Cliente.Apellido") %>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                    <asp:BoundField HeaderText="Servicio" DataField="Servicio.Nombre" />
+                                                    <asp:TemplateField HeaderText="Estado">
+                                                        <ItemTemplate>
+                                                            <span class='badge rounded-pill <%# Eval("Estado.Descripcion").ToString() == "Confirmado" ? "bg-success" : "bg-warning text-dark" %>'>
+                                                                <%# Eval("Estado.Descripcion") %>
+                                                            </span>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                </Columns>
+                                                <HeaderStyle CssClass="bg-light text-muted small text-uppercase" />
+                                            </asp:GridView>
                                         </div>
                                     </asp:View>
 
-                                    <asp:View ID="viewProximos" runat="server">
-                                        <h5 class="mb-3 fw-bold text-secondary">Próximos Turnos</h5>
-                                        <div class="alert alert-light border text-center py-5">
-                                            <i class="bi bi-calendar3 fs-1 text-muted d-block mb-2"></i>
-                                            <p class="mb-0 text-muted">Aquí se mostrará el listado de turnos futuros.</p>
+                                   <asp:View ID="viewProximos" runat="server">
+                                        <h5 class="mb-3 fw-bold text-secondary">Próximos Turnos (7 días)</h5>
+                                        
+                                        <div class="table-responsive">
+                                            <asp:GridView ID="dgvMiAgendaProximos" runat="server" AutoGenerateColumns="false" 
+                                                CssClass="table table-hover align-middle mb-0" EmptyDataText="No hay turnos próximos agendados.">
+                                                <Columns>
+                                                    <asp:BoundField HeaderText="Fecha" DataField="Fecha" DataFormatString="{0:dd/MM/yyyy}" />
+                                                    <asp:BoundField HeaderText="Hora" DataField="HoraInicio" />
+                                                    <asp:TemplateField HeaderText="Paciente">
+                                                        <ItemTemplate>
+                                                            <%# Eval("Cliente.Nombre") + " " + Eval("Cliente.Apellido") %>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                    <asp:BoundField HeaderText="Servicio" DataField="Servicio.Nombre" />
+                                                    <asp:TemplateField HeaderText="Estado">
+                                                        <ItemTemplate>
+                                                            <span class='badge rounded-pill <%# Eval("Estado.Descripcion").ToString() == "Confirmado" ? "bg-success" : "bg-warning text-dark" %>'>
+                                                                <%# Eval("Estado.Descripcion") %>
+                                                            </span>
+                                                        </ItemTemplate>
+                                                    </asp:TemplateField>
+                                                </Columns>
+                                                <HeaderStyle CssClass="bg-light text-muted small text-uppercase" />
+                                            </asp:GridView>
                                         </div>
-                                    </asp:View>
-
-                                    <asp:View ID="viewPasados" runat="server">
-                                        <h5 class="mb-3 fw-bold text-secondary">Historial de Turnos</h5>
-                                        <div class="alert alert-light border text-center py-5">
-                                            <i class="bi bi-clock-history fs-1 text-muted d-block mb-2"></i>
-                                            <p class="mb-0 text-muted">Aquí se mostrará el historial de turnos pasados.</p>
-                                        </div>
-                                    </asp:View>
+                                    </asp:View>             
 
                                 </asp:MultiView>
                             </div>

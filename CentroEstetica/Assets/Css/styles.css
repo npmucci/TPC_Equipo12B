@@ -382,7 +382,7 @@ h1, h2, h3, h4, h5, h6 {
     /* Efecto Hover unificado (Rosa Fuerte) */
     .table .btn:hover {
         background-color: var(--colorPrincipalHover) !important; /* Rosa Fuerte */
-        color: white !important; /
+        color: white !important; 
         border-color: var(--colorPrincipalHover) !important;
         transform: translateY(-2px); 
         box-shadow: 0 4px 8px rgba(216, 92, 126, 0.3);
@@ -416,3 +416,20 @@ h1, h2, h3, h4, h5, h6 {
     background-color: var(--colorPrincipalHover) !important;
     color: white !important;
 }
+
+.table .btn-primary,
+.table .btn-success {
+    background-color: var(--colorPrincipal) !important; 
+    border-color: var(--colorPrincipalHover) !important; 
+    
+    color: #000 !important;
+    font-weight: 700; 
+}
+
+    
+    .table .btn-primary:hover,
+    .table .btn-success:hover {
+        background-color: var(--colorPrincipalHover) !important; 
+        border-color: var(--colorPrincipalHover) !important;
+        color: #fff !important;
+    }
