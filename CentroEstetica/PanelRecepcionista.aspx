@@ -57,8 +57,8 @@
                     <div class="nav flex-column nav-pills me-3" id="v-pills-tab-recepcionista" role="tablist" aria-orientation="vertical">
                         <button class="nav-link active" id="v-pills-agenda-tab" data-bs-toggle="pill" data-bs-target="#v-pills-agenda" type="button" role="tab"> Agenda del Día </button>
                         <button class="nav-link" id="v-pills-pendientes-tab" data-bs-toggle="pill" data-bs-target="#v-pills-pendientes" type="button" role="tab"> Pendientes de Confirmación </button>
-                        <button class="nav-link" id="v-pills-devoluciones-tab" data-bs-toggle="pill" data-bs-target="#v-pills-devoluciones" type="button" role="tab"> Pendientes de Devolución </button>
-                        <button class="nav-link" id="v-pills-historial-tab" data-bs-toggle="pill" data-bs-target="#v-pills-agenda" type="button" role="tab"> Historial de Turnos </button>
+                        <button class="nav-link" id="v-pills-devoluciones-tab" data-bs-toggle="pill" data-bs-target="#v-pills-devoluciones" type="button" role="tab"> Pendientes de Devolución </button>        
+                        <asp:HyperLink  ID="lnkHistorialTurnos"  runat="server"   NavigateUrl="~/HistorialTurnos.aspx" CssClass="nav-link" ToolTip="Ir a la página de Historial de turnos">Historial de Turnos</asp:HyperLink>
                         <asp:HyperLink  ID="lnkReservarTurnos"  runat="server"   NavigateUrl="~/ReservarTurno.aspx" CssClass="nav-link" ToolTip="Ir a la página de registro de turnos"> Reservar Turnos</asp:HyperLink>
                     </div>
                 </div>
@@ -124,15 +124,15 @@
                                                     
                                                     <asp:TemplateField ItemStyle-HorizontalAlign="Center" HeaderText="Acciones" ItemStyle-Width="380px">
                                                         <ItemTemplate>
-                                                            <div class="d-flex justify-content-center gap-2">
+                                                            <div class="d-flex justify-content-left gap-2">
                                                                 <asp:LinkButton ID="btnVerPagos" runat="server" CommandName="VerPagos" CommandArgument='<%# Eval("IDTurno") %>' 
                                                                     CssClass="btn btn-outline-secondary btn-sm d-flex align-items-center">
                                                                     <i class="bi bi-eye me-1"></i> Ver Pagos
                                                                 </asp:LinkButton>
                                                                 
                                                                 <asp:LinkButton ID="btnCobrar" runat="server" CommandName="CobrarResto" CommandArgument='<%# Eval("IDTurno") %>' 
-                                                                    CssClass="btn btn-primary btn-sm fw-bold d-flex align-items-center shadow-sm">
-                                                                    <i class="bi bi-currency-dollar me-1"></i> Cobrar
+                                                                    CssClass="btn btn-primary btn-sm fw-bold d-flex align-items-center">
+                                                                    <i class="bi bi-eye me-1"></i> Cobrar
                                                                 </asp:LinkButton>
                                                                 
                                                                 <asp:LinkButton ID="btnCancelar" runat="server" CommandName="CancelarTurno" CommandArgument='<%# Eval("IDTurno") %>' 
@@ -169,7 +169,7 @@
                                                     
                                                     <asp:TemplateField ItemStyle-HorizontalAlign="Left" HeaderText="Acciones">
                                                         <ItemTemplate>
-                                                            <div class="d-flex justify-content-center gap-2">
+                                                            <div class="d-flex justify-content-left gap-2">
                                                                 <asp:LinkButton ID="btnVerPagos" runat="server" CommandName="VerPagos" CommandArgument='<%# Eval("IDTurno") %>' 
                                                                     CssClass="btn btn-outline-secondary btn-sm"> <i class="bi bi-eye"></i> Ver Pagos </asp:LinkButton>
                                                     

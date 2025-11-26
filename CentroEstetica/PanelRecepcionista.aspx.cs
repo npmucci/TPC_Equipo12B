@@ -42,7 +42,7 @@ namespace CentroEstetica
                 CargarTablas();
             }
         }
-
+       
         private void MostrarFechaActual()
         {
             lblFechaHoy.Text = DateTime.Now.ToString("dddd, dd 'de' MMMM",
