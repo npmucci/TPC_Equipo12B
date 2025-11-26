@@ -322,7 +322,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE sp_ListarTodosLosTurnos
+CREATE OR ALTER PROCEDURE sp_ListarTodosLosTurnos
 AS
 BEGIN
     SELECT 
@@ -335,16 +335,13 @@ BEGIN
         P.Apellido AS ApellidoProfesional,
         C.Nombre AS NombreCliente,
         C.Apellido AS ApellidoCliente,
-        S.Nombre AS Servicio
+        S.Nombre AS Servicio,
+        S.Precio AS PrecioServicio 
     FROM Turno T
-    INNER JOIN Usuario P
-        ON T.IDUsuarioProfesional = P.IDUsuario
-    INNER JOIN Usuario C
-        ON T.IDUsuarioCliente = C.IDUsuario
-    INNER JOIN Servicio S
-        ON T.IDServicio = S.IDServicio
-    INNER JOIN EstadoTurno E
-        ON T.IDEstado = E.IDEstado
+    INNER JOIN Usuario P ON T.IDUsuarioProfesional = P.IDUsuario
+    INNER JOIN Usuario C ON T.IDUsuarioCliente = C.IDUsuario
+    INNER JOIN Servicio S ON T.IDServicio = S.IDServicio
+    INNER JOIN EstadoTurno E ON T.IDEstado = E.IDEstado
     ORDER BY T.Fecha, T.HoraInicio;
 END
 GO
