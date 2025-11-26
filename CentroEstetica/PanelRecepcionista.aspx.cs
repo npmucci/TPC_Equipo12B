@@ -1,9 +1,10 @@
-﻿using Dominio;
-using Negocio;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq; 
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Dominio;
+using Negocio;
 
 namespace CentroEstetica
 {
@@ -15,8 +16,10 @@ namespace CentroEstetica
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            
+            pnlMensajeExito.Visible = false;
+            pnlMensajeError.Visible = false;
             Usuario usuario = (Usuario)Session["usuario"];
+            
 
             if (usuario == null || (!Seguridad.EsRecepcionista(usuario) && !Seguridad.EsAdmin(usuario)))
             {
@@ -40,20 +43,21 @@ namespace CentroEstetica
             }
         }
 
-        
         private void MostrarFechaActual()
         {
             lblFechaHoy.Text = DateTime.Now.ToString("dddd, dd 'de' MMMM",
                 System.Globalization.CultureInfo.CreateSpecificCulture("es-ES"));
         }
 
-        
+     
         public string GetComprobante(object pagoListObj)
         {
             var pagos = pagoListObj as List<Pago>;
             if (pagos != null && pagos.Count > 0)
             {
-                return pagos[0].CodigoTransaccion ?? "No especificado";
+                
+                var pago = pagos.FirstOrDefault(p => !p.EsDevolucion);
+                return pago != null ? (pago.CodigoTransaccion ?? "No especificado") : "-";
             }
             return "-";
         }
@@ -64,16 +68,38 @@ namespace CentroEstetica
             {
                 List<Turno> listaTodos = turnoNegocio.ListarTodos();
 
-                // AGENDA DEL DÍA (Turnos Confirmados o Pendientes de HOY)
                 
-                List<Turno> agendaHoy = listaTodos.FindAll(t =>
+                var turnosHoy = listaTodos.FindAll(t =>
                     t.Fecha.Date == DateTime.Today.Date &&
                     (t.Estado.IDEstado == 1 || t.Estado.IDEstado == 2));
 
-                dgvTurnos.DataSource = agendaHoy;
-                dgvTurnos.DataBind();
+                
+                var agendaCalculada = turnosHoy.Select(t => new
+                {
+                    t.IDTurno,
+                    t.Fecha,
+                    t.HoraInicio,
+                    ClienteNombreCompleto = t.Cliente.Nombre + " " + t.Cliente.Apellido,
+                    ProfesionalNombreCompleto = t.Profesional.Nombre + " " + t.Profesional.Apellido,
+                    Servicio = t.Servicio, 
+                    Estado = t.Estado,
 
-                // PENDIENTES DE CONFIRMACIÓN (Para verificar pagos)
+                    
+                    MontoPagado = t.Pago != null ? t.Pago.Where(p => !p.EsDevolucion).Sum(p => p.Monto) : 0,
+
+                   
+                    SaldoRestante = t.Servicio.Precio - (t.Pago != null ? t.Pago.Where(p => !p.EsDevolucion).Sum(p => p.Monto) : 0)
+                }).ToList();
+
+                
+                dgvAgendaPendienteCobro.DataSource = agendaCalculada.Where(x => x.SaldoRestante > 0).ToList();
+                dgvAgendaPendienteCobro.DataBind();
+
+                
+                dgvAgendaPagada.DataSource = agendaCalculada.Where(x => x.SaldoRestante <= 0).ToList();
+                dgvAgendaPagada.DataBind();
+
+
                 
                 List<Turno> pendientes = listaTodos.FindAll(t =>
                     t.Estado.IDEstado == 2 &&
@@ -82,8 +108,8 @@ namespace CentroEstetica
                 dgvPendientesConfirmacion.DataSource = pendientes;
                 dgvPendientesConfirmacion.DataBind();
 
-                // PENDIENTES DE DEVOLUCIÓN
-                
+
+              
                 List<Turno> devoluciones = turnoNegocio.ListarTurnosParaDevolucion();
                 dgvDevoluciones.DataSource = devoluciones;
                 dgvDevoluciones.DataBind();
@@ -94,41 +120,182 @@ namespace CentroEstetica
             }
         }
 
-        
-        // LÓGICA DE LA AGENDA DEL DÍA
-        
-
-        protected void dgvTurnos_PageIndexChanging(object sender, GridViewPageEventArgs e)
-        {
-            dgvTurnos.PageIndex = e.NewPageIndex;
-            CargarTablas();
-        }
-
-        protected void dgvTurnos_RowCommand(object sender, GridViewCommandEventArgs e)
+      
+        protected void dgvAgendaPendienteCobro_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             try
             {
+                int idTurno = Convert.ToInt32(e.CommandArgument);
+
                 if (e.CommandName == "VerPagos")
                 {
-                    int idTurno = Convert.ToInt32(e.CommandArgument);
                     MostrarDetalleModal(idTurno);
                 }
-                if (e.CommandName == "Modificar")
+                else if (e.CommandName == "CobrarResto")
                 {
-                    int idTurno = Convert.ToInt32(e.CommandArgument);
-                    Response.Redirect($"ModificarTurno.aspx?IDTurno={idTurno}");
+                   
+                    Turno t = turnoNegocio.BuscarTurnoPorId(idTurno);
+
+                    decimal pagado = 0;
+                    if (t.Pago != null) pagado = t.Pago.Where(p => !p.EsDevolucion).Sum(p => p.Monto);
+
+                    decimal precio = t.Servicio.Precio;
+                    decimal resta = precio - pagado;
+
+                   
+                    hfIdTurnoCobrar.Value = idTurno.ToString();
+                    lblTotalServicio.Text = "$" + precio.ToString("N0");
+                    lblYaAbonado.Text = "$" + pagado.ToString("N0");
+                    lblRestaPagar.Text = "$" + resta.ToString("N0");
+
+                  
+                    txtComprobanteCobro.Text = "";
+
+                
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "AbrirCobro", "new bootstrap.Modal(document.getElementById('cobrarModal')).show();", true);
+                }
+                else if (e.CommandName == "CancelarTurno")
+                {
+                    hfIdTurnoCancelar.Value = idTurno.ToString();
+                   
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "AbrirCancelar", "new bootstrap.Modal(document.getElementById('cancelarModal')).show();", true);
                 }
             }
             catch (Exception ex)
             {
-                MostrarError("Error en agenda: " + ex.Message);
+                MostrarError("Error en agenda pendiente: " + ex.Message);
             }
         }
 
-        
-        // LÓGICA DE PENDIENTES DE CONFIRMACIÓN
-        
+       
+        protected void dgvAgendaPagada_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            try
+            {
+                int idTurno = Convert.ToInt32(e.CommandArgument);
 
+                if (e.CommandName == "VerPagos")
+                {
+                    MostrarDetalleModal(idTurno);
+                }
+                else if (e.CommandName == "FinalizarTurno")
+                {
+                    
+                    turnoNegocio.CambiarEstado(idTurno, 4);
+
+                    CargarTablas();
+                    MostrarExito("¡El turno ha sido marcado como Finalizado!");
+                }
+            }
+            catch (Exception ex)
+            {
+                MostrarError("Error al finalizar turno: " + ex.Message);
+            }
+        }
+
+       
+
+        protected void btnConfirmarCobro_Click(object sender, EventArgs e)
+        {
+            try
+            {
+               
+                if (ddlFormaPagoCobro.SelectedValue == "2" && string.IsNullOrWhiteSpace(txtComprobanteCobro.Text))
+                {
+                   
+                    MostrarError("El comprobante es OBLIGATORIO para pagos con Transferencia.");
+                    return;
+                }
+
+                int idTurno = int.Parse(hfIdTurnoCobrar.Value);
+
+                
+                Turno t = turnoNegocio.BuscarTurnoPorId(idTurno);
+
+                
+                decimal pagado = t.Pago != null ? t.Pago.Where(p => !p.EsDevolucion).Sum(p => p.Monto) : 0;
+
+               
+                decimal montoACobrar = t.Servicio.Precio - pagado;
+
+                if (montoACobrar <= 0)
+                {
+                    MostrarError("Este turno ya está pagado en su totalidad.");
+                    return;
+                }
+
+                
+                Pago nuevoPago = new Pago();
+                nuevoPago.IDTurno = idTurno;
+                nuevoPago.Fecha = DateTime.Now;
+                nuevoPago.Monto = montoACobrar;
+                nuevoPago.EsDevolucion = false;
+                nuevoPago.Tipo = new TipoPago { IDTipoPago = 1 };
+                nuevoPago.FormaDePago = new FormaPago { IDFormaPago = int.Parse(ddlFormaPagoCobro.SelectedValue) };
+
+                
+                if (string.IsNullOrWhiteSpace(txtComprobanteCobro.Text))
+                    nuevoPago.CodigoTransaccion = null;
+                else
+                    nuevoPago.CodigoTransaccion = txtComprobanteCobro.Text;
+
+                
+                pagoNegocio.AgregarPago(nuevoPago);
+
+               
+                if (t.Estado.IDEstado == 2)
+                {
+                    turnoNegocio.CambiarEstado(idTurno, 1);
+                }
+
+                
+                CargarTablas();
+                MostrarExito("Cobro registrado exitosamente. El turno ahora aparece en 'Pagados Completos'.");
+            }
+            catch (Exception ex)
+            {
+                MostrarError("Error al procesar el cobro: " + ex.Message);
+            }
+        }
+
+        protected void btnConfirmarCancelacion_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int idTurno = int.Parse(hfIdTurnoCancelar.Value);
+
+             
+                bool esCulpaCliente = rbAusenciaCliente.Checked;
+
+                if (esCulpaCliente)
+                {
+                    
+                    turnoNegocio.CambiarEstado(idTurno, 3);
+
+                    
+
+                    MostrarExito("Turno cancelado por ausencia/tardanza. No corresponde devolución.");
+                }
+                else
+                {
+                    turnoNegocio.CambiarEstado(idTurno, 6);
+
+                 
+                    hfTabActivo.Value = "#v-pills-devoluciones";
+
+                    MostrarExito("Turno cancelado por el centro. Se ha generado una solicitud de devolución.");
+                }
+
+                CargarTablas();
+            }
+            catch (Exception ex)
+            {
+                MostrarError("Error al cancelar el turno: " + ex.Message);
+            }
+        }
+
+
+     
         protected void dgvPendientesConfirmacion_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             if (e.CommandName == "ConfirmarTurno")
@@ -137,17 +304,14 @@ namespace CentroEstetica
                 {
                     int idTurno = int.Parse(e.CommandArgument.ToString());
 
-                    
                     turnoNegocio.CambiarEstado(idTurno, 1);
 
-                   
                     Turno turnoCompleto = CargarDatosCompletosTurno(idTurno);
                     EmailService.EnviarAvisoPagoAprobado(turnoCompleto.Cliente.Mail, turnoCompleto);
 
-                    
                     CargarTablas();
                     hfTabActivo.Value = "#v-pills-pendientes";
-                    MostrarExito("Turno confirmado y cliente notificado.");
+                    MostrarExito("Seña confirmada y cliente notificado.");
                 }
                 catch (Exception ex)
                 {
@@ -160,14 +324,12 @@ namespace CentroEstetica
                 {
                     int idTurno = int.Parse(e.CommandArgument.ToString());
 
-                    
+            
                     turnoNegocio.CambiarEstado(idTurno, 3);
 
-                   
                     Turno turnoCompleto = CargarDatosCompletosTurno(idTurno);
                     EmailService.EnviarAvisoPagoRechazado(turnoCompleto.Cliente.Mail, turnoCompleto, "Comprobante inválido o pago no acreditado.");
 
-                    
                     CargarTablas();
                     hfTabActivo.Value = "#v-pills-pendientes";
                     MostrarExito("Turno rechazado y notificación enviada.");
@@ -179,10 +341,8 @@ namespace CentroEstetica
             }
         }
 
-        
-        // LÓGICA DE DEVOLUCIONES
-        
 
+     
         protected void dgvDevoluciones_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             if (e.CommandName == "AbrirModalDevolucion")
@@ -191,27 +351,21 @@ namespace CentroEstetica
                 {
                     int idTurno = int.Parse(e.CommandArgument.ToString());
 
-                    
                     Turno turno = turnoNegocio.BuscarTurnoPorId(idTurno);
 
+                    
                     decimal totalPagado = 0;
                     if (turno.Pago != null)
                     {
-                        foreach (var p in turno.Pago)
-                        {
-                            if (!p.EsDevolucion) totalPagado += p.Monto;
-                        }
+                        totalPagado = turno.Pago.Where(p => !p.EsDevolucion).Sum(p => p.Monto);
                     }
 
-                    
                     hfIdTurnoDevolucion.Value = idTurno.ToString();
                     hfIdClienteDevolucion.Value = turno.Cliente.ID.ToString();
 
-                    
                     txtMontoDevolucion.Text = totalPagado.ToString("N2");
                     txtComprobanteDevolucion.Text = "";
 
-                   
                     ScriptManager.RegisterStartupScript(this, this.GetType(), "AbrirDevolucion", "new bootstrap.Modal(document.getElementById('devolucionModal')).show();", true);
                 }
                 catch (Exception ex)
@@ -229,14 +383,14 @@ namespace CentroEstetica
                 int idCliente = int.Parse(hfIdClienteDevolucion.Value);
                 decimal montoPositivo = decimal.Parse(txtMontoDevolucion.Text);
 
-                
+            
                 if (ddlFormaDevolucion.SelectedValue == "2" && string.IsNullOrWhiteSpace(txtComprobanteDevolucion.Text))
                 {
                     MostrarError("El comprobante es obligatorio para transferencias.");
                     return;
                 }
 
-                
+              
                 Pago devolucion = new Pago();
                 devolucion.IDTurno = idTurno;
                 devolucion.Fecha = DateTime.Now;
@@ -248,22 +402,22 @@ namespace CentroEstetica
 
                 pagoNegocio.AgregarPago(devolucion);
 
+                
                 turnoNegocio.CambiarEstado(idTurno, 5);
 
-               
+                
                 Usuario cliente = usuarioNegocio.ObtenerPorId(idCliente);
                 if (cliente != null && !string.IsNullOrEmpty(cliente.Mail))
                 {
                     EmailService.EnviarConfirmacionDevolucion(
                         cliente.Mail,
                         cliente.Nombre,
-                        devolucion.Monto, 
+                        devolucion.Monto,
                         ddlFormaDevolucion.SelectedItem.Text,
                         devolucion.CodigoTransaccion
                     );
                 }
 
-                
                 CargarTablas();
                 hfTabActivo.Value = "#v-pills-devoluciones";
                 MostrarExito("Devolución registrada y notificada correctamente.");
@@ -274,15 +428,14 @@ namespace CentroEstetica
             }
         }
 
-        
-        // MÉTODOS AUXILIARES Y MODALES
+
        
 
-        
         private Turno CargarDatosCompletosTurno(int idTurno)
         {
             Turno t = turnoNegocio.BuscarTurnoPorId(idTurno);
 
+           
             if (string.IsNullOrEmpty(t.Cliente.Mail))
             {
                 Usuario u = usuarioNegocio.ObtenerPorId(t.Cliente.ID);
@@ -306,7 +459,7 @@ namespace CentroEstetica
                     litNombreTurno.Text = $"{t.Servicio.Nombre} - {t.Cliente.Nombre} {t.Cliente.Apellido}";
                 }
 
-                string script = "var modal = new bootstrap.Modal(document.getElementById('pagoModal')); modal.show();";
+                string script = "new bootstrap.Modal(document.getElementById('pagoModal')).show();";
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowModal", script, true);
             }
             catch (Exception ex)
@@ -327,6 +480,12 @@ namespace CentroEstetica
             lblMensajeError.Text = msg;
             pnlMensajeError.Visible = true;
             pnlMensajeExito.Visible = false;
+        }
+
+      
+        protected void dgvTurnos_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+          
         }
     }
 }

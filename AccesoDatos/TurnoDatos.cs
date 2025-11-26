@@ -41,7 +41,8 @@ namespace AccesoDatos
 
                     aux.Servicio = new Servicio()
                     {
-                        Nombre = (string)datos.Lector["Servicio"]
+                        Nombre = (string)datos.Lector["Servicio"],
+                        Precio = (decimal)datos.Lector["PrecioServicio"]
                     };
 
                     aux.Estado = new EstadoTurno
@@ -146,6 +147,7 @@ namespace AccesoDatos
                         turno.Servicio = new Servicio()
                         {
                             Nombre = (string)datos.Lector["Servicio"],
+                            Precio = (decimal)datos.Lector["PrecioServicio"]
                         };
 
                         turno.Estado = new EstadoTurno
