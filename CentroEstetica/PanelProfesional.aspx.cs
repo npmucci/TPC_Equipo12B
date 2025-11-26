@@ -31,7 +31,7 @@ namespace CentroEstetica
                 CargarEstadisticas(profesional.ID);
                 CargarTurnos();
             }
-            ActualizarEstilosMenu(hfTabActivo.Value);
+            //ActualizarEstilosMenu(hfTabActivo.Value);
         }
         private void MostrarFechaActual()
         {

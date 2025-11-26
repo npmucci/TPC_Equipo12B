@@ -569,7 +569,9 @@ namespace AccesoDatos
                         {
                             ID = (int)datos.Lector["IDUsuarioCliente"],
                             Nombre = (string)datos.Lector["NombreCliente"],
-                            Apellido = (string)datos.Lector["ApellidoCliente"]
+                            Apellido = (string)datos.Lector["ApellidoCliente"],
+                            Telefono = (string)datos.Lector["TelefonoCliente"],
+                            Mail = (string)datos.Lector["EmailCliente"]
                         };
                         aux.Profesional = new Profesional
                         {

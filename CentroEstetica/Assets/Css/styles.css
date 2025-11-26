@@ -360,3 +360,56 @@ h1, h2, h3, h4, h5, h6 {
     display: inline-flex !important;
     align-items: center !important;
 }
+
+/* =========================================
+   ESTILOS ESPECÍFICOS AGENDA (BOTONES UNIFICADOS)
+   ========================================= */
+
+
+.table .btn {
+    background-color: var(--colorPrincipal) !important; 
+    border: 1px solid var(--colorPrincipalHover) !important; 
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 5px 15px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+    /* Efecto Hover unificado (Rosa Fuerte) */
+    .table .btn:hover {
+        background-color: var(--colorPrincipalHover) !important; /* Rosa Fuerte */
+        color: white !important; /
+        border-color: var(--colorPrincipalHover) !important;
+        transform: translateY(-2px); 
+        box-shadow: 0 4px 8px rgba(216, 92, 126, 0.3);
+    }
+
+    /* Ajuste para el foco (cuando se hace clic) para que el anillo sea rosa y no azul */
+    .table .btn:focus, .table .btn:active {
+        box-shadow: 0 0 0 0.25rem rgba(216, 92, 126, 0.4) !important;
+        border-color: var(--colorPrincipalHover) !important;
+    }
+
+    /* Ajuste opcional para los iconos dentro de los botones */
+    .table .btn i {
+        margin-right: 4px;
+    }
+
+
+
+/* 1. Cambiar el borde izquierdo grueso de la tarjeta */
+#tab-listo .border-success {
+    border-color: var(--colorPrincipalHover) !important;
+}
+
+/* 2. Cambiar el color del título "Turnos Pagados..." */
+#tab-listo h5.text-success {
+    color: var(--colorPrincipalHover) !important;
+}
+
+/* 3. Cambiar el fondo de la etiqueta "Completo" dentro de la grilla */
+#tab-listo .badge.bg-success {
+    background-color: var(--colorPrincipalHover) !important;
+    color: white !important;
+}
