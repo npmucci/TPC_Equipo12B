@@ -132,11 +132,14 @@ namespace AccesoDatos
                         turno.HoraInicio = (TimeSpan)datos.Lector["HoraInicio"];
                         turno.Cliente = new Cliente()
                         {
+                            ID = (int)datos.Lector["IDUsuarioCliente"],                                        
                             Nombre = (string)datos.Lector["NombreCliente"],
-                            Apellido = (string)datos.Lector["ApellidoCliente"]
+                            Apellido = (string)datos.Lector["ApellidoCliente"],
+                            Mail = (string)datos.Lector["EmailCliente"] 
                         };
                         turno.Profesional = new Profesional()
                         {
+                            ID = (int)datos.Lector["IDUsuarioProfesional"],
                             Nombre = (string)datos.Lector["NombreProfesional"],
                             Apellido = (string)datos.Lector["ApellidoProfesional"]
                         };

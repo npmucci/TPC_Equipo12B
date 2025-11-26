@@ -143,7 +143,7 @@ namespace Negocio
             cuerpo += "<h2 style='color: #28a745;'>¡Pago Verificado!</h2>";
             cuerpo += $"<p>Hola <strong>{turno.Cliente.Nombre}</strong>,</p>";
             cuerpo += "<p>Te informamos que hemos verificado tu comprobante de pago correctamente.</p>";
-            cuerpo += "<p><strong>Tu turno ha pasado a estado: CONFIRMADO.</strong></p>";
+            cuerpo += "<p><strong>Tu turno ha sido CONFIRMADO.</strong></p>";
             cuerpo += "<hr>";
             cuerpo += $"<p>📅 <strong>Fecha:</strong> {turno.FechaString}</p>";
             cuerpo += $"<p>⏰ <strong>Hora:</strong> {turno.HoraInicio:hh\\:mm} hs</p>";
@@ -216,6 +216,68 @@ namespace Negocio
             cuerpo += "</div>";
 
             email.Body = cuerpo;
+            EnviarEmail(email);
+        }
+
+        // AVISO DE DEVOLUCIÓN DE DINERO
+        public static void EnviarConfirmacionDevolucion(string emailCliente, string nombreCliente, decimal monto, string medioPago, string comprobante)
+        {
+            MailMessage email = new MailMessage();
+            email.From = new MailAddress(EMAIL_EMISOR, "Centro Estética - Administración");
+            email.To.Add(emailCliente);
+            email.Subject = "💸 Reembolso Procesado - Centro Estética";
+            email.IsBodyHtml = true;
+
+            StringBuilder cuerpo = new StringBuilder();
+            cuerpo.Append("<div style='font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ddd; max-width: 600px;'>");
+            cuerpo.Append("<h2 style='color: #dc3545;'>Devolución Procesada</h2>");
+            cuerpo.Append($"<p>Hola <strong>{nombreCliente}</strong>,</p>");
+            cuerpo.Append("<p>Te informamos que hemos procesado la devolución de tu reserva cancelada.</p>");
+
+            cuerpo.Append("<div style='background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 15px 0;'>");
+            cuerpo.Append($"<p style='margin: 5px 0;'><strong>Monto Reembolsado:</strong> ${Math.Abs(monto):N0}</p>"); // Math.Abs para mostrar positivo en el mail
+            cuerpo.Append($"<p style='margin: 5px 0;'><strong>Medio de Devolución:</strong> {medioPago}</p>");
+
+            if (!string.IsNullOrEmpty(comprobante))
+            {
+                cuerpo.Append($"<p style='margin: 5px 0;'><strong>Comprobante/Transacción:</strong> {comprobante}</p>");
+            }
+            cuerpo.Append("</div>");
+
+            cuerpo.Append("<hr>");
+            cuerpo.Append("<small>Si la devolución fue por transferencia, el dinero puede demorar hasta 48hs hábiles en impactar en tu cuenta.</small>");
+            cuerpo.Append("</div>");
+
+            email.Body = cuerpo.ToString();
+
+            EnviarEmail(email);
+        }
+
+        // AVISO DE PAGO RECHAZADO (Comprobante inválido)
+        public static void EnviarAvisoPagoRechazado(string emailCliente, Turno turno, string motivo)
+        {
+            MailMessage email = new MailMessage();
+            email.From = new MailAddress(EMAIL_EMISOR, "Centro Estética - Pagos");
+            email.To.Add(emailCliente);
+            email.Subject = "⚠️ Problema con tu Pago - Acción Requerida";
+            email.IsBodyHtml = true;
+
+            StringBuilder cuerpo = new StringBuilder();
+            cuerpo.Append("<div style='font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ffc107; max-width: 600px;'>");
+            cuerpo.Append("<h2 style='color: #d39e00;'>No pudimos verificar tu pago</h2>");
+            cuerpo.Append($"<p>Hola <strong>{turno.Cliente.Nombre}</strong>,</p>");
+            cuerpo.Append("<p>Hemos revisado el comprobante enviado para el siguiente turno, pero no corresponde o no se ha acreditado:</p>");
+
+            cuerpo.Append("<ul>");
+            cuerpo.Append($"<li>📅 Fecha: {turno.FechaString}</li>");
+            cuerpo.Append($"<li>💆 Servicio: {turno.Servicio.Nombre}</li>");
+            cuerpo.Append($"<li>❌ <strong>Motivo:</strong> {motivo}</li>");
+            cuerpo.Append("</ul>");
+
+            cuerpo.Append("<p>El turno ha sido cancelado momentáneamente. Por favor, ponte en contacto con nosotros respondiendo este correo o al WhatsApp para regularizar la situación.</p>");
+            cuerpo.Append("</div>");
+
+            email.Body = cuerpo.ToString();
             EnviarEmail(email);
         }
     }

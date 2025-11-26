@@ -124,9 +124,9 @@ namespace CentroEstetica
                     devolucion.IDTurno = idTurno;
                     devolucion.Fecha = DateTime.Now;
                     devolucion.EsDevolucion = true;
-                    devolucion.Monto = montoDevolucion;
+                    devolucion.Monto = montoDevolucion * -1;
 
-                    
+
                     if (ddlFormaDevolucion.SelectedValue == "Efectivo")
                     {
                         devolucion.FormaDePago = new FormaPago { IDFormaPago = 1 };

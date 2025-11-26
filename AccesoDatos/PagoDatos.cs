@@ -28,6 +28,11 @@ namespace AccesoDatos
                     aux.EsDevolucion = (bool)datos.Lector["EsDevolucion"];
                     aux.Monto = (decimal)datos.Lector["Monto"];
 
+                    if (!(datos.Lector["CodigoTransaccion"] is DBNull))
+                    {
+                        aux.CodigoTransaccion = (string)datos.Lector["CodigoTransaccion"];
+                    }
+
 
                     aux.Tipo = new TipoPago
                     {

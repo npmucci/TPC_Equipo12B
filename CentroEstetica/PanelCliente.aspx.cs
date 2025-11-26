@@ -118,7 +118,21 @@ namespace CentroEstetica
                 {
                     
                     int idTurno = int.Parse(e.CommandArgument.ToString());
+                    Turno turno = turnosNegocio.BuscarTurnoPorId(idTurno);
                     string mensajeResultado = turnosNegocio.ProcesarCancelacionCliente(idTurno);
+
+                    Usuario cliente = (Usuario)Session["usuario"]; 
+                    try
+                    {
+                        EmailService.EnviarAvisoCancelacion(
+                            cliente.Mail,
+                            turno.Servicio.Nombre,
+                            turno.Fecha,
+                            mensajeResultado 
+                        );
+                    }
+                    catch {  }
+
                     CargarTurnos();
 
                     lblMensajeCancelacion.Text = mensajeResultado;
