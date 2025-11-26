@@ -301,9 +301,9 @@ BEGIN
         T.Fecha,
         T.HoraInicio,
         T.IDEstado,
-        T.IDUsuarioCliente,     
-        T.IDUsuarioProfesional,  
-        T.IDServicio,            
+        T.IDUsuarioCliente,      
+        T.IDUsuarioProfesional,   
+        T.IDServicio,             
         E.Descripcion AS DescripcionEstado,
         P.Nombre AS NombreProfesional,
         P.Apellido AS ApellidoProfesional,
@@ -312,7 +312,8 @@ BEGIN
         C.Telefono AS TelefonoCliente,
         C.Mail AS EmailCliente,
         C.Domicilio AS DomicilioCliente,
-        S.Nombre AS Servicio
+        S.Nombre AS Servicio,
+        S.Precio AS PrecioServicio 
     FROM Turno T
     INNER JOIN Usuario P ON T.IDUsuarioProfesional = P.IDUsuario
     INNER JOIN Usuario C ON T.IDUsuarioCliente = C.IDUsuario
@@ -355,11 +356,15 @@ BEGIN
         T.HoraInicio,
         T.IDEstado,
         E.Descripcion AS DescripcionEstado,
-        T.IDUsuarioProfesional, T.IDUsuarioCliente, T.IDServicio, 
+        T.IDUsuarioProfesional, 
+        T.IDUsuarioCliente, 
+        T.IDServicio, 
         P.Nombre AS NombreProfesional,
         P.Apellido AS ApellidoProfesional,
         C.Nombre AS NombreCliente,
         C.Apellido AS ApellidoCliente,
+        C.Telefono AS TelefonoCliente,
+        C.Mail AS EmailCliente,
         S.Nombre AS Servicio,
         S.DuracionMinutos,
         ISNULL((SELECT SUM(Monto) FROM Pago WHERE IDTurno = T.IDTurno AND EsDevolucion = 0), 0) as TotalPagado
