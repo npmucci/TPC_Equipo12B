@@ -41,9 +41,9 @@ namespace Negocio
             return datos.ListarPorProfesionalYFecha(idProfesional, fechaInicio, fechaFin);
         }
 
-        public List<Turno> FiltrarTurnos(int idEstado, int idEspecialidad, int idProfesional, int idServicio)
+        public List<Turno> FiltrarTurnos(int idEstado, DateTime fechaDesde, DateTime fechaHasta)
         {
-            return datos.FiltrarTurnos (idEstado, idEspecialidad, idProfesional, idServicio);
+            return datos.FiltrarTurnos (idEstado,fechaDesde,fechaHasta);
         } 
         #endregion
 

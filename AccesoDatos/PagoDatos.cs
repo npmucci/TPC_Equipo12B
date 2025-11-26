@@ -37,12 +37,12 @@ namespace AccesoDatos
                     aux.Tipo = new TipoPago
                     {
                         IDTipoPago = (int)datos.Lector["IDTipoPago"],
-                        Descripcion = (string)datos.Lector["TipoPagoDescripcion"]
+                        Descripcion = datos.Lector["TipoPagoDescripcion"] is DBNull ? "" : (string)datos.Lector["TipoPagoDescripcion"]
                     };
                     aux.FormaDePago = new FormaPago
                     {
-                        IDFormaPago = (int)datos.Lector["IDFormaPago"],
-                        Descripcion = (string)datos.Lector["FormaPagoDescripcion"]
+                        IDFormaPago = (int)datos.Lector["IDFormaPago"],                       
+                        Descripcion = datos.Lector["FormaPagoDescripcion"] is DBNull ? "" : (string)datos.Lector["FormaPagoDescripcion"]
                     };
 
 

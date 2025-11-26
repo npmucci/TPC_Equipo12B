@@ -29,12 +29,14 @@ namespace AccesoDatos
 
                     aux.Cliente = new Cliente()
                     {
+                        ID = (int)datos.Lector["IDUsuarioCliente"],
                         Nombre = (string)datos.Lector["NombreCliente"],
                         Apellido = (string)datos.Lector["ApellidoCliente"]
                     };
 
                     aux.Profesional = new Profesional()
                     {
+                        ID = (int)datos.Lector["IDUsuarioProfesional"],
                         Nombre = (string)datos.Lector["NombreProfesional"],
                         Apellido = (string)datos.Lector["ApellidoProfesional"]
                     };
@@ -133,10 +135,10 @@ namespace AccesoDatos
                         turno.HoraInicio = (TimeSpan)datos.Lector["HoraInicio"];
                         turno.Cliente = new Cliente()
                         {
-                            ID = (int)datos.Lector["IDUsuarioCliente"],                                        
+                            ID = (int)datos.Lector["IDUsuarioCliente"],
                             Nombre = (string)datos.Lector["NombreCliente"],
                             Apellido = (string)datos.Lector["ApellidoCliente"],
-                            Mail = (string)datos.Lector["EmailCliente"] 
+                            Mail = (string)datos.Lector["EmailCliente"]
                         };
                         turno.Profesional = new Profesional()
                         {
@@ -599,7 +601,7 @@ namespace AccesoDatos
             }
         }
 
-        public List<Turno> FiltrarTurnos(int idEstado, int idEspecialidad, int idProfesional, int idServicio)
+        public List<Turno> FiltrarTurnos(int idEstado, DateTime fechaDesde, DateTime fechaHasta)
         {
             List<Turno> lista = new List<Turno>();
 
@@ -608,19 +610,18 @@ namespace AccesoDatos
                 try
                 {
                     // Armamos la consulta base
-                    string consulta =
-                        "SELECT T.IDTurno, T.Fecha, T.HoraInicio, T.IDEstado, T.IDServicio, " +
-                        "T.IDUsuarioProfesional, T.IDUsuarioCliente, " +
-                        "E.Descripcion AS EstadoDesc, " +
-                        "P.Nombre AS ProfNombre, P.Apellido AS ProfApellido, " +
-                        "C.Nombre AS CliNombre, C.Apellido AS CliApellido, " +
-                        "S.Nombre AS ServNombre, S.IDEspecialidad " +
-                        "FROM Turno T " +
-                        "INNER JOIN EstadoTurno E ON E.IDEstado = T.IDEstado " +
-                        "INNER JOIN Usuario C ON C.IDUsuario = T.IDUsuarioCliente " +
-                        "INNER JOIN Usuario P ON P.IDUsuario = T.IDUsuarioProfesional " +
-                        "INNER JOIN Servicio S ON S.IDServicio = T.IDServicio " +
-                        "WHERE 1 = 1 ";
+                    string consulta = "SELECT T.IDTurno, T.Fecha, T.HoraInicio, T.IDEstado, T.IDServicio, " +
+                 "T.IDUsuarioProfesional, T.IDUsuarioCliente, " +
+                 "E.Descripcion AS EstadoDesc, " +
+                 "P.Nombre AS ProfNombre, P.Apellido AS ProfApellido, " +
+                 "C.Nombre AS CliNombre, C.Apellido AS CliApellido, " +
+                 "S.Nombre AS ServNombre, S.IDEspecialidad " +
+                 "FROM Turno T " +
+                 "INNER JOIN EstadoTurno E ON E.IDEstado = T.IDEstado " +
+                 "INNER JOIN Usuario C ON C.IDUsuario = T.IDUsuarioCliente " +
+                 "INNER JOIN Usuario P ON P.IDUsuario = T.IDUsuarioProfesional " +
+                 "INNER JOIN Servicio S ON S.IDServicio = T.IDServicio " +
+                 "WHERE 1 = 1 ";
 
                     // Lista de condiciones dinámicas
                     List<string> condiciones = new List<string>();
@@ -628,16 +629,15 @@ namespace AccesoDatos
                     if (idEstado != 0)
                         condiciones.Add("T.IDEstado = @IDEstado");
 
-                    if (idEspecialidad != 0)
-                        condiciones.Add("S.IDEspecialidad = @IDEspecialidad");
+                    // 2. Condición de Fecha Desde
+                    if (fechaDesde != DateTime.MinValue)
+                        condiciones.Add("T.Fecha >= @FechaDesde"); 
 
-                    if (idProfesional != 0)
-                        condiciones.Add("T.IDUsuarioProfesional = @IDProfesional");
+                  
+                    if (fechaHasta != DateTime.MaxValue)
+                        condiciones.Add("T.Fecha <= @FechaHasta"); 
 
-                    if (idServicio != 0)
-                        condiciones.Add("T.IDServicio = @IDServicio");
 
-                    // Si hay condiciones, las agregamos
                     if (condiciones.Count > 0)
                     {
                         consulta += " AND " + string.Join(" AND ", condiciones);
@@ -647,21 +647,18 @@ namespace AccesoDatos
 
                     datos.SetearConsulta(consulta);
 
-                    // Parámetros
                     if (idEstado != 0)
                         datos.SetearParametro("@IDEstado", idEstado);
 
-                    if (idEspecialidad != 0)
-                        datos.SetearParametro("@IDEspecialidad", idEspecialidad);
+                    if (fechaDesde != DateTime.MinValue)
+                        datos.SetearParametro("@FechaDesde", fechaDesde);
 
-                    if (idProfesional != 0)
-                        datos.SetearParametro("@IDProfesional", idProfesional);
+                    if (fechaHasta != DateTime.MaxValue)
+                        datos.SetearParametro("@FechaHasta", fechaHasta);
 
-                    if (idServicio != 0)
-                        datos.SetearParametro("@IDServicio", idServicio);
+              
 
                     datos.EjecutarLectura();
-
                     while (datos.Lector.Read())
                     {
                         lista.Add(new Turno

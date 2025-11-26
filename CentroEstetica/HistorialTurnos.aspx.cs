@@ -2,8 +2,6 @@
 using Negocio;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -11,22 +9,31 @@ namespace CentroEstetica
 {
     public partial class HistorialTurnos : System.Web.UI.Page
     {
+        public bool FiltroAvanzado { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
-           /* if (!Seguridad.EsRecepcionista(Session["usuario"]))
+            if (!Seguridad.SesionActiva(Session["usuario"]))
             {
                 Response.Redirect("Default.aspx", false);
                 return;
             }
-           */
-
+            int IdUsuario = ((Usuario)Session["usuario"]).ID;
+            int rolUsuario = (int) ((Usuario)Session["usuario"]).Rol;
+            ConfigurarBotonVolver(rolUsuario);
             if (!IsPostBack)
             {
-  
                 MostrarFechaActual();
                 CargarFiltrosIniciales();
                 TurnoNegocio negocio = new TurnoNegocio();
-                List<Turno> listaTurnos = negocio.ListarTodos();
+                List<Turno> listaTurnos= negocio.ListarTodos(); ;
+               /*
+                if (rolUsuario == 2 || rolUsuario == 3) 
+                {
+
+                    listaTurnos = listaTurnos.FindAll(t => (t.Profesional?.ID  == IdUsuario) || (t.Cliente?.ID  == IdUsuario)
+);
+                }
+                */
                 Session.Add("listaTurnosHistorial", listaTurnos);
                 dgvTurnos.DataSource = Session["listaTurnosHistorial"];
                 dgvTurnos.DataBind();
@@ -43,19 +50,11 @@ namespace CentroEstetica
         {
             TurnoNegocio turnoNegocio = new TurnoNegocio();
             EspecialidadNegocio especialidadNegocio = new EspecialidadNegocio();
-
             ddlEstado.DataSource = turnoNegocio.ListarEstados();
             ddlEstado.DataTextField = "Descripcion";
             ddlEstado.DataValueField = "IDEstado";
-            ddlEstado.DataBind();    
+            ddlEstado.DataBind();
             ddlEstado.Items.Insert(0, new ListItem("Todos", "0"));
-            ddlEspecialidad.DataSource = especialidadNegocio.ListarActivos();
-            ddlEspecialidad.DataTextField = "Nombre";
-            ddlEspecialidad.DataValueField = "IDEspecialidad";
-            ddlEspecialidad.DataBind();
-            ddlEspecialidad.Items.Insert(0, new ListItem("Todas", "0"));
-            ddlProfesional.Items.Insert(0, new ListItem("Todos", "0"));
-            ddlServicio.Items.Insert(0, new ListItem("Todos", "0"));
         }
 
         protected void filtro_TextChanged(object sender, EventArgs e)
@@ -78,7 +77,7 @@ namespace CentroEstetica
 
         protected void chkAvanzado_CheckedChanged(object sender, EventArgs e)
         {
-            pnlAvanzado.Visible = chkAvanzado.Checked;
+           
 
             TurnoNegocio negocio = new TurnoNegocio();
 
@@ -91,69 +90,26 @@ namespace CentroEstetica
             dgvTurnos.DataBind();
         }
 
-
-        protected void ddlEspecialidad_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                ddlProfesional.Items.Clear();
-                ddlServicio.Items.Clear();
-                int idEspecialidad = int.Parse(ddlEspecialidad.SelectedValue);
-                ProfesionalNegocio profNeg = new ProfesionalNegocio();
-                ddlProfesional.DataSource = profNeg.ListarPorEspecialidad(idEspecialidad);
-                ddlProfesional.DataTextField = "NombreCompleto";
-                ddlProfesional.DataValueField = "ID";
-                ddlProfesional.DataBind();
-
-                ServicioNegocio servNeg = new ServicioNegocio();
-                ddlServicio.DataSource = servNeg.ListarPorEspecialidad(idEspecialidad);
-                ddlServicio.DataTextField = "Nombre";
-                ddlServicio.DataValueField = "IDServicio";
-                ddlServicio.DataBind();
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-
-            ddlProfesional.Items.Insert(0, new ListItem("Todos", "0"));
-            ddlServicio.Items.Insert(0, new ListItem("Todos", "0"));
-        }
-
-        protected void ddlProfesional_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ddlServicio.Items.Clear();
-            int idEspecialidad = int.Parse(ddlEspecialidad.SelectedValue);
-       
-
-          if (idEspecialidad != 0)
-            {
-                ServicioNegocio servNeg = new ServicioNegocio();
-                ddlServicio.DataSource = servNeg.ListarPorEspecialidad(idEspecialidad);
-                ddlServicio.DataTextField = "Nombre";
-                ddlServicio.DataValueField = "IDServicio";
-                ddlServicio.DataBind();
-            }
-
-            ddlServicio.Items.Insert(0, new ListItem("Todos", "0"));
-        }
-
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
             try
             {
-                int idEstado = int.Parse(ddlEstado.SelectedValue); 
-                int idEspecialidad = int.Parse(ddlEspecialidad.SelectedValue); 
-                int idProfesional = int.Parse(ddlProfesional.SelectedValue);
-                int idServicio = 0; 
-                           
-                if (ddlServicio.SelectedValue != "0" && !string.IsNullOrEmpty(ddlServicio.SelectedValue))
+                int idEstado = int.Parse(ddlEstado.SelectedValue);
+                DateTime fechaDesde = DateTime.MinValue;
+                DateTime fechaHasta = DateTime.MaxValue;
+
+                if (!string.IsNullOrEmpty(txtFechaDesde.Text))
                 {
-                    idServicio = int.Parse(ddlServicio.SelectedValue);
+                    fechaDesde = Convert.ToDateTime(txtFechaDesde.Text);
                 }
 
+                if (!string.IsNullOrEmpty(txtFechaHasta.Text))
+                {
+                  
+                    fechaHasta = Convert.ToDateTime(txtFechaHasta.Text).AddDays(1).AddSeconds(-1);
+                }
                 TurnoNegocio negocio = new TurnoNegocio();
-                List<Turno> listaFiltrada = negocio.FiltrarTurnos(idEstado, idEspecialidad, idProfesional,  idServicio);
+                List<Turno> listaFiltrada = negocio.FiltrarTurnos(idEstado, fechaDesde,fechaHasta);
                 Session["listaTurnosHistorial"] = listaFiltrada;
                 dgvTurnos.DataSource = listaFiltrada;
                 dgvTurnos.DataBind();
@@ -182,14 +138,9 @@ namespace CentroEstetica
                 {
                     int idTurno = Convert.ToInt32(e.CommandArgument);
 
-
                     MostrarDetalleModal(idTurno);
                 }
-                if (e.CommandName == "Modificar")
-                {
-                    int idTurno = Convert.ToInt32(e.CommandArgument);
-                    Response.Redirect($"ModificarTurno.aspx?IDTurno={idTurno}");
-                }
+     
             }
 
             catch (Exception ex)
@@ -208,8 +159,31 @@ namespace CentroEstetica
             string script = "var modal = new bootstrap.Modal(document.getElementById('pagoModal')); modal.show();";
             ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowModal", script, true);
 
-
-
         }
+        private void ConfigurarBotonVolver(int rolID)
+        {
+            string urlPanel = "~/Default.aspx";
+                switch (rolID)
+                {
+                    case 1: 
+                        urlPanel = "~/PanelAdmin.aspx";
+                        break;
+                    case 2: 
+                        urlPanel = "~/PanelProfesional.aspx";
+                        break;
+                    case 3: 
+                        urlPanel = "~/PanelCliente.aspx";
+                        break;
+                    case 4:  
+                        urlPanel = "~/PanelRecepcionista.aspx";
+                        break;
+                default:
+                       
+                        urlPanel = "~/Default.aspx";
+                        break;
+                }                
+                lnkVolver.NavigateUrl = urlPanel;
+            }
+          
     }
 }

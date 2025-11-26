@@ -322,7 +322,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE sp_ListarTodosLosTurnos
+CREATE OR ALTER PROCEDURE sp_ListarTodosLosTurnos
 AS
 BEGIN
     SELECT 
@@ -335,6 +335,8 @@ BEGIN
         P.Apellido AS ApellidoProfesional,
         C.Nombre AS NombreCliente,
         C.Apellido AS ApellidoCliente,
+		T.IDUsuarioProfesional, 
+        T.IDUsuarioCliente,     
         S.Nombre AS Servicio
     FROM Turno T
     INNER JOIN Usuario P
