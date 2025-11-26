@@ -429,6 +429,7 @@ END
 GO
 
 --sp para pagos
+    
 CREATE OR ALTER PROCEDURE sp_ListarPagosPorTurno
     @IDTurno INT
 AS
@@ -439,6 +440,7 @@ BEGIN
         p.Fecha,
         p.EsDevolucion,
         p.Monto,
+        p.CodigoTransaccion,  
         p.IDTipoPago,
         tp.Nombre AS TipoPagoDescripcion,
         p.IDFormaPago,
@@ -449,6 +451,7 @@ BEGIN
     WHERE p.IDTurno = @IDTurno
 END
 GO
+    
 CREATE  PROCEDURE sp_AgregarPago
     @IDTurno INT,
     @Fecha DATETIME,
