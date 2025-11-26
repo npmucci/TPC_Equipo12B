@@ -58,7 +58,7 @@
                         <button class="nav-link active" id="v-pills-agenda-tab" data-bs-toggle="pill" data-bs-target="#v-pills-agenda" type="button" role="tab"> Agenda del Día </button>
                         <button class="nav-link" id="v-pills-pendientes-tab" data-bs-toggle="pill" data-bs-target="#v-pills-pendientes" type="button" role="tab"> Pendientes de Confirmación </button>
                         <button class="nav-link" id="v-pills-devoluciones-tab" data-bs-toggle="pill" data-bs-target="#v-pills-devoluciones" type="button" role="tab"> Pendientes de Devolución </button>
-                        <button class="nav-link" id="v-pills-historial-tab" data-bs-toggle="pill" data-bs-target="#v-pills-agenda" type="button" role="tab"> Historial de Turnos </button>
+                         <asp:HyperLink  ID="lnkHistorial"  runat="server"   NavigateUrl="~/HistorialTurnos.aspx" CssClass="nav-link" ToolTip="Ir a la página de historial de de turnos"> Historial Turnos</asp:HyperLink>
                         <asp:HyperLink  ID="lnkReservarTurnos"  runat="server"   NavigateUrl="~/ReservarTurno.aspx" CssClass="nav-link" ToolTip="Ir a la página de registro de turnos"> Reservar Turnos</asp:HyperLink>
                     </div>
                 </div>

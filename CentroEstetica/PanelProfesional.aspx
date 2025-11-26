@@ -46,8 +46,8 @@
                     <asp:Panel ID="pnlEstadisticas" runat="server">
                         <div class="row mb-5 justify-content-start">
                             <div class="col-md-5 col-lg-4 col-xl-3 me-3">
-                                <div class="stat-card text-center shadow-sm">
-                                    <p class="stat-label">📅 Turnos Hoy</p>
+                                <div class="kpi-card bg-personalizado text-center shadow-sm">
+                                    <p class="stat-label"> Turnos Hoy</p>
                                     <div class="stat-value">
                                         <asp:Label ID="lblTurnosHoy" runat="server" Text="0"></asp:Label>
                                     </div>
@@ -55,8 +55,8 @@
                             </div>
 
                             <div class="col-md-5 col-lg-4 col-xl-3">
-                                <div class="stat-card text-center shadow-sm">
-                                    <p class="stat-label">📊 Próximos 7 días</p>
+                                <div class="kpi-card bg-personalizado text-center shadow-sm">
+                                    <p class="stat-label"> Próximos 7 días</p>
                                     <div class="stat-value">
                                         <asp:Label ID="lblTurnosProximos" runat="server" Text="0"></asp:Label>
                                     </div>
@@ -66,7 +66,7 @@
                     </asp:Panel>
 
                     <div class="card shadow-sm border-0 rounded-4">
-                        <div class="card-header bg-primary text-white pt-4 px-4 rounded-top-4">
+                        <div class="card-header bg-custom-accent text-white pt-4 px-4 rounded-top-4"">
                             <h5 class="mb-0 fw-bold">
                                 <asp:Label ID="lblSubTituloGrid" runat="server" Text="Turnos Programados para Hoy"></asp:Label>
                             </h5>

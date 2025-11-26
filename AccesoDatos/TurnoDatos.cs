@@ -605,7 +605,7 @@ namespace AccesoDatos
             }
         }
 
-        public List<Turno> FiltrarTurnos(int idEstado, DateTime fechaDesde, DateTime fechaHasta)
+        public List<Turno> FiltrarTurnos(int idEstado, DateTime fechaDesde, DateTime fechaHasta, int idUsuario)
         {
             List<Turno> lista = new List<Turno>();
 
@@ -613,34 +613,35 @@ namespace AccesoDatos
             {
                 try
                 {
-                    // Armamos la consulta base
-                    string consulta = "SELECT T.IDTurno, T.Fecha, T.HoraInicio, T.IDEstado, T.IDServicio, " +
-                 "T.IDUsuarioProfesional, T.IDUsuarioCliente, " +
-                 "E.Descripcion AS EstadoDesc, " +
-                 "P.Nombre AS ProfNombre, P.Apellido AS ProfApellido, " +
-                 "C.Nombre AS CliNombre, C.Apellido AS CliApellido, " +
-                 "S.Nombre AS ServNombre, S.IDEspecialidad " +
-                 "FROM Turno T " +
-                 "INNER JOIN EstadoTurno E ON E.IDEstado = T.IDEstado " +
-                 "INNER JOIN Usuario C ON C.IDUsuario = T.IDUsuarioCliente " +
-                 "INNER JOIN Usuario P ON P.IDUsuario = T.IDUsuarioProfesional " +
-                 "INNER JOIN Servicio S ON S.IDServicio = T.IDServicio " +
-                 "WHERE 1 = 1 ";
 
-                    // Lista de condiciones dinámicas
+                    string consulta = "SELECT T.IDTurno, T.Fecha, T.HoraInicio, T.IDEstado, T.IDServicio, " +
+                   "T.IDUsuarioProfesional, T.IDUsuarioCliente, " +
+                   "E.Descripcion AS EstadoDesc, " +
+                   "P.Nombre AS ProfNombre, P.Apellido AS ProfApellido, " +
+                   "C.Nombre AS CliNombre, C.Apellido AS CliApellido, " +
+                   "S.Nombre AS ServNombre, S.IDEspecialidad " +
+                   "FROM Turno T " +
+                   "INNER JOIN EstadoTurno E ON E.IDEstado = T.IDEstado " +
+                   "INNER JOIN Usuario C ON C.IDUsuario = T.IDUsuarioCliente " +
+                   "INNER JOIN Usuario P ON P.IDUsuario = T.IDUsuarioProfesional " +
+                   "INNER JOIN Servicio S ON S.IDServicio = T.IDServicio " +
+                   "WHERE 1 = 1 ";
+
+
                     List<string> condiciones = new List<string>();
 
                     if (idEstado != 0)
                         condiciones.Add("T.IDEstado = @IDEstado");
 
-                    // 2. Condición de Fecha Desde
                     if (fechaDesde != DateTime.MinValue)
-                        condiciones.Add("T.Fecha >= @FechaDesde"); 
+                        condiciones.Add("T.Fecha >= @FechaDesde");
 
-                  
+
                     if (fechaHasta != DateTime.MaxValue)
-                        condiciones.Add("T.Fecha <= @FechaHasta"); 
+                        condiciones.Add("T.Fecha <= @FechaHasta");
 
+                    if (idUsuario != 0)
+                        condiciones.Add("(T.IDUsuarioCliente = @IDUsuario OR T.IDUsuarioProfesional = @IDUsuario)");
 
                     if (condiciones.Count > 0)
                     {
@@ -660,7 +661,10 @@ namespace AccesoDatos
                     if (fechaHasta != DateTime.MaxValue)
                         datos.SetearParametro("@FechaHasta", fechaHasta);
 
-              
+                    if (idUsuario != 0)
+                        datos.SetearParametro("@IDUsuario", idUsuario);
+
+
 
                     datos.EjecutarLectura();
                     while (datos.Lector.Read())

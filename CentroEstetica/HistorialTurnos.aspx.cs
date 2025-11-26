@@ -25,15 +25,17 @@ namespace CentroEstetica
                 MostrarFechaActual();
                 CargarFiltrosIniciales();
                 TurnoNegocio negocio = new TurnoNegocio();
-                List<Turno> listaTurnos= negocio.ListarTodos(); ;
-               /*
+                List<Turno> listaTurnos= negocio.ListarTodos();
+                lblNombre.Text = ((Usuario)Session["usuario"]).Nombre.ToString();
+
+
                 if (rolUsuario == 2 || rolUsuario == 3) 
                 {
 
                     listaTurnos = listaTurnos.FindAll(t => (t.Profesional?.ID  == IdUsuario) || (t.Cliente?.ID  == IdUsuario)
 );
                 }
-                */
+                
                 Session.Add("listaTurnosHistorial", listaTurnos);
                 dgvTurnos.DataSource = Session["listaTurnosHistorial"];
                 dgvTurnos.DataBind();
@@ -89,6 +91,18 @@ namespace CentroEstetica
             dgvTurnos.DataSource = Session["listaTurnosHistorial"];
             dgvTurnos.DataBind();
         }
+        protected void dgvTurnos_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+
+            if (Session["listaTurnosHistorial"] != null)
+            {
+                dgvTurnos.DataSource = Session["listaTurnosHistorial"];
+                dgvTurnos.PageIndex = e.NewPageIndex;
+                dgvTurnos.DataBind();
+            }
+
+        }
+
 
         protected void btnBuscar_Click(object sender, EventArgs e)
         {
@@ -97,6 +111,15 @@ namespace CentroEstetica
                 int idEstado = int.Parse(ddlEstado.SelectedValue);
                 DateTime fechaDesde = DateTime.MinValue;
                 DateTime fechaHasta = DateTime.MaxValue;
+                int idUsuarioFiltro = 0; 
+                Usuario usuarioLogueado = (Usuario)Session["usuario"];
+                int rolUsuario = (int)usuarioLogueado.Rol;
+                int IdUsuario = usuarioLogueado.ID;
+              
+                if (rolUsuario == 2 || rolUsuario == 3)
+                {
+                    idUsuarioFiltro = IdUsuario;
+                }
 
                 if (!string.IsNullOrEmpty(txtFechaDesde.Text))
                 {
@@ -105,61 +128,24 @@ namespace CentroEstetica
 
                 if (!string.IsNullOrEmpty(txtFechaHasta.Text))
                 {
-                  
                     fechaHasta = Convert.ToDateTime(txtFechaHasta.Text).AddDays(1).AddSeconds(-1);
                 }
+
                 TurnoNegocio negocio = new TurnoNegocio();
-                List<Turno> listaFiltrada = negocio.FiltrarTurnos(idEstado, fechaDesde,fechaHasta);
+       
+                List<Turno> listaFiltrada = negocio.FiltrarTurnos(idEstado, fechaDesde, fechaHasta, idUsuarioFiltro);
+
                 Session["listaTurnosHistorial"] = listaFiltrada;
                 dgvTurnos.DataSource = listaFiltrada;
                 dgvTurnos.DataBind();
             }
             catch (Exception ex)
             {
-                throw (ex);
+               
+                throw new Exception("Error al buscar turnos con filtro avanzado.", ex);
             }
         }
-        protected void dgvTurnos_PageIndexChanging(object sender, GridViewPageEventArgs e)
-        {
-         
-            if (Session["listaTurnosHistorial"] != null)
-            {
-                dgvTurnos.DataSource = Session["listaTurnosHistorial"];
-                dgvTurnos.PageIndex = e.NewPageIndex;
-                dgvTurnos.DataBind();
-            }
-           
-        }
-        protected void dgvTurnos_RowCommand(object sender, GridViewCommandEventArgs e)
-        {
-            try
-            {
-                if (e.CommandName == "VerPagos")
-                {
-                    int idTurno = Convert.ToInt32(e.CommandArgument);
 
-                    MostrarDetalleModal(idTurno);
-                }
-     
-            }
-
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-        }
-        private void MostrarDetalleModal(int idTurno)
-        {
-            PagoNegocio pagoNegocio = new PagoNegocio();
-            var lista = pagoNegocio.ListarPagosDelTurno(idTurno);
-
-            dgvPagos.DataSource = lista;
-            dgvPagos.DataBind();
-
-            string script = "var modal = new bootstrap.Modal(document.getElementById('pagoModal')); modal.show();";
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "ShowModal", script, true);
-
-        }
         private void ConfigurarBotonVolver(int rolID)
         {
             string urlPanel = "~/Default.aspx";
