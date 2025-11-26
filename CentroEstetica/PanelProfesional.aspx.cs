@@ -25,74 +25,108 @@ namespace CentroEstetica
             if (!IsPostBack)
             {
 
-                if (Request.QueryString["reservaExitosa"] == "true")
-                {
-                    pnlMensajeExito.Visible = true;
-                }
-
                 Profesional profesional = (Profesional)Session["usuario"];
                 lblNombre.Text = "Bienvenida/o " + profesional.Nombre.ToString();
                 MostrarFechaActual();
                 CargarEstadisticas(profesional.ID);
-
-
+                CargarTurnos();
             }
+            ActualizarEstilosMenu(hfTabActivo.Value);
         }
         private void MostrarFechaActual()
         {
 
             lblFechaHoy.Text = DateTime.Now.ToString("dddd, dd 'de' MMMM",
-                System.Globalization.CultureInfo.CreateSpecificCulture("es-ES"));
+            System.Globalization.CultureInfo.CreateSpecificCulture("es-ES"));
         }
-        protected void lnk_Click(object sender, EventArgs e)
-        {
 
-            lnkHoy.CssClass = "nav-link";
-            lnkProximos.CssClass = "nav-link";
-            lnkPasados.CssClass = "nav-link";
-
-            // btener el LinkButton que fue presionado
-            LinkButton clickedLink = (LinkButton)sender;
-
-            // Establecer la clase 'active' para el botón presionado
-            clickedLink.CssClass = "nav-link active";
-
-            //  Cambiar la vista del MultiView
-            switch (clickedLink.ID)
-            {
-                case "lnkHoy":
-                    mvTurnos.ActiveViewIndex = 0;
-                    break;
-                case "lnkProximos":
-                    mvTurnos.ActiveViewIndex = 1;
-                    break;
-                case "lnkPasados":
-                    mvTurnos.ActiveViewIndex = 2;
-                    break;
-            }
-
-        }
+        
         protected void CargarEstadisticas(int idProfesional)
         {
             TurnoNegocio negocio = new TurnoNegocio();
             DateTime hoy = DateTime.Now.Date;
 
-            DateTime inicioSemana = hoy.AddDays(1); // asi se muestran los turnos a partir del dia siguiente;
+            DateTime inicioSemana = hoy.AddDays(1); 
             DateTime finSemana = hoy.AddDays(7);
-
-            DateTime primerDiaDelMes = new DateTime(hoy.Year, hoy.Month, 1);
-            DateTime ultimoDiaDelMes = primerDiaDelMes.AddMonths(1).AddDays(-1);
-
             int turnosProximos = negocio.ContarTurnos(inicioSemana, finSemana, idProfesional);
-            int turnosHoy = negocio.ContarTurnos(hoy, hoy, idProfesional);
-          
-
+            int turnosHoy = negocio.ContarTurnos(hoy, hoy, idProfesional);      
 
             lblTurnosHoy.Text = turnosHoy.ToString();
-
             lblTurnosProximos.Text = turnosProximos.ToString();
-
       
+        }
+
+        protected void CargarTurnos()
+        {
+            string filtro = hfTabActivo.Value; 
+            TurnoNegocio negocio = new TurnoNegocio();
+            Profesional profesional = (Profesional)Session["usuario"];
+            List<Turno> lista;
+            DateTime hoy = DateTime.Now.Date;
+         
+            lblTituloPrincipal.Text =TituloPrincipal(filtro);
+            lblSubTituloGrid.Text =SubTituloGrid(filtro);
+            pnlEstadisticas.Visible = (filtro == "Hoy");
+
+            switch (filtro)
+            {
+                case "Hoy":
+                    lista = negocio.ListarTurnosDelDia(profesional.ID, hoy, hoy);
+                    break;
+
+                case "Semana":
+                    DateTime inicioSemana = hoy.AddDays(1);
+                    DateTime finSemana = hoy.AddDays(7);
+                    lista = negocio.ListarTurnosDelDia(profesional.ID, inicioSemana, finSemana);
+                    break;
+
+                default:                
+                    lista = negocio.ListarTurnosDelDia(profesional.ID, hoy, hoy);
+                    hfTabActivo.Value = "Hoy"; 
+                    break;
+            }
+
+            Session["ListaTurnosProfesional"] = lista;
+            dgvTurnos.DataSource = lista;
+            dgvTurnos.DataBind();
+        }
+
+        protected void dgvTurnos_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {           
+            dgvTurnos.PageIndex = e.NewPageIndex;          
+            dgvTurnos.DataSource = (List<Turno>)Session["ListaTurnosProfesional"];
+            dgvTurnos.DataBind();
+           
+        }
+
+        protected void lnkMenu_Click(object sender, EventArgs e)
+        {
+            LinkButton btn = (LinkButton)sender;
+            string filtro = btn.CommandArgument;
+           hfTabActivo.Value = filtro;
+            CargarTurnos();   
+        
+        }
+
+       
+        private string TituloPrincipal(string filtro)
+        {
+            switch (filtro)
+            {
+                case "Hoy": return "Agenda del Día";
+                case "Semana": return "Próximos Turnos (7 días)";         
+                default: return "Panel Profesional";
+            }
+        }
+
+        private string SubTituloGrid(string filtro)
+        {
+            switch (filtro)
+            {
+                case "Hoy": return "Turnos Programados para Hoy";
+                case "Semana": return "Turnos de la semana";               
+                default: return "Turnos";
+            }
         }
     }
 }

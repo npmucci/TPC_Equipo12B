@@ -66,8 +66,7 @@
                                             <label class="form-check-label small fw-bold text-muted" for="<%= chkAvanzado.ClientID %>">Filtros por Categoría</label>
                                         </div>
 
-                                        <% if (chkAvanzado.Checked)
-                                        { %>
+                                      <asp:Panel ID="pnlAvanzado" runat="server" Visible="false">
                                         <div class="row g-3 border-top pt-3">
                                             <div class="col-md-3">
                                                 <asp:Label Text="Especialidad" runat="server" CssClass="form-label small fw-bold" />
@@ -98,7 +97,7 @@
                                                     style="background-color: var(--colorPrincipalHover); color: white;" />
                                             </div>
                                         </div>
-                                        <% } %>
+                                       </asp:Panel>
                                     </ContentTemplate>
                                     <Triggers>
                                         <asp:AsyncPostBackTrigger ControlID="chkAvanzado" EventName="CheckedChanged" />

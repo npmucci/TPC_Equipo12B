@@ -3,77 +3,95 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+<asp:HiddenField ID="hfTabActivo" runat="server" Value="Hoy" />
 
-    <div class="container mt-3">
-        <asp:Panel ID="pnlMensajeExito" runat="server" Visible="false" CssClass="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="bi bi-check-circle-fill me-2"></i> Turno reservado con éxito.
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </asp:Panel>
-    </div>
+    <div class="container-fluid dashboard-container">
+        <div class="row">
 
-    <div class="container mb-5">
-        <h1 class="display-6 mb-2">Panel Profesional</h1>
+            <div class="col-lg-2 col-xl-2 mb-4">
+                <div class="sticky-top" style="top: 90px; z-index: 1;">
+                    <h5 class="text-muted text-uppercase mb-3 ms-2 small fw-bold">Menú Profesional</h5>
+                    <div class="nav flex-column nav-pills me-3" id="v-pills-tab-profesional" role="tablist" aria-orientation="vertical">
 
-        <h3>
-            <asp:Label ID="lblNombre" runat="server"></asp:Label>
-        </h3>
+                        <asp:LinkButton ID="lnkAgendaHoy" runat="server" Text=" Agenda de Hoy"
+                            CssClass="nav-link" OnClick="lnkMenu_Click" CommandArgument="Hoy" />
 
-    </div>
-    <!-- ESTADÍSTICAS -->
-    <div class=" row container justify-content-center">
-        <div class="col-md-3 custom-card mx-3">
-            <div class="stat-card text-center">
-                <p class="stat-label">📅 Turnos Hoy</p>
-                <div class="stat-value">
-                    <asp:Label ID="lblTurnosHoy" runat="server" Text="0"></asp:Label></div>
+                        <asp:LinkButton ID="lnkAgendaSemana" runat="server" Text=" Agenda de la Semana"
+                            CssClass="nav-link" OnClick="lnkMenu_Click" CommandArgument="Semana" />
+
+                        <asp:HyperLink ID="lnkHistorial" runat="server" NavigateUrl="~/HistorialTurnos.aspx"
+                            CssClass="nav-link" ToolTip="Ver todos los turnos pasados">Historial de Turnos</asp:HyperLink>
+                    </div>
+                </div>
             </div>
-        </div>
+            <div class="col-lg-10 col-xl-10">
+                <div class="content-area">
 
-        <div class="col-md-3 custom-card mx-3 ">
-            <div class="stat-card text-center">
-                <p class="stat-label">📊 Próximos 7 días</p>
-                <div class="stat-value">
-                    <asp:Label ID="lblTurnosProximos" runat="server" Text="0"></asp:Label></div>
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h2 class="fw-bold mb-1 text-dark">
+                                <asp:Label ID="lblTituloPrincipal" runat="server" Text="Agenda de Hoy"></asp:Label>
+                            </h2>
+                            <h5 class="text-muted fw-normal">
+                                <asp:Label ID="lblNombre" runat="server" Text="[Nombre Profesional]"></asp:Label>
+                            </h5>
+                        </div>
+                        <div class="text-end">
+                            <span class="lblfecha border px-3 py-2 fs-6">
+                                <asp:Label ID="lblFechaHoy" runat="server"></asp:Label>
+                            </span>
+                        </div>
+                    </div>
+
+                    <asp:Panel ID="pnlEstadisticas" runat="server">
+                        <div class="row mb-5 justify-content-start">
+                            <div class="col-md-5 col-lg-4 col-xl-3 me-3">
+                                <div class="stat-card text-center shadow-sm">
+                                    <p class="stat-label">📅 Turnos Hoy</p>
+                                    <div class="stat-value">
+                                        <asp:Label ID="lblTurnosHoy" runat="server" Text="0"></asp:Label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-5 col-lg-4 col-xl-3">
+                                <div class="stat-card text-center shadow-sm">
+                                    <p class="stat-label">📊 Próximos 7 días</p>
+                                    <div class="stat-value">
+                                        <asp:Label ID="lblTurnosProximos" runat="server" Text="0"></asp:Label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </asp:Panel>
+
+                    <div class="card shadow-sm border-0 rounded-4">
+                        <div class="card-header bg-primary text-white pt-4 px-4 rounded-top-4">
+                            <h5 class="mb-0 fw-bold">
+                                <asp:Label ID="lblSubTituloGrid" runat="server" Text="Turnos Programados para Hoy"></asp:Label>
+                            </h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="table-responsive">
+                                <asp:GridView ID="dgvTurnos" runat="server" DataKeyNames="IDTurno" CssClass="table table-hover align-middle mb-0"
+                                    AutoGenerateColumns="false" AllowPaging="True" PageSize="10" OnPageIndexChanging="dgvTurnos_PageIndexChanging">
+                                    <Columns>
+                                        <asp:BoundField HeaderText="Fecha" DataField="FechaString" ItemStyle-Width="120px" />
+                                        <asp:BoundField HeaderText="Hora" DataField="HoraInicio" />
+                                        <asp:BoundField HeaderText="Paciente" DataField="ClienteNombreCompleto" />
+                                        <asp:BoundField HeaderText="Servicio" DataField="Servicio.Nombre" />
+                                        <asp:BoundField HeaderText="Estado" DataField="Estado.Descripcion" />                                     
+                                    </Columns>
+                                    <HeaderStyle CssClass="bg-light text-muted small text-uppercase" />
+                                    <PagerStyle CssClass="p-2 border-top bg-light" HorizontalAlign="Center" />
+                                </asp:GridView>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
-        </div>
-       
-<!-- Turnos-->
-    <div class="container mt-4">
-
-        <ul class="nav nav-tabs" id="tabTurnos" role="tablist">
-            <li class="nav-item" role="presentation">
-                <asp:LinkButton ID="lnkHoy" runat="server" CssClass="nav-link active" OnClick="lnk_Click">Hoy</asp:LinkButton>
-            </li>
-            <li class="nav-item" role="presentation">
-                <asp:LinkButton ID="lnkProximos" runat="server" CssClass="nav-link" OnClick="lnk_Click">Próximos</asp:LinkButton>
-            </li>
-            <li class="nav-item" role="presentation">
-                <asp:LinkButton ID="lnkPasados" runat="server" CssClass="nav-link" OnClick="lnk_Click">Pasados</asp:LinkButton>
-            </li>
-        </ul>
-
-        <asp:MultiView ID="mvTurnos" runat="server" ActiveViewIndex="0">
-
-            <asp:View ID="viewHoy" runat="server">
-                <h2 class="mt-4 mb-3">Turnos de Hoy 
-        <small class="text-muted float-end">
-            <asp:Label ID="lblFechaHoy" runat="server" Text=""></asp:Label>
-        </small>
-                </h2>
-                <p>Aquí iría el listado de turnos del dia.</p>
-            </asp:View>
-
-            <asp:View ID="viewProximos" runat="server">
-                <h2 class="mt-4">Próximos Turnos</h2>
-                <p>Aquí iría el listado de turnos de los próximos días.</p>
-            </asp:View>
-
-            <asp:View ID="viewPasados" runat="server">
-                <h2 class="mt-4">Turnos Pasados</h2>
-                <p>Aquí iría el listado de turnos que ya se completaron o cancelaron.</p>
-            </asp:View>
-
-        </asp:MultiView>
+            </div>
     </div>
 
 </asp:Content>

@@ -36,14 +36,14 @@ namespace Negocio
             return ListarTodos().FindAll(turnos => turnos.Estado.Descripcion == "Confirmado" || turnos.Estado.Descripcion == "Pendiente");
         }
 
-        public List<Turno> ListarTurnosDelDia(int idProfesional, DateTime fecha)
+        public List<Turno> ListarTurnosDelDia(int idProfesional, DateTime fechaInicio, DateTime fechaFin)
         {
-            return datos.ListarPorProfesionalYFecha(idProfesional, fecha);
+            return datos.ListarPorProfesionalYFecha(idProfesional, fechaInicio, fechaFin);
         }
 
         public List<Turno> FiltrarTurnos(int idEstado, int idEspecialidad, int idProfesional, int idServicio)
         {
-            return datos.Filtrar (idEstado, idEspecialidad, idProfesional, idServicio);
+            return datos.FiltrarTurnos (idEstado, idEspecialidad, idProfesional, idServicio);
         } 
         #endregion
 

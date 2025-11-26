@@ -193,13 +193,13 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     .nav-pills .nav-link:hover {
-        background-color: var(--colorPrincipal);
+        background-color: var(--colorPrincipal)!important;
         color: var(--colorPrincipalHover);
         transform: translateX(5px);
     }
 
     .nav-pills .nav-link.active {
-        background-color: var(--colorPrincipalHover);
+        background-color: var(--colorPrincipalHover) !important ;
         color: white;
         box-shadow: 0 4px 10px rgba(216, 92, 126, 0.4);
     }

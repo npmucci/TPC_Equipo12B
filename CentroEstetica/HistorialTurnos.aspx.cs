@@ -60,41 +60,37 @@ namespace CentroEstetica
 
         protected void filtro_TextChanged(object sender, EventArgs e)
         {
-            List<Turno> listaBase = (List<Turno>)Session["listaTurnosHistorial"];
+            TurnoNegocio negocio = new TurnoNegocio();
+            List<Turno> listaBase = negocio.ListarTodos();
             string filtro = txtFiltro.Text.Trim().ToUpper();
-            List<Turno> listaFiltrada;
 
-            if (string.IsNullOrWhiteSpace(filtro))
-            {          
-                listaFiltrada = listaBase;
-            }
-            else
+            List<Turno> listaFiltrada = listaBase;
+
+            if (!string.IsNullOrWhiteSpace(filtro))
             {
-               
-                listaFiltrada = listaBase.FindAll(x =>x.ClienteNombreCompleto.ToUpper().Contains(filtro) || x.ProfesionalNombreCompleto.ToUpper().Contains(filtro) ||(x.Servicio.Nombre.ToUpper().Contains(filtro)));
+                listaFiltrada = listaBase.FindAll(x => x.ClienteNombreCompleto.ToUpper().Contains(filtro) ||  x.ProfesionalNombreCompleto.ToUpper().Contains(filtro) ||  x.Servicio.Nombre.ToUpper().Contains(filtro));
             }
 
+            Session["listaTurnosHistorial"] = listaFiltrada;
             dgvTurnos.DataSource = listaFiltrada;
             dgvTurnos.DataBind();
         }
 
         protected void chkAvanzado_CheckedChanged(object sender, EventArgs e)
         {
-           if (chkAvanzado.Checked)
-            {
-                    txtFiltro.Enabled = false;
-                    txtFiltro.Text = "";
-            }
-            else
-            {
-     
-                txtFiltro.Enabled = true;
-                TurnoNegocio negocio = new TurnoNegocio();
-                Session["listaTurnosHistorial"] = negocio.ListarTodos();
-                dgvTurnos.DataSource = Session["listaTurnosHistorial"];
-                dgvTurnos.DataBind();
-            }
+            pnlAvanzado.Visible = chkAvanzado.Checked;
+
+            TurnoNegocio negocio = new TurnoNegocio();
+
+                     Session["listaTurnosHistorial"] = negocio.ListarTodos();
+
+            txtFiltro.Text = "";
+            txtFiltro.Enabled = !chkAvanzado.Checked;
+
+            dgvTurnos.DataSource = Session["listaTurnosHistorial"];
+            dgvTurnos.DataBind();
         }
+
 
         protected void ddlEspecialidad_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -169,14 +165,14 @@ namespace CentroEstetica
         }
         protected void dgvTurnos_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
-            // Carga la lista filtrada que ya está en la sesión
+         
             if (Session["listaTurnosHistorial"] != null)
             {
                 dgvTurnos.DataSource = Session["listaTurnosHistorial"];
                 dgvTurnos.PageIndex = e.NewPageIndex;
                 dgvTurnos.DataBind();
             }
-            // Si la sesión es null, no hacemos nada o redirigimos (manejo de error)
+           
         }
         protected void dgvTurnos_RowCommand(object sender, GridViewCommandEventArgs e)
         {

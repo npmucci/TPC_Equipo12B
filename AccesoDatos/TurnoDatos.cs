@@ -60,7 +60,7 @@ namespace AccesoDatos
             return lista;
         }
 
-        public List<Turno> ListarPorProfesionalYFecha(int idProf, DateTime fecha)
+        public List<Turno> ListarPorProfesionalYFecha(int idProf, DateTime fechaInicio, DateTime fechaFin)
         {
             List<Turno> lista = new List<Turno>();
             using (Datos datos = new Datos())
@@ -69,7 +69,8 @@ namespace AccesoDatos
                 {
                     datos.SetearProcedimiento("sp_ListarTurnosPorProfesionalYFecha");
                     datos.SetearParametro("@IDProfesional", idProf);
-                    datos.SetearParametro("@Fecha", fecha);
+                    datos.SetearParametro("@FechaInicio", fechaInicio);
+                    datos.SetearParametro("@FechaFin", fechaFin);
                     datos.EjecutarLectura();
 
                     while (datos.Lector.Read())
@@ -598,7 +599,7 @@ namespace AccesoDatos
             }
         }
 
-        public List<Turno> Filtrar(int idEstado, int idEspecialidad, int idProfesional, int idServicio)
+        public List<Turno> FiltrarTurnos(int idEstado, int idEspecialidad, int idProfesional, int idServicio)
         {
             List<Turno> lista = new List<Turno>();
 
@@ -606,96 +607,107 @@ namespace AccesoDatos
             {
                 try
                 {
+                    // Armamos la consulta base
+                    string consulta =
+                        "SELECT T.IDTurno, T.Fecha, T.HoraInicio, T.IDEstado, T.IDServicio, " +
+                        "T.IDUsuarioProfesional, T.IDUsuarioCliente, " +
+                        "E.Descripcion AS EstadoDesc, " +
+                        "P.Nombre AS ProfNombre, P.Apellido AS ProfApellido, " +
+                        "C.Nombre AS CliNombre, C.Apellido AS CliApellido, " +
+                        "S.Nombre AS ServNombre, S.IDEspecialidad " +
+                        "FROM Turno T " +
+                        "INNER JOIN EstadoTurno E ON E.IDEstado = T.IDEstado " +
+                        "INNER JOIN Usuario C ON C.IDUsuario = T.IDUsuarioCliente " +
+                        "INNER JOIN Usuario P ON P.IDUsuario = T.IDUsuarioProfesional " +
+                        "INNER JOIN Servicio S ON S.IDServicio = T.IDServicio " +
+                        "WHERE 1 = 1 ";
 
-                    string consulta = "SELECT T.IDTurno, T.Fecha, T.HoraInicio, T.IDEstado, T.IDServicio, " +
-                  "T.IDUsuarioProfesional, T.IDUsuarioCliente, " + 
-                  "E.Descripcion AS EstadoDesc, " +
-                  "P.Nombre AS ProfNombre, P.Apellido AS ProfApellido, " +
-                  "C.Nombre AS CliNombre, C.Apellido AS CliApellido, " +
-                  "S.Nombre AS ServNombre, S.IDEspecialidad " +
-                              "FROM Turno T " +
-                              "INNER JOIN EstadoTurno E ON E.IDEstado = T.IDEstado " +
-                              "INNER JOIN Usuario C ON C.IDUsuario = T.IDUsuarioCliente " +
-                              "INNER JOIN Usuario P ON P.IDUsuario = T.IDUsuarioProfesional " +
-                              "INNER JOIN Servicio S ON S.IDServicio = T.IDServicio " +
-                              "WHERE 1=1 "; 
+                    // Lista de condiciones dinámicas
+                    List<string> condiciones = new List<string>();
+
+                    if (idEstado != 0)
+                        condiciones.Add("T.IDEstado = @IDEstado");
+
+                    if (idEspecialidad != 0)
+                        condiciones.Add("S.IDEspecialidad = @IDEspecialidad");
 
                     if (idProfesional != 0)
-                    {
-                        consulta += "AND T.IDUsuarioProfesional = @IDProfesional ";
-                    }
+                        condiciones.Add("T.IDUsuarioProfesional = @IDProfesional");
+
                     if (idServicio != 0)
+                        condiciones.Add("T.IDServicio = @IDServicio");
+
+                    // Si hay condiciones, las agregamos
+                    if (condiciones.Count > 0)
                     {
-                        consulta += "AND T.IDServicio = @IDServicio ";
+                        consulta += " AND " + string.Join(" AND ", condiciones);
                     }
-                    if (idEspecialidad != 0)
-                    {
-                        consulta += "AND S.IDEspecialidad = @IDEspecialidad ";
-                    }
-                    consulta += "ORDER BY T.Fecha DESC, T.HoraInicio DESC";
+
+                    consulta += " ORDER BY T.Fecha DESC, T.HoraInicio DESC";
 
                     datos.SetearConsulta(consulta);
-                
-                    if (idProfesional != 0)
-                    {
-                        datos.SetearParametro("@IDProfesional", idProfesional);
-                    }
-                    if (idServicio != 0)
-                    {
-                        datos.SetearParametro("@IDServicio", idServicio);
-                    }
-                    if (idEspecialidad != 0)
-                    {
-                        datos.SetearParametro("@IDEspecialidad", idEspecialidad);
-                    }
-                    datos.EjecutarLectura();
 
+                    // Parámetros
+                    if (idEstado != 0)
+                        datos.SetearParametro("@IDEstado", idEstado);
+
+                    if (idEspecialidad != 0)
+                        datos.SetearParametro("@IDEspecialidad", idEspecialidad);
+
+                    if (idProfesional != 0)
+                        datos.SetearParametro("@IDProfesional", idProfesional);
+
+                    if (idServicio != 0)
+                        datos.SetearParametro("@IDServicio", idServicio);
+
+                    datos.EjecutarLectura();
 
                     while (datos.Lector.Read())
                     {
-                        Turno aux = new Turno();
-
-                        aux.IDTurno = (int)datos.Lector["IDTurno"];
-                        aux.Fecha = (DateTime)datos.Lector["Fecha"];
-                        aux.HoraInicio = (TimeSpan)datos.Lector["HoraInicio"];
-
-                
-                        aux.Estado = new EstadoTurno
+                        lista.Add(new Turno
                         {
-                            IDEstado = (int)datos.Lector["IDEstado"],
-                            Descripcion = (string)datos.Lector["EstadoDesc"]
-                        };
+                            IDTurno = (int)datos.Lector["IDTurno"],
+                            Fecha = (DateTime)datos.Lector["Fecha"],
+                            HoraInicio = (TimeSpan)datos.Lector["HoraInicio"],
 
-                        aux.Servicio = new Servicio
-                        {
-                            IDServicio = (int)datos.Lector["IDServicio"],
-                            Nombre = (string)datos.Lector["ServNombre"],
-                        };
+                            Estado = new EstadoTurno
+                            {
+                                IDEstado = (int)datos.Lector["IDEstado"],
+                                Descripcion = (string)datos.Lector["EstadoDesc"]
+                            },
 
-                        aux.Cliente = new Cliente
-                        {
-                            ID = (int)datos.Lector["IDUsuarioCliente"],
-                            Nombre = (string)datos.Lector["CliNombre"],
-                            Apellido = (string)datos.Lector["CliApellido"]
-                        };
-                        aux.Profesional = new Profesional
-                        {
-                            ID = (int)datos.Lector["IDUsuarioProfesional"],
-                            Nombre = (string)datos.Lector["ProfNombre"],
-                            Apellido = (string)datos.Lector["ProfApellido"]
-                        };
-                        lista.Add(aux);
+                            Servicio = new Servicio
+                            {
+                                IDServicio = (int)datos.Lector["IDServicio"],
+                                Nombre = (string)datos.Lector["ServNombre"]
+                            },
+
+                            Cliente = new Cliente
+                            {
+                                ID = (int)datos.Lector["IDUsuarioCliente"],
+                                Nombre = (string)datos.Lector["CliNombre"],
+                                Apellido = (string)datos.Lector["CliApellido"]
+                            },
+
+                            Profesional = new Profesional
+                            {
+                                ID = (int)datos.Lector["IDUsuarioProfesional"],
+                                Nombre = (string)datos.Lector["ProfNombre"],
+                                Apellido = (string)datos.Lector["ProfApellido"]
+                            }
+                        });
                     }
+
                     return lista;
                 }
                 catch (Exception ex)
                 {
-
                     throw new Exception("Error al filtrar turnos en la BBDD: " + ex.Message);
                 }
-
             }
         }
+
+
     }
 
 }

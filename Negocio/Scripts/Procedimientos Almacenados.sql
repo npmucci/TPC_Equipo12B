@@ -398,7 +398,8 @@ GO
 
 CREATE OR ALTER PROCEDURE sp_ListarTurnosPorProfesionalYFecha
     @IDProfesional INT,
-    @Fecha DATE
+    @FechaInicio DATE,
+	@FechaFin DATE
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -425,7 +426,7 @@ BEGIN
     INNER JOIN EstadoTurno E ON T.IDEstado = E.IDEstado
     WHERE 
         T.IDUsuarioProfesional = @IDProfesional 
-        AND T.Fecha = @Fecha
+        AND T.Fecha BETWEEN @FechaInicio AND @FechaFin
         AND T.IDEstado IN (1, 2) 
     ORDER BY T.HoraInicio;
 END

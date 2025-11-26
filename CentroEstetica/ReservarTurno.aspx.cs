@@ -299,7 +299,7 @@ namespace CentroEstetica
 
             if (horarioDia == null) return slotsLibres;
 
-            List<Turno> turnosDelDia = turnoNegocio.ListarTurnosDelDia(idProf, fecha);
+            List<Turno> turnosDelDia = turnoNegocio.ListarTurnosDelDia(idProf, fecha, fecha);
 
             TimeSpan inicioJornada = horarioDia.HorarioInicio;
             TimeSpan finJornada = horarioDia.HorarioFin;
