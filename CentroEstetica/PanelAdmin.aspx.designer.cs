@@ -33,6 +33,15 @@ namespace CentroEstetica
         protected global::System.Web.UI.HtmlControls.HtmlButton btnTabAgenda;
 
         /// <summary>
+        /// Control upMensajesGlobal.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upMensajesGlobal;
+
+        /// <summary>
         /// Control pnlMensajes.
         /// </summary>
         /// <remarks>

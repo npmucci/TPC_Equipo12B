@@ -708,6 +708,32 @@ namespace AccesoDatos
             }
         }
 
+        public bool TieneTurnosPendientesPorCliente(int idCliente)
+        {
+            using (Datos datos = new Datos())
+            {
+                try
+                {
+                    
+                    string consulta = @"
+                    SELECT COUNT(*) 
+                    FROM Turno 
+                    WHERE IDUsuarioCliente = @idCliente 
+                       AND IDEstado IN (1, 2) 
+                       AND (CAST(Fecha AS DATETIME) + CAST(HoraInicio AS DATETIME)) > GETDATE()";
+
+                    datos.SetearConsulta(consulta);
+                    datos.SetearParametro("@idCliente", idCliente);
+
+                    int cantidad = (int)datos.EjecutarAccionEscalar();
+                    return cantidad > 0;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
 
     }
 

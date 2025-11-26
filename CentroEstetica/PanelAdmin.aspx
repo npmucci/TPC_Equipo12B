@@ -58,11 +58,17 @@
             <div class="col-lg-9 col-xl-10">
                 
                 <!-- Mensajes de Alerta -->
-                <asp:Panel ID="pnlMensajes" runat="server" Visible="false" CssClass="alert alert-warning alert-dismissible fade show mb-4 shadow-sm" role="alert">
-                    <i class="bi bi-info-circle-fill me-2"></i>
-                    <asp:Literal ID="litMensaje" runat="server"></asp:Literal>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </asp:Panel>
+                <asp:UpdatePanel ID="upMensajesGlobal" runat="server" UpdateMode="Always">
+                     <ContentTemplate>
+                         
+                         <asp:Panel ID="pnlMensajes" runat="server" Visible="false" CssClass="alert alert-warning alert-dismissible fade show mb-4 shadow-sm" role="alert">
+                             <i class="bi bi-info-circle-fill me-2"></i>
+                             <asp:Literal ID="litMensaje" runat="server"></asp:Literal>
+                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                         </asp:Panel>
+
+                     </ContentTemplate>
+                 </asp:UpdatePanel>
 
                 <div class="content-area tab-content" id="v-pills-tabContent">
                     
@@ -848,9 +854,13 @@
                                     <li class="list-group-item d-flex justify-content-between align-items-center">
                                         <div>
                                             <span class="fw-bold d-block"><%# Eval("Servicio.Nombre") %></span>
-                                            <small class="text-muted"><%# ((DateTime)Eval("Fecha")).ToString("dd/MM/yyyy") %> - <%# Eval("HoraInicio") %> hs</small>
+                                            <small class="text-muted">
+                                                <i class="bi bi-clock"></i> <%# ((DateTime)Eval("Fecha")).ToString("dd/MM/yyyy") %> - <%# Eval("HoraInicio") %> hs
+                                            </small>
                                         </div>
-                                        <span class="badge bg-warning text-dark">Pendiente</span>
+                                        <span class='badge rounded-pill <%# Eval("Estado.Descripcion").ToString() == "Confirmado" ? "bg-success" : "bg-warning text-dark" %>'>
+                                            <%# Eval("Estado.Descripcion") %>
+                                        </span>
                                     </li>
                                 </ItemTemplate>
                                 <FooterTemplate>

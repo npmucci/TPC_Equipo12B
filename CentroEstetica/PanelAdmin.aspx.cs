@@ -109,22 +109,29 @@ namespace CentroEstetica
                 case "EditarCliente":
 
                     Response.Redirect($"PanelPerfil.aspx?id={id}&adminMode=true", false);
-                    break;
+                break;
 
                 case "VerTurnosCliente":
                     CargarTurnosEnModal(id);
-                    break;
+                break;
 
                 case "DarDeBajaCliente":
-
-                    usuarioNegocio.CambiarEstado(id, false);
-                    MostrarMensaje("Cliente dado de baja correctamente.", "success");
-                    break;
+                 
+                    if (turnoNegocio.ClienteTieneTurnosPendientes(id))
+                    {
+                        MostrarMensaje("⚠️ No se puede dar de baja: El cliente tiene turnos pendientes o confirmados.", "danger");
+                    }
+                    else
+                    {
+                        usuarioNegocio.CambiarEstado(id, false);
+                        MostrarMensaje("Cliente dado de baja correctamente.", "success");
+                    }
+                    break; 
 
                 case "DarDeAltaCliente":
                     usuarioNegocio.CambiarEstado(id, true);
                     MostrarMensaje("Cliente reactivado correctamente.", "success");
-                    break;
+                break;
             }
 
             
@@ -134,19 +141,19 @@ namespace CentroEstetica
 
         private void CargarTurnosEnModal(int idCliente)
         {
-
-            Usuario cliente = usuarioNegocio.ObtenerPorId(idCliente); 
+            Usuario cliente = usuarioNegocio.ObtenerPorId(idCliente);
             litNombreClienteModal.Text = cliente != null ? $"{cliente.Nombre} {cliente.Apellido}" : "Cliente";
 
-
             List<Turno> turnos = turnoNegocio.ListarTurnosCliente(idCliente);
+   
+            List<Turno> proximos = turnos.FindAll(t =>
+                t.Fecha.Date >= DateTime.Today &&
+                (t.Estado.Descripcion == "Pendiente" || t.Estado.Descripcion == "Confirmado")
+            );
 
-
-            List<Turno> pendientes = turnos.FindAll(t => t.Estado.Descripcion == "Pendiente");
-
-            if (pendientes.Count > 0)
+            if (proximos.Count > 0)
             {
-                rptTurnosModal.DataSource = pendientes;
+                rptTurnosModal.DataSource = proximos;
                 rptTurnosModal.DataBind();
                 pnlSinTurnos.Visible = false;
                 rptTurnosModal.Visible = true;
@@ -157,16 +164,14 @@ namespace CentroEstetica
                 rptTurnosModal.Visible = false;
             }
 
-
             upModalTurnos.Update();
-
             ScriptManager.RegisterStartupScript(Page, Page.GetType(), "abrirModalTurnos", "new bootstrap.Modal(document.getElementById('modalTurnosCliente')).show();", true);
         }
 
 
 
 
-      
+
 
         private void CalcularEstadisticasPersonales(int idProfesional)
         {

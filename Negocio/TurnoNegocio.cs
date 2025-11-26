@@ -65,11 +65,16 @@ namespace Negocio
         {
             return datos.ListarTurnosCliente(idCliente).FindAll(turnos => turnos.Estado.Descripcion == "Confirmado" || turnos.Estado.Descripcion == "Pendiente");
         }
+
+        public bool ClienteTieneTurnosPendientes(int idCliente)
+        {
+            return datos.TieneTurnosPendientesPorCliente(idCliente);
+        }
         #endregion
 
-       
+
         // MÉTODOS PARA PROFESIONALES Y RECEPCIÓN
-        
+
         #region Métodos Profesional y Recepción
         public List<Turno> ListarTurnosPendientesPorProfesional(int idProfesional)
         {
